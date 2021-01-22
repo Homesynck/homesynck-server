@@ -1,1 +1,4 @@
-# rt-sfs-sec-sync-server
+# GambettServer
+
+**TODO: Add description**
+
