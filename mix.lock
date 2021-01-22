@@ -1,0 +1,5 @@
+%{
+  "esockd": {:hex, :esockd, "5.5.1", "e138c06a8f01bf6eade299c6e7d353a503a45890d39ff59457e064eb72eb98ec", [:rebar3], [], "hexpm", "4895921527ca8f8186321b500e5738aa99491b6eb4216c5d5edf4525ec1c2c16"},
+  "ranch": {:hex, :ranch, "2.0.0", "fbf3d79661c071543256f9051caf19d65daa6df1cf6824d8f37a49b19a66f703", [:rebar3], [], "hexpm", "c20a4840c7d6623c19812d3a7c828b2f1bd153ef0f124cb69c54fe51d8a42ae0"},
+  "socket": {:hex, :socket, "0.3.13", "98a2ab20ce17f95fb512c5cadddba32b57273e0d2dba2d2e5f976c5969d0c632", [:mix], [], "hexpm", "f82ea9833ef49dde272e6568ab8aac657a636acb4cf44a7de8a935acb8957c2e"},
+}
