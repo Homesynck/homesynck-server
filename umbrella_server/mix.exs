@@ -1,4 +1,4 @@
-defmodule GambettServer.MixProject do
+defmodule HomesynckServer.MixProject do
   use Mix.Project
 
   def project do
