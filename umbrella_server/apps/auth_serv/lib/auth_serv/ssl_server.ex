@@ -1,4 +1,4 @@
-defmodule AuthServ.ConnectionHandler do
+defmodule AuthServ.SSLServer do
   @moduledoc """
   Listens for connections and redirects to the appropriate service
   """
@@ -9,18 +9,28 @@ defmodule AuthServ.ConnectionHandler do
   defmodule State do
     defstruct port: nil,
               listen_socket: nil,
-              service: nil
+              service_type: nil
+  end
+
+  defmodule ServiceType do
+    defstruct worker: nil,
+              name: "Anonymous",
+              state_initiator: nil
   end
 
   @doc """
   Mendatory GenServer callback
   """
-  def start_link(%{port: port, service: service}) do
+  def start_link(
+    %{port: port, service_type: %{worker: worker, state_initiator: si}}
+  ) do
     GenServer.start_link(
       __MODULE__,
       %State{
         port: port,
-        service: service
+        service_type: %ServiceType{
+          worker: worker, state_initiator: si
+        }
       },
       name: __MODULE__)
   end
@@ -35,15 +45,15 @@ defmodule AuthServ.ConnectionHandler do
   def handle_continue(
     :start_accepting,
     %State{
-      port: port, service: service
+      port: port, service_type: service_type
     } = state
   ) do
     {:ok, listen_socket} = start_listening_ssl(port)
-    Logger.info("[#{__MODULE__}] started ssl server on port #{port} for service #{service}")
+    Logger.info("[#{__MODULE__}] started ssl server on port #{port} for service #{service_type.name}")
 
     Logger.info("[#{__MODULE__}] started accepting connections")
 
-    accept_connection(listen_socket)
+    accept_connection(listen_socket, service_type)
 
     Logger.info("[#{__MODULE__}] stopped accepting connections")
 
@@ -58,7 +68,12 @@ defmodule AuthServ.ConnectionHandler do
       {:keyfile, Path.join(:code.priv_dir(:auth_serv), "certificates/ssl.key")}])
   end
 
-  defp accept_connection(listen_socket) do
+  defp accept_connection(
+    listen_socket,
+    %ServiceType{
+      worker: worker,
+      state_initiator: state_initiator
+    } = service_type) do
     {:ok, tls_transport_socket} = :ssl.transport_accept(listen_socket)
     {:ok, peername} = :ssl.peername(tls_transport_socket)
 
@@ -67,7 +82,15 @@ defmodule AuthServ.ConnectionHandler do
     {:ok, socket} = :ssl.handshake(tls_transport_socket)
 
     Logger.info("[#{__MODULE__}] successfully handshaked with #{inspect peername}")
-    #:ssl.send(socket, 'Mon super message\n')
-    accept_connection(listen_socket)
+
+    {:ok, worker} = DynamicSupervisor.start_child(
+      AuthServ.ServiceSupervisor,
+      {worker, state_initiator.(socket)})
+
+    Logger.info("#{inspect worker}")
+
+    accept_connection(listen_socket, service_type)
   end
+
+
 end
