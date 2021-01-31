@@ -12,12 +12,6 @@ defmodule SSLTCP.Server do
               service_type: nil
   end
 
-  defmodule ServiceType do
-    defstruct worker: nil,
-              name: "Anonymous",
-              state_initiator: nil
-  end
-
   @doc """
   Mendatory GenServer callback
   """
@@ -28,7 +22,7 @@ defmodule SSLTCP.Server do
       __MODULE__,
       %State{
         port: port,
-        service_type: %ServiceType{
+        service_type: %SSLTCP.ServiceType{
           worker: worker, state_initiator: si
         }
       },
@@ -70,7 +64,7 @@ defmodule SSLTCP.Server do
 
   defp accept_connection(
     listen_socket,
-    %ServiceType{
+    %SSLTCP.ServiceType{
       worker: worker,
       state_initiator: state_initiator
     } = service_type) do
