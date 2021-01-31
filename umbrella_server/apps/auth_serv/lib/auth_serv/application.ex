@@ -11,7 +11,7 @@ defmodule AuthServ.Application do
       }}
 
     children = [
-      {AuthServ.SSLServer, ch_state},
+      {SSLTCP.Server, ch_state},
       {DynamicSupervisor, name: AuthServ.ServiceSupervisor, strategy: :one_for_one}
     ]
 

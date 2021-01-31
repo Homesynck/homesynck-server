@@ -1,4 +1,4 @@
-defmodule AuthServ.SSLServer do
+defmodule SSLTCP.Server do
   @moduledoc """
   Listens for connections and redirects to the appropriate service
   """
@@ -91,6 +91,4 @@ defmodule AuthServ.SSLServer do
 
     accept_connection(listen_socket, service_type)
   end
-
-
 end
