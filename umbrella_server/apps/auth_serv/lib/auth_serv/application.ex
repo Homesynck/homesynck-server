@@ -3,15 +3,10 @@ defmodule AuthServ.Application do
 
   @impl true
   def start(_type, _args) do
-    ch_state = %{
-      :port => 3000,
-      :service_type => %{
-        :worker => AuthServ.Application,
-        :state_initiator => fn s -> [s] end
-      }}
+    certificate_path = Path.join(:code.priv_dir(:auth_serv), "certificates")
 
     children = [
-      {SSLTCP.Server, ch_state},
+      {SSLTCP.Server, SSLTCP.sup_opts(3000, 0, 0, certificate_path)},
       {DynamicSupervisor, name: AuthServ.ServiceSupervisor, strategy: :one_for_one}
     ]
 
