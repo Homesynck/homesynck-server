@@ -1,6 +1,6 @@
-defmodule AuthServ do
+defmodule AuthServer do
   @moduledoc """
-  Documentation for `AuthServ`.
+  Documentation for `AuthServer`.
   """
 
   @doc """
@@ -8,7 +8,7 @@ defmodule AuthServ do
 
   ## Examples
 
-      iex> AuthServ.hello()
+      iex> AuthServer.hello()
       :world
 
   """

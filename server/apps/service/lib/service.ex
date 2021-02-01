@@ -17,7 +17,6 @@ defmodule Service do
     defstruct [:socket, :service_module, :name, :session]
   end
 
-
   # Behaviour
 
   @callback on_created(message :: binary(), state :: State.t()) ::
@@ -37,11 +36,10 @@ defmodule Service do
 
   @callback get_name() :: name :: String.t()
 
-
   # GenServer callbacks
 
-  @spec start_link([service_module: module(), socket: socket()]) :: any()
-  def start_link([service_module: service_module, socket: socket]) do
+  @spec start_link(service_module: module(), socket: socket()) :: any()
+  def start_link(service_module: service_module, socket: socket) do
     GenServer.start_link(
       __MODULE__,
       %State{

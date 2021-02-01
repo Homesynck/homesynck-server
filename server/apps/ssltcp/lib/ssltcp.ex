@@ -12,12 +12,13 @@ defmodule Ssltcp do
     @type t :: %__MODULE__{
             port: integer(),
             listen_socket: Service.socket() | nil,
+            service_supervisor: module(),
             service_module: module(),
             cert_path: binary(),
             acceptor: Task.t() | nil
           }
 
-    defstruct [:port, :listen_socket, :service_module, :cert_path, :acceptor]
+    defstruct [:port, :listen_socket, :service_supervisor, :service_module, :cert_path, :acceptor]
   end
 
   @spec start(pid :: pid()) :: :ok
@@ -36,12 +37,14 @@ defmodule Ssltcp do
   """
   @spec sup_opts(
           port :: integer(),
+          service_supervisor :: module(),
           service_module :: module(),
           certificate_path :: binary()
         ) :: State.t()
-  def sup_opts(port, service_module, certificate_path) do
+  def sup_opts(port, service_supervisor, service_module, certificate_path) do
     %State{
       :port => port,
+      :service_supervisor => service_supervisor,
       :cert_path => certificate_path,
       :service_module => service_module
     }
@@ -85,11 +88,15 @@ defmodule Ssltcp do
   def handle_cast(
         {:start, listen_socket},
         %State{
+          service_supervisor: service_supervisor,
           service_module: service_module
         } = state
       ) do
     Logger.info("[#{__MODULE__}] started accepting connections")
-    acceptor = Task.async(fn -> accept_connection(listen_socket, service_module) end)
+
+    acceptor =
+      Task.async(fn -> accept_connection(listen_socket, service_supervisor, service_module) end)
+
     {:noreply, %{state | acceptor: acceptor}}
   end
 
@@ -116,8 +123,12 @@ defmodule Ssltcp do
     socket
   end
 
-  @spec accept_connection(listen_socket :: any(), service_module :: module()) :: any()
-  defp accept_connection(listen_socket, service_module) do
+  @spec accept_connection(
+          listen_socket :: any(),
+          service_supervisor :: module(),
+          service_module :: module()
+        ) :: any()
+  defp accept_connection(listen_socket, service_supervisor, service_module) do
     {:ok, tls_transport_socket} = :ssl.transport_accept(listen_socket)
     {:ok, peername} = :ssl.peername(tls_transport_socket)
 
@@ -129,12 +140,12 @@ defmodule Ssltcp do
 
     {:ok, service} =
       DynamicSupervisor.start_child(
-        AuthServ.ServiceSupervisor,
+        service_supervisor,
         {Service, [service_module: service_module, socket: socket]}
       )
 
     Logger.info("#{inspect(service)}")
 
-    accept_connection(listen_socket, service_module)
+    accept_connection(listen_socket, service_supervisor, service_module)
   end
 end

@@ -1,9 +1,9 @@
-defmodule AuthServ.MixProject do
+defmodule AuthServer.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :auth_serv,
+      app: :auth_server,
       version: "0.1.0",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
@@ -15,14 +15,15 @@ defmodule AuthServ.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      mod: {AuthServ.Application, []}
+      mod: {AuthServer.Application, []}
     ]
   end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ssltcp, in_umbrella: true}
+      {:ssltcp, in_umbrella: true},
+      {:service, in_umbrella: true}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]
