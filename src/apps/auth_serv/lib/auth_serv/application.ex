@@ -6,7 +6,7 @@ defmodule AuthServ.Application do
     certificate_path = Path.join(:code.priv_dir(:auth_serv), "certificates")
 
     children = [
-      {SSLTCP.Server, SSLTCP.sup_opts(3000, 0, 0, certificate_path)},
+      {Ssltcp.Server, Ssltcp.sup_opts(3000, 0, 0, certificate_path)},
       {DynamicSupervisor, name: AuthServ.ServiceSupervisor, strategy: :one_for_one}
     ]
 

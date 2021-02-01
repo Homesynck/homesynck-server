@@ -1,4 +1,4 @@
-defmodule SSLTCP.ServiceType do
+defmodule Ssltcp.ServiceType do
   defstruct service: nil,
             name: "Anonymous",
             state_initiator: nil

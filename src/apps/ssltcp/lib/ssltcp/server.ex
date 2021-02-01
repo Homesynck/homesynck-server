@@ -1,4 +1,4 @@
-defmodule SSLTCP.Server do
+defmodule Ssltcp.Server do
   @moduledoc """
   Listens for connections and redirects to the appropriate service
   """
@@ -39,7 +39,7 @@ defmodule SSLTCP.Server do
         %State{
           port: port,
           cert_path: cert_path,
-          service_type: %SSLTCP.ServiceType{
+          service_type: %Ssltcp.ServiceType{
             service: service,
             state_initiator: si
           }
@@ -106,7 +106,7 @@ defmodule SSLTCP.Server do
 
   defp accept_connection(
          listen_socket,
-         %SSLTCP.ServiceType{
+         %Ssltcp.ServiceType{
            service: service,
            state_initiator: state_initiator
          } = service_type

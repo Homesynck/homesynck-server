@@ -1,4 +1,4 @@
-defmodule SSLTCP do
+defmodule Ssltcp do
   @doc """
   Build options for supervision
   """
