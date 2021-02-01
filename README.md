@@ -8,7 +8,7 @@
    - `mix test` to test
    - `mix dialyzer` to run a static analysis (may take some time the first time)
    - `mix compile` to compile
-   - `mix app.start` to compile and start the server
+   - `mix run --no-halt` to compile and start the server (--no-halt means it'll let the server run forever)
 
 ## Before pushing
 - Run the dialyzer analysis and get rid of all errors and warnings
