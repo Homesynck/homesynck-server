@@ -1,19 +1,24 @@
 defmodule Service do
   use GenServer
 
-  @type socket :: record(any())
+  # Types
+
+  # Further defining requires investigation
+  @type socket :: any()
 
   defmodule State do
     @type t :: %__MODULE__{
-            socket: socket,
-            callback_module: :atom,
+            socket: Service.socket(),
+            service_module: module(),
             name: String.t(),
             session: Map.t()
           }
 
-    @enforce_keys [:socket, :callback_module]
-    defstruct [:socket, :callback_module, :name, :session]
+    defstruct [:socket, :service_module, :name, :session]
   end
+
+
+  # Behaviour
 
   @callback on_created(message :: binary(), state :: State.t()) ::
               {:ok, new_state :: State.t()}
@@ -30,29 +35,26 @@ defmodule Service do
 
   @callback init_session() :: session :: any()
 
-  # TODO : init session
+  @callback get_name() :: name :: String.t()
 
-  @spec start_link(callback_module :: atom()) :: on_start
-  def start_link(
-        %Template{
-          callback_module: callback_module
-        } = template
-      ) do
-    GenServer.start_link(__MODULE__, %State{})
+
+  # GenServer callbacks
+
+  @spec start_link([service_module: module(), socket: socket()]) :: any()
+  def start_link([service_module: service_module, socket: socket]) do
+    GenServer.start_link(
+      __MODULE__,
+      %State{
+        service_module: service_module,
+        socket: socket,
+        name: service_module.get_name(),
+        session: service_module.init_session()
+      }
+    )
   end
 
   @spec init(state :: State.t()) :: {:ok, state :: State.t()}
   def init(state) do
     {:ok, state}
-  end
-
-  @impl true
-  def handle_call(:pop, _from, [head | tail]) do
-    {:reply, head, tail}
-  end
-
-  @impl true
-  def handle_cast({:push, element}, state) do
-    {:noreply, [element | state]}
   end
 end

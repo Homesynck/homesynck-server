@@ -9,18 +9,24 @@ defmodule Ssltcp do
   use GenServer
 
   defmodule State do
-    defstruct port: nil,
-              listen_socket: nil,
-              service_type: nil,
-              cert_path: nil,
-              acceptor: nil
+    @type t :: %__MODULE__{
+            port: integer(),
+            listen_socket: Service.socket() | nil,
+            service_module: module(),
+            cert_path: binary(),
+            acceptor: Task.t() | nil
+          }
+
+    defstruct [:port, :listen_socket, :service_module, :cert_path, :acceptor]
   end
 
+  @spec start(pid :: pid()) :: :ok
   def start(pid) do
     listen_socket = GenServer.call(pid, :listen)
     GenServer.cast(pid, {:start, listen_socket})
   end
 
+  @spec stop(pid :: pid()) :: :ok
   def stop(pid) do
     GenServer.cast(pid, :stop)
   end
@@ -28,36 +34,28 @@ defmodule Ssltcp do
   @doc """
   Build options for supervision
   """
-  def sup_opts(port, service_module, service_state, certificate_path) do
-    %{
+  @spec sup_opts(
+          port :: integer(),
+          service_module :: module(),
+          certificate_path :: binary()
+        ) :: State.t()
+  def sup_opts(port, service_module, certificate_path) do
+    %State{
       :port => port,
       :cert_path => certificate_path,
-      :service_type => %{
-        :service => service_module,
-        :state_initiator => fn s -> [s, service_state] end
-      }
+      :service_module => service_module
     }
   end
 
   @doc """
   Mendatory GenServer callback
   """
-  def start_link(%{
-        port: port,
-        cert_path: cert_path,
-        service_type: %{service: service, state_initiator: si}
-      }) do
+  @spec start_link(state :: State.t()) :: any()
+  def start_link(state) do
     {:ok, pid} =
       GenServer.start_link(
         __MODULE__,
-        %State{
-          port: port,
-          cert_path: cert_path,
-          service_type: %Service.Template{
-            service: service,
-            state_initiator: si
-          }
-        },
+        state,
         name: __MODULE__
       )
 
@@ -68,7 +66,7 @@ defmodule Ssltcp do
   @doc """
   Mendatory GenServer callback that asynchronously triggers handle_continue
   """
-  def init(state) do
+  def init(%State{} = state) do
     {:ok, state}
   end
 
@@ -87,11 +85,11 @@ defmodule Ssltcp do
   def handle_cast(
         {:start, listen_socket},
         %State{
-          service_type: service_type
+          service_module: service_module
         } = state
       ) do
     Logger.info("[#{__MODULE__}] started accepting connections")
-    acceptor = Task.async(fn -> accept_connection(listen_socket, service_type) end)
+    acceptor = Task.async(fn -> accept_connection(listen_socket, service_module) end)
     {:noreply, %{state | acceptor: acceptor}}
   end
 
@@ -118,13 +116,8 @@ defmodule Ssltcp do
     socket
   end
 
-  defp accept_connection(
-         listen_socket,
-         %Service.Template{
-           service: service,
-           state_initiator: state_initiator
-         } = service_type
-       ) do
+  @spec accept_connection(listen_socket :: any(), service_module :: module()) :: any()
+  defp accept_connection(listen_socket, service_module) do
     {:ok, tls_transport_socket} = :ssl.transport_accept(listen_socket)
     {:ok, peername} = :ssl.peername(tls_transport_socket)
 
@@ -137,11 +130,11 @@ defmodule Ssltcp do
     {:ok, service} =
       DynamicSupervisor.start_child(
         AuthServ.ServiceSupervisor,
-        {service, state_initiator.(socket)}
+        {Service, [service_module: service_module, socket: socket]}
       )
 
     Logger.info("#{inspect(service)}")
 
-    accept_connection(listen_socket, service_type)
+    accept_connection(listen_socket, service_module)
   end
 end
