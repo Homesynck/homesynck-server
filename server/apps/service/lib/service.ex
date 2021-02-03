@@ -19,7 +19,7 @@ defmodule Service do
 
   # Behaviour
 
-  @callback on_created(message :: binary(), state :: State.t()) ::
+  @callback on_created(state :: State.t()) ::
               {:ok, new_state :: State.t()}
               | {:error, reason :: any()}
               | {:terminated, result :: any()}
@@ -30,7 +30,8 @@ defmodule Service do
               | {:error, reason :: any()}
               | {:terminated, result :: any()}
 
-  @callback before_message_sent(message :: binary()) :: :ok | :abort
+  @callback before_message_sent(message :: binary(), state :: State.t()) ::
+              :ok | :abort | {:alter, message :: binary()}
 
   @callback init_session() :: session :: any()
 
@@ -45,7 +46,7 @@ defmodule Service do
       %State{
         service_module: service_module,
         socket: socket,
-        name: service_module.get_name(),
+        name: "#{service_module.get_name()} #{self()}",
         session: service_module.init_session()
       }
     )
