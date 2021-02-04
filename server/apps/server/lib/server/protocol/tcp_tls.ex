@@ -1,28 +1,28 @@
-defmodule Server.Listener.SSL do
+defmodule Server.Protocol.TcpTls do
   require Logger
-  use Server.Listener
+  @behaviour Server.Protocol
 
   @impl true
-  def init_listen_socket(
+  def init(
         %{
           port: port,
           cert_path: cert_path
-        } = _listener_arg
+        } = _protocol_opts
       ) do
     :ssl.start()
 
-    {:ok, listen_socket} =
-      :ssl.listen(
+    {:ok, accept_socket} =
+      :ssl.accept(
         port,
         [{:certfile, Path.join(cert_path, ".crt")}, {:keyfile, Path.join(cert_path, ".key")}]
       )
 
-    listen_socket
+    accept_socket
   end
 
   @impl true
-  def listen(listen_socket) do
-    {:ok, tls_transport_socket} = :ssl.transport_accept(listen_socket)
+  def accept(accept_socket) do
+    {:ok, tls_transport_socket} = :ssl.transport_accept(accept_socket)
     {:ok, peername} = :ssl.peername(tls_transport_socket)
 
     Logger.info("[#{__MODULE__}] successfully accepted connection with #{inspect(peername)}")
@@ -32,5 +32,15 @@ defmodule Server.Listener.SSL do
     Logger.info("[#{__MODULE__}] successfully handshaked with #{inspect(peername)}")
 
     client_socket
+  end
+
+  @impl true
+  def receive_blocking(socket) do
+    :ssl.recv(socket)
+  end
+
+  @impl true
+  def send(socket, data) do
+    :ssl.send(socket, data)
   end
 end
