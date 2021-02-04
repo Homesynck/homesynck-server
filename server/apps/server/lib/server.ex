@@ -2,15 +2,16 @@ defmodule Server do
   @moduledoc """
   A module that implements a networking service/server behaviour.
   """
+  require Logger
   use Supervisor
 
-  @services_sup ServicesSupervisor
+  @services_sup Server.ServicesSupervisor
 
   def on_connection(server, socket, protocol, service) do
     {:ok, pid} =
       DynamicSupervisor.start_child(
         services_sup_name(server),
-        {Server.Service, :start_link, [{socket, protocol, service}]}
+        {Server.Service, {socket, protocol, service}}
       )
   end
 
@@ -27,14 +28,14 @@ defmodule Server do
         } = _init_arg
       ) do
     children = [
-      {@services_sup, name: services_sup_name(name)},
-      {Server.Acceptor, :start_link, [{name, protocol, service}], name: :"#{name}.Acceptor"}
+      {DynamicSupervisor, strategy: :one_for_one, name: services_sup_name(name)},
+      {Server.Acceptor, {name, protocol, service}}
     ]
 
     Supervisor.init(children, strategy: :one_for_one)
   end
 
   defp services_sup_name(server) do
-    :"#{server}.#{@services_sup}"
+    :"#{server}.ServicesSupervisor"
   end
 end

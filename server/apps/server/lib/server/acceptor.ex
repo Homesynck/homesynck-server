@@ -1,5 +1,5 @@
 defmodule Server.Acceptor do
-  use Task
+  use Task, restart: :permanent
   require Logger
 
   def start_link({_, {protocol_module, protocol_opts}, _} = server_data) do
@@ -14,9 +14,7 @@ defmodule Server.Acceptor do
     run(accept_socket, server_data)
   end
 
-  def on_connection(socket, {server, protocol, service}) do
-    Logger.info("#{inspect(server_data)}")
-    Logger.info("#{inspect(socket)}")
+  def on_connection(socket, {server, protocol, service} = server_data) do
     Server.on_connection(server, socket, protocol, service)
   end
 end

@@ -6,8 +6,14 @@ defmodule AuthServer.Application do
     certificate_path = Path.join(:code.priv_dir(:auth_server), "certificates")
 
     children = [
-      {Ssltcp.Server, Ssltcp.sup_opts(3000, AuthServer.AuthService, certificate_path)},
-      {DynamicSupervisor, name: AuthServer.ServiceSupervisor, strategy: :one_for_one}
+      {Server, %{
+        name: :"PingServer",
+        protocol: {Server.Protocol.TcpTls, %{
+          port: 3000,
+          cert_path: certificate_path
+        }},
+        service: {Server.Service.Ping, []}
+      }},
     ]
 
     opts = [strategy: :one_for_one, name: AuthServer.Supervisor]

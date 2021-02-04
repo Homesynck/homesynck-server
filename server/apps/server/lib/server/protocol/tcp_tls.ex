@@ -12,9 +12,9 @@ defmodule Server.Protocol.TcpTls do
     :ssl.start()
 
     {:ok, accept_socket} =
-      :ssl.accept(
+      :ssl.listen(
         port,
-        [{:certfile, Path.join(cert_path, ".crt")}, {:keyfile, Path.join(cert_path, ".key")}]
+        [{:certfile, Path.join(cert_path, ".crt")}, {:keyfile, Path.join(cert_path, ".key")}, {:active, false}]
       )
 
     accept_socket
@@ -36,7 +36,8 @@ defmodule Server.Protocol.TcpTls do
 
   @impl true
   def receive_blocking(socket) do
-    :ssl.recv(socket)
+    Logger.info("#{inspect socket}")
+    :ssl.recv(socket, 0)
   end
 
   @impl true
