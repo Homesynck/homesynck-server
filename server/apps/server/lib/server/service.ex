@@ -16,7 +16,7 @@ defmodule Server.Service do
   def run({socket, {protocol_module, _}, {service_module, _}} = args, state, send_function) do
     case protocol_module.receive_blocking(socket) do
       {:ok, data} -> {:ok, state} = service_module.on_message(state, data, send_function)
-      a -> Logger.info("#{inspect a}")
+      _ -> []
     end
 
     run(args, state, send_function)

@@ -6,14 +6,17 @@ defmodule AuthServer.Application do
     certificate_path = Path.join(:code.priv_dir(:auth_server), "certificates")
 
     children = [
-      {Server, %{
-        name: :"PingServer",
-        protocol: {Server.Protocol.TcpTls, %{
-          port: 3000,
-          cert_path: certificate_path
-        }},
-        service: {Server.Service.Ping, []}
-      }},
+      {Server,
+       %{
+         name: :PingServer,
+         protocol:
+           {Server.Protocol.TcpTls,
+            %{
+              port: 3000,
+              cert_path: certificate_path
+            }},
+         service: {Server.Service.Ping, []}
+       }}
     ]
 
     opts = [strategy: :one_for_one, name: AuthServer.Supervisor]

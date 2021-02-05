@@ -13,13 +13,17 @@ public class SSLSocketClient {
             SSLSocketFactory factory = sc.getSocketFactory();
             SSLSocket socket = (SSLSocket) factory.createSocket("localhost", 3000);
             
-            PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())));
-
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             String inputLine;
-            while ((inputLine = in.readLine()) != null)
-                System.out.println(inputLine);
+            while ((inputLine = in.readLine()) != null) {
+            	System.out.println(inputLine);
+            	System.out.println("avant");
+            	out.writeUTF("aodadhzaodzhadazpdhazpd");
+            	out.flush();
+            	System.out.println("odhzaodhzaodih");
+            }
             
             in.close();
             out.close();
