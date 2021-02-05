@@ -7,14 +7,17 @@ defmodule Server.Service.Ping do
     {:ok, 0}
   end
 
-  def on_message(state, "ping" = message, send_function) do
+  def on_message(state, message, send_function) when message == "ping" do
     Logger.info("PING: #{state}")
     send_function.("pong\n")
     {:ok, state + 1}
   end
 
   def on_message(state, message, send_function) do
-    Logger.info("MESSAGE: #{message}, #{state}")
+    Logger.info("#{inspect(message)}")
+    Logger.info("#{message == "ping"}")
+    Logger.info("#{message == 'ping'}")
+    Logger.info("MESSAGE: '#{message}', #{state}")
     {:ok, state}
   end
 end

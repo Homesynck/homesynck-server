@@ -1,5 +1,7 @@
 
 import java.io.*;
+import java.util.Scanner;
+
 import javax.net.ssl.*;
 
 
@@ -15,14 +17,15 @@ public class SSLSocketClient {
             
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
+            
+            Scanner scanner = new Scanner(System.in);
+            
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
             	System.out.println(inputLine);
-            	System.out.println("avant");
-            	out.writeUTF("aodadhzaodzhadazpdhazpd");
+            	System.out.print(">");
+            	out.writeUTF(scanner.nextLine());
             	out.flush();
-            	System.out.println("odhzaodhzaodih");
             }
             
             in.close();

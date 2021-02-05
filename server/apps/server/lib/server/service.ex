@@ -14,12 +14,15 @@ defmodule Server.Service do
   end
 
   def run({socket, {protocol_module, _}, {service_module, _}} = args, state, send_function) do
-    case protocol_module.receive_blocking(socket) do
-      {:ok, data} -> {:ok, state} = service_module.on_message(state, data, send_function)
-      _ -> []
+    new_state = case protocol_module.receive_blocking(socket) do
+      {:ok, [_, _ | data]} ->
+        {:ok, new_state} = service_module.on_message(state, List.to_string(data), send_function)
+        new_state
+
+      _ -> state
     end
 
-    run(args, state, send_function)
+    run(args, new_state, send_function)
   end
 
   def init_send_function(socket, protocol_module) do

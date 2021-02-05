@@ -17,7 +17,8 @@ defmodule Server.Protocol.TcpTls do
         [
           {:certfile, Path.join(cert_path, ".crt")},
           {:keyfile, Path.join(cert_path, ".key")},
-          {:active, false}, {:reuseaddr, true}
+          {:active, false},
+          {:reuseaddr, true}
         ]
       )
 
@@ -40,7 +41,7 @@ defmodule Server.Protocol.TcpTls do
 
   @impl true
   def receive_blocking(socket) do
-    Logger.info("#{inspect :ssl.getopts(socket, [:active, :packet, :buffer])}")
+    Logger.info("#{inspect(:ssl.getopts(socket, [:active, :packet, :buffer]))}")
 
     :ssl.recv(socket, 0)
   end
