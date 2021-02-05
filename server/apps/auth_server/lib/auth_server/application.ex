@@ -8,7 +8,7 @@ defmodule AuthServer.Application do
     children = [
       {Server,
        %{
-         name: :AuthServer,
+         name: :PingServer,
          protocol:
            {Server.Protocol.TcpTls,
             %{
@@ -16,7 +16,18 @@ defmodule AuthServer.Application do
               cert_path: certificate_path
             }},
          service: {Server.Service.Ping, []}
-       }}
+       }},
+      {Server,
+      %{
+        name: :AuthServer,
+        protocol:
+          {Server.Protocol.TcpTls,
+          %{
+            port: 3001,
+            cert_path: certificate_path
+          }},
+        service: {AuthServer.AuthService, []}
+      }}
     ]
 
     opts = [strategy: :one_for_one, name: AuthServer.Supervisor]

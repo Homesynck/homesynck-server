@@ -13,6 +13,7 @@ defmodule Server.Service.Ping do
   end
 
   def on_message(state, message, send_function) do
+    send_function.("error\n")
     {:ok, state}
   end
 end
