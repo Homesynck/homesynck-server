@@ -7,8 +7,9 @@ defmodule Server.Acceptor do
     Task.start_link(__MODULE__, :run, [accept_socket, server_data])
   end
 
-  def run(accept_socket, {_, {protocol_module, _}, _} = server_data) do
+  def run(accept_socket, {server, {protocol_module, _}, _} = server_data) do
     client_socket = protocol_module.accept(accept_socket)
+    Logger.info("[#{server}.Acceptor] successfully accepted a connection using protocol #{protocol_module}")
     on_connection(client_socket, server_data)
 
     run(accept_socket, server_data)

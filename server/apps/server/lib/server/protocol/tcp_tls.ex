@@ -30,8 +30,6 @@ defmodule Server.Protocol.TcpTls do
     {:ok, tls_transport_socket} = :ssl.transport_accept(accept_socket)
     {:ok, peername} = :ssl.peername(tls_transport_socket)
 
-    Logger.info("[#{__MODULE__}] successfully accepted connection with #{inspect(peername)}")
-
     {:ok, client_socket} = :ssl.handshake(tls_transport_socket)
 
     Logger.info("[#{__MODULE__}] successfully handshaked with #{inspect(peername)}")
@@ -41,8 +39,6 @@ defmodule Server.Protocol.TcpTls do
 
   @impl true
   def receive_blocking(socket) do
-    Logger.info("#{inspect(:ssl.getopts(socket, [:active, :packet, :buffer]))}")
-
     :ssl.recv(socket, 0)
   end
 

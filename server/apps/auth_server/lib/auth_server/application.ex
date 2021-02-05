@@ -8,7 +8,7 @@ defmodule AuthServer.Application do
     children = [
       {Server,
        %{
-         name: :PingServer,
+         name: :AuthServer,
          protocol:
            {Server.Protocol.TcpTls,
             %{

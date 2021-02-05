@@ -7,7 +7,8 @@ defmodule Server do
 
   @services_sup Server.ServicesSupervisor
 
-  def on_connection(server, socket, protocol, service) do
+  def on_connection(server, socket, protocol, {service_module,_} = service) do
+    Logger.info("[#{server}] initiating service #{inspect service_module}")
     {:ok, pid} =
       DynamicSupervisor.start_child(
         services_sup_name(server),
