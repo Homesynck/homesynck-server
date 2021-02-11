@@ -3,7 +3,7 @@ use Mix.Config
 # Configure your database
 config :homesynck, Homesynck.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "anicetto",
   database: "homesynck_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
