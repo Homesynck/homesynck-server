@@ -8,7 +8,7 @@ defmodule AuthServer.AuthService do
   end
 
   def on_message(state, "registerphone", send_function) do
-    send_function.("pong #{inspect state}\n")
+    send_function.("pong #{inspect(state)}\n")
     {:ok, state}
   end
 

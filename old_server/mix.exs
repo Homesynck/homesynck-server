@@ -16,6 +16,9 @@ defmodule HomesynckServer.MixProject do
   #
   # Run "mix help deps" for examples and options.
   defp deps do
-    [{:dialyxir, "~> 1.0", only: [:dev], runtime: false}]
+    [
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false}
+    ]
   end
 end
