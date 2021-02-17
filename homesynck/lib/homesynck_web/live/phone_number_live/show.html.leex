@@ -1,0 +1,37 @@
+<h1>Show Phone number</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal @socket, HomesynckWeb.PhoneNumberLive.FormComponent,
+    id: @phone_number.id,
+    title: @page_title,
+    action: @live_action,
+    phone_number: @phone_number,
+    return_to: Routes.phone_number_show_path(@socket, :show, @phone_number) %>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Number:</strong>
+    <%= @phone_number.number %>
+  </li>
+
+  <li>
+    <strong>Expires on:</strong>
+    <%= @phone_number.expires_on %>
+  </li>
+
+  <li>
+    <strong>Verification code:</strong>
+    <%= @phone_number.verification_code %>
+  </li>
+
+  <li>
+    <strong>Register token:</strong>
+    <%= @phone_number.register_token %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.phone_number_show_path(@socket, :edit, @phone_number), class: "button" %></span>
+<span><%= live_redirect "Back", to: Routes.phone_number_index_path(@socket, :index) %></span>

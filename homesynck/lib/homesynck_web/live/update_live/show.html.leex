@@ -1,0 +1,27 @@
+<h1>Show Update</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal @socket, HomesynckWeb.UpdateLive.FormComponent,
+    id: @update.id,
+    title: @page_title,
+    action: @live_action,
+    update: @update,
+    return_to: Routes.update_show_path(@socket, :show, @update) %>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Rank:</strong>
+    <%= @update.rank %>
+  </li>
+
+  <li>
+    <strong>Instructions:</strong>
+    <%= @update.instructions %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.update_show_path(@socket, :edit, @update), class: "button" %></span>
+<span><%= live_redirect "Back", to: Routes.update_index_path(@socket, :index) %></span>

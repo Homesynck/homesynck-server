@@ -1,0 +1,37 @@
+<h1>Listing Updates</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <%= live_modal @socket, HomesynckWeb.UpdateLive.FormComponent,
+    id: @update.id || :new,
+    title: @page_title,
+    action: @live_action,
+    update: @update,
+    return_to: Routes.update_index_path(@socket, :index) %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Rank</th>
+      <th>Instructions</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="updates">
+    <%= for update <- @updates do %>
+      <tr id="update-<%= update.id %>">
+        <td><%= update.rank %></td>
+        <td><%= update.instructions %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.update_show_path(@socket, :show, update) %></span>
+          <span><%= live_patch "Edit", to: Routes.update_index_path(@socket, :edit, update) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: update.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Update", to: Routes.update_index_path(@socket, :new) %></span>

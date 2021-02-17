@@ -1,0 +1,17 @@
+<h1>Show Update received</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal @socket, HomesynckWeb.UpdateReceivedLive.FormComponent,
+    id: @update_received.id,
+    title: @page_title,
+    action: @live_action,
+    update_received: @update_received,
+    return_to: Routes.update_received_show_path(@socket, :show, @update_received) %>
+<% end %>
+
+<ul>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.update_received_show_path(@socket, :edit, @update_received), class: "button" %></span>
+<span><%= live_redirect "Back", to: Routes.update_received_index_path(@socket, :index) %></span>
