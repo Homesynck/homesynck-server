@@ -37,6 +37,21 @@ defmodule Homesynck.Auth do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  def get_by(%{"name" => name}) do
+    Repo.get_by(User, name: name)
+  end
+
+  def get_by(%{"email" => email}) do
+    Repo.get_by(User, email: email)
+  end
+
+  def authenticate(%{"password" => password} = params) do
+    case get_by(params) do
+      nil -> {:error, "no user found"}
+      user -> Argon2.check_pass(user, password, [{:hash_key, :password_hashed}])
+    end
+  end
+
   @doc """
   Creates a user.
 

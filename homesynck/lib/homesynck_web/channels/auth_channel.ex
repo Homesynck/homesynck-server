@@ -10,6 +10,26 @@ defmodule HomesynckWeb.AuthChannel do
     end
   end
 
+  @impl true
+  def handle_in("login", payload, socket) do
+    case payload do
+      %{"password" => password, "login" => login} -> {:reply, authenticate(login, password), socket}
+      _ -> {:reply, {:error, %{reason: "wrong params"}}, socket}
+    end
+  end
+
+  defp authenticate(login, password) do
+    params = case is_email?(login) do
+      true -> %{email: login, password: password}
+      false -> %{name: login, password: password}
+    end
+
+    case Homesynck.Auth.authenticate(params) do
+      {:ok, _} -> {:ok, %{}}
+      error -> {:error, %{reason: "#{inspect(error)}"}}
+    end
+  end
+
   # Channels can be used in a request/response fashion
   # by sending replies to requests from the client
   @impl true
@@ -29,4 +49,13 @@ defmodule HomesynckWeb.AuthChannel do
   defp authorized?(_payload) do
     true
   end
+
+  defp is_email?(email) when is_binary(email) do
+    case Regex.run(~r/^[\w.!#$%&’*+\-\/=?\^`{|}~]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*$/i, email) do
+      nil -> false
+      [email] -> true
+    end
+  end
+
+  defp is_email?(email) do false end
 end
