@@ -1,4 +1,5 @@
 defmodule HomesynckWeb.AuthChannel do
+  import Logger
   use HomesynckWeb, :channel
 
   @impl true
@@ -20,13 +21,15 @@ defmodule HomesynckWeb.AuthChannel do
 
   defp authenticate(login, password) do
     params = case is_email?(login) do
-      true -> %{email: login, password: password}
-      false -> %{name: login, password: password}
+      true -> %{"email" => login, "password" => password}
+      false -> %{"name" => login, "password" => password}
     end
+
+    #Logger.debug("#{inspect login}, #{inspect password}, #{inspect params}")
 
     case Homesynck.Auth.authenticate(params) do
       {:ok, _} -> {:ok, %{}}
-      error -> {:error, %{reason: "#{inspect(error)}"}}
+      error -> {:error, %{reason: "unauthorized"}}
     end
   end
 
