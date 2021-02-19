@@ -56,7 +56,7 @@ defmodule HomesynckWeb.AuthChannel do
   defp is_email?(email) when is_binary(email) do
     case Regex.run(~r/^[\w.!#$%&’*+\-\/=?\^`{|}~]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*$/i, email) do
       nil -> false
-      [email] -> true
+      [email, _] -> true
     end
   end
 
