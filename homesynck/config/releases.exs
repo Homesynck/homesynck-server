@@ -1,12 +1,12 @@
 import Config
 
-secret_key_base = System.fetch_env!("SECRET_KEY_BASE")
-app_port = System.fetch_env!("APP_PORT")
-app_hostname = System.fetch_env!("APP_HOSTNAME")
-db_user = System.fetch_env!("DB_USER")
-db_password = System.fetch_env!("DB_PASSWORD")
-db_host = System.fetch_env!("DB_HOST")
-db_port = System.fetch_env!("DB_PORT")
+secret_key_base = System.get_env("HOMESYNCK_SECRET_KEY_BASE")
+app_port = System.get_env("HOMESYNCK_APP_PORT")
+app_hostname = System.get_env("HOMESYNCK_APP_HOSTNAME")
+db_user = System.get_env("HOMESYNCK_DB_USER")
+db_password = System.get_env("HOMESYNCK_DB_PASSWORD")
+db_host = System.get_env("HOMESYNCK_DB_HOST")
+db_port = System.get_env("HOMESYNCK_DB_PORT")
 
 config :homesynck, HomesynckWeb.Endpoint,
   http: [:inet6, port: String.to_integer(app_port)],
