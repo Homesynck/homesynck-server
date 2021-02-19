@@ -3,9 +3,9 @@ use Mix.Config
 # Configure your database
 config :homesynck, Homesynck.Repo,
   username: "postgres",
-  password: "anicetto",
+  password: "getway",
   database: "homesynck_dev",
-  hostname: "localhost",
+  hostname: "149.202.42.98",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
