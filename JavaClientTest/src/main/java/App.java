@@ -1,6 +1,7 @@
 import ch.kuon.phoenix.Socket;
 import ch.kuon.phoenix.Channel;
 import ch.kuon.phoenix.Presence;
+import com.github.openjson.JSONObject;
 
 import java.util.HashMap;
 
@@ -21,10 +22,9 @@ public class App {
                 return null;
             });
         HashMap<String, Object> params = new HashMap<>();
-        params.put("user_token", "supersecret");
         opts.setParams(params);
 
-        Socket socket = new Socket("ws://localhost:4000/socket", opts);
+        Socket socket = new Socket("ws://149.202.42.98:4000/socket", opts);
         socket.connect();
 
         socket.onError((String msg) -> {
@@ -35,6 +35,18 @@ public class App {
             System.out.println("The connection closed!");
             return null;
         });
+
+        Channel ch = socket.channel("auth:lobby", new JSONObject());
+
+        ch.join(5000);
+
+        while(true) {
+            ch.push("shout", new JSONObject("{}"), socket.getOpts().getTimeout()).receive("ok", (msg) -> {
+                System.out.println("OK MAGGLE");
+                return null;
+            });
+        }
+
 
     }
 }
