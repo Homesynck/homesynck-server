@@ -29,4 +29,5 @@ config :homesynck, HomesynckWeb.Endpoint,
     port: String.to_integer(System.get_env("PORT") || "8080"),
     transport_options: [socket_opts: [:inet6]]
   ],
+  url: [host: System.get_env("HOST")],
   secret_key_base: System.get_env("SECRET_KEY_BASE")
