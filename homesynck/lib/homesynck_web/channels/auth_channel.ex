@@ -14,12 +14,14 @@ defmodule HomesynckWeb.AuthChannel do
   @impl true
   def handle_in("login", payload, socket) do
     case payload do
-      %{"password" => password, "login" => login} -> {:reply, authenticate(login, password), socket}
+      %{"password" => password, "login" => login} ->
+        {:reply, authenticate(socket, login, password), socket}
+
       _ -> {:reply, {:error, %{reason: "wrong params"}}, socket}
     end
   end
 
-  defp authenticate(login, password) do
+  defp authenticate(socket, login, password) do
     params = case is_email?(login) do
       true -> %{"email" => login, "password" => password}
       false -> %{"name" => login, "password" => password}
@@ -28,7 +30,7 @@ defmodule HomesynckWeb.AuthChannel do
     #Logger.debug("#{inspect login}, #{inspect password}, #{inspect params}")
 
     case Homesynck.Auth.authenticate(params) do
-      {:ok, _} -> {:ok, %{}}
+      {:ok, id} -> {:ok, %{token: gen_auth_token(id)}}
       error -> {:error, %{reason: "unauthorized"}}
     end
   end
@@ -61,4 +63,12 @@ defmodule HomesynckWeb.AuthChannel do
   end
 
   defp is_email?(email) do false end
+
+  defp gen_auth_token(user_id) do
+    Phoenix.Token.sign(
+      Application.get_env(:homesynck, HomesynckWeb.Endpoint)[:secret_key_base],
+      "user auth",
+      user_id
+    )
+  end
 end

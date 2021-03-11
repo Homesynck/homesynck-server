@@ -1,10 +1,11 @@
 defmodule Homesynck.Sync.UpdateReceived do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Homesynck.Sync.{Update, Controller}
 
   schema "updates_received" do
-    has_one :update, Homesynck.Sync.Update
-    has_one :controller, Homesynck.Sync.Controller
+    belongs_to :update, Update
+    belongs_to :receiver, Controller
 
     timestamps()
   end

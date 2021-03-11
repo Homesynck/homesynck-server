@@ -48,7 +48,9 @@ defmodule Homesynck.Auth do
   def authenticate(%{"password" => password} = params) do
     case get_by(params) do
       nil -> {:error, "no user found"}
-      user -> Argon2.check_pass(user, password, [{:hash_key, :password_hashed}])
+      user ->
+        Argon2.check_pass(user, password, [{:hash_key, :password_hashed}])
+        {:ok, user.id}
     end
   end
 

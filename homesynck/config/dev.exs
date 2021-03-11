@@ -20,6 +20,7 @@ config :homesynck, HomesynckWeb.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
+  secret_key_base: "Pi6lbm3/QtepN6SHNYU3pDjJeKZs/DEV",
   watchers: [
     node: [
       "node_modules/webpack/bin/webpack.js",
@@ -55,13 +56,13 @@ config :homesynck, HomesynckWeb.Endpoint,
 # different ports.
 
 config :homesynck, HomesynckWeb.Endpoint,
-    http: [port: 4000],
-    https: [
-      port: 4001,
-      cipher_suite: :strong,
-      certfile: "priv/cert/selfsigned.pem",
-      keyfile: "priv/cert/selfsigned_key.pem"
-    ]
+    http: [port: 4000]
+    # https: [
+    #   port: 4001,
+    #   cipher_suite: :strong,
+    #   certfile: "priv/cert/selfsigned.pem",
+    #   keyfile: "priv/cert/selfsigned_key.pem"
+    # ]
 
 # Watch static and templates for browser reloading.
 config :homesynck, HomesynckWeb.Endpoint,

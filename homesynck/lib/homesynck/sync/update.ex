@@ -1,9 +1,12 @@
 defmodule Homesynck.Sync.Update do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Homesynck.Sync.{Controller, UpdateReceived}
 
   schema "updates" do
-    has_one :emitter, Homesynck.Sync.Controller
+    belongs_to :emitter, Controller
+    many_to_many :receivers, Controller, join_through: UpdateReceived
+
     field :instructions, :string
     field :rank, :integer
 

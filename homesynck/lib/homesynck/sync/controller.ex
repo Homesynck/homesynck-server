@@ -1,10 +1,13 @@
 defmodule Homesynck.Sync.Controller do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Homesynck.Sync.{Update, UpdateReceived}
 
   schema "controllers" do
-    has_many :updates_emitted, Homesynck.Sync.Update
     belongs_to :user, Homesynck.Auth.User
+    has_many :updates_emitted, Update, foreign_key: :emitter_id
+    many_to_many :updates_received, Update, join_through: UpdateReceived
+
     field :last_online, :date
     field :name, :string
 
