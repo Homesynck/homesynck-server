@@ -30,7 +30,7 @@ defmodule HomesynckWeb.AuthChannel do
     #Logger.debug("#{inspect login}, #{inspect password}, #{inspect params}")
 
     case Homesynck.Auth.authenticate(params) do
-      {:ok, id} -> {:ok, %{token: gen_auth_token(id)}}
+      {:ok, id} -> {:ok, %{token: gen_auth_token(id), sync_channel_id: id}}
       error -> {:error, %{reason: "unauthorized"}}
     end
   end
