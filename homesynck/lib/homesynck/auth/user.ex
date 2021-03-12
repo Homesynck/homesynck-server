@@ -15,8 +15,8 @@ defmodule Homesynck.Auth.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:name, :email, :password])
-    |> validate_required([:name, :email, :password])
+    |> cast(attrs, [:name, :password])
+    |> validate_required([:name, :password])
     |> unique_email()
     |> validate_password(:password)
     |> put_pass_hash()

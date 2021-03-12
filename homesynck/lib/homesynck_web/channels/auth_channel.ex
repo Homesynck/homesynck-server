@@ -15,23 +15,55 @@ defmodule HomesynckWeb.AuthChannel do
   def handle_in("login", payload, socket) do
     case payload do
       %{"password" => password, "login" => login} ->
-        {:reply, authenticate(socket, login, password), socket}
-
+        {:reply, authenticate(login, password), socket}
       _ -> {:reply, {:error, %{reason: "wrong params"}}, socket}
     end
   end
 
-  defp authenticate(socket, login, password) do
+  @impl true
+  def handle_in("register", payload, socket) do
+    case payload do
+      %{"login" => login, "password" => password, "register_token" => register_token} ->
+        {:reply, register(login, password, register_token), socket}
+      _ -> {:reply, {:error, %{reason: "wrong params"}}, socket}
+    end
+  end
+
+  @impl true
+  def handle_in("validate_phone", payload, socket) do
+    case payload do
+      %{"phone" => phone} -> {:reply, validate_phone(phone), socket}
+      _ -> {:reply, {:error, %{reason: "wrong params"}}, socket}
+    end
+  end
+
+  defp authenticate(login, password) do
     params = case is_email?(login) do
       true -> %{"email" => login, "password" => password}
       false -> %{"name" => login, "password" => password}
     end
-
-    #Logger.debug("#{inspect login}, #{inspect password}, #{inspect params}")
-
     case Homesynck.Auth.authenticate(params) do
       {:ok, id} -> {:ok, %{token: gen_auth_token(id), sync_channel_id: id}}
       error -> {:error, %{reason: "unauthorized"}}
+    end
+  end
+
+  defp register(login, password, register_token) do
+    case Homesynck.Auth.register(%{
+      "register_token" => register_token,
+      "name" => login,
+      "password" => password
+    }) do
+      {:ok, id} -> {:ok, %{token: gen_auth_token(id), sync_channel_id: id}}
+      error ->
+        {:error, %{reason: "unauthorized"}}
+    end
+  end
+
+  defp validate_phone(phone) when is_binary(phone) do
+    case Homesynck.Auth.validate_phone(phone) do
+      {:ok, token} -> {:ok, %{register_token: token}}
+      error -> {:error, %{reason: error}}
     end
   end
 

@@ -72,6 +72,21 @@ defmodule Homesynck.Auth do
     |> Repo.insert()
   end
 
+  def register(%{
+    "register_token" => register_token,
+    "name" => login,
+    "password" => password
+  } = params) do
+    cond do
+      get_by(params) != nil -> {:error, "name taken"}
+      #is_register_token_invalid?(token) -> {:error, "invalid register token"}
+      true -> case create_user(params) do
+        {:ok, user} -> {:ok, user.id}
+        error -> error
+      end
+    end
+  end
+
   @doc """
   Updates a user.
 
@@ -132,6 +147,31 @@ defmodule Homesynck.Auth do
   """
   def list_phone_numbers do
     Repo.all(PhoneNumber)
+  end
+
+  def validate_register_token(_token) do
+    false
+  end
+
+  def validate_phone(phone) when is_binary(phone) do
+    cond do
+      is_phone_format_invalid?(phone) -> {:error, "invalid format"}
+      is_phone_cooling_down?(phone) -> {:error, "phone not validated"}
+      send_validation_sms(phone) == :ok -> {:error, "invalid format"}
+      true -> {:ok, "dummy token"}
+    end
+  end
+
+  defp is_phone_cooling_down?(_phone) do
+    false
+  end
+
+  defp is_phone_format_invalid?(_phone) do
+    false
+  end
+
+  defp send_validation_sms(_phone) do
+    :ok
   end
 
   @doc """
