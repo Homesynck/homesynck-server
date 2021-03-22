@@ -56,7 +56,7 @@ defmodule HomesynckWeb.AuthChannel do
     }) do
       {:ok, id} -> {:ok, %{token: gen_auth_token(id), sync_channel_id: id}}
       error ->
-        {:error, %{reason: "unauthorized"}}
+        {:error, %{reason: "#{inspect error}"}}
     end
   end
 
