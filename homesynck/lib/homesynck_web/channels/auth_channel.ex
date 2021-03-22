@@ -63,7 +63,7 @@ defmodule HomesynckWeb.AuthChannel do
   defp validate_phone(phone) when is_binary(phone) do
     case Homesynck.Auth.validate_phone(phone) do
       {:ok, token} -> {:ok, %{register_token: token}}
-      error -> {:error, %{reason: error}}
+      {:error, error} -> {:error, %{reason: error}}
     end
   end
 
