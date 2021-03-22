@@ -77,10 +77,10 @@ defmodule Homesynck.Auth do
     "name" => login,
     "password" => password
   } = params) do
-    cond do
-      get_by(params) != nil -> {:error, "name taken"}
-      #is_register_token_invalid?(token) -> {:error, "invalid register token"}
-      true -> case create_user(params) do
+    if get_by(params) do
+      {:error, "name taken"}
+    else
+      case create_user(params) do
         {:ok, user} -> {:ok, user.id}
         error -> error
       end
