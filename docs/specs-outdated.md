@@ -1,5 +1,7 @@
 # Requests Specifications
 
+**WARNING**: Outdated
+
 ## Authentication service
 Conversation on this service is done with TCP and secured with SSL (no client cert. required).
 
