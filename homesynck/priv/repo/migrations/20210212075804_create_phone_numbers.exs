@@ -10,6 +10,5 @@ defmodule Homesynck.Repo.Migrations.CreatePhoneNumbers do
 
       timestamps()
     end
-
   end
 end

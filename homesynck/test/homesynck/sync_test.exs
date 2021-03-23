@@ -150,7 +150,8 @@ defmodule Homesynck.SyncTest do
     end
 
     test "create_update_received/1 with valid data creates a update_received" do
-      assert {:ok, %UpdateReceived{} = update_received} = Sync.create_update_received(@valid_attrs)
+      assert {:ok, %UpdateReceived{} = update_received} =
+               Sync.create_update_received(@valid_attrs)
     end
 
     test "create_update_received/1 with invalid data returns error changeset" do
@@ -159,12 +160,17 @@ defmodule Homesynck.SyncTest do
 
     test "update_update_received/2 with valid data updates the update_received" do
       update_received = update_received_fixture()
-      assert {:ok, %UpdateReceived{} = update_received} = Sync.update_update_received(update_received, @update_attrs)
+
+      assert {:ok, %UpdateReceived{} = update_received} =
+               Sync.update_update_received(update_received, @update_attrs)
     end
 
     test "update_update_received/2 with invalid data returns error changeset" do
       update_received = update_received_fixture()
-      assert {:error, %Ecto.Changeset{}} = Sync.update_update_received(update_received, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Sync.update_update_received(update_received, @invalid_attrs)
+
       assert update_received == Sync.get_update_received!(update_received.id)
     end
 
@@ -238,6 +244,73 @@ defmodule Homesynck.SyncTest do
     test "change_controller/1 returns a controller changeset" do
       controller = controller_fixture()
       assert %Ecto.Changeset{} = Sync.change_controller(controller)
+    end
+  end
+
+  describe "directories" do
+    alias Homesynck.Sync.Directory
+
+    @valid_attrs %{description: "some description", is_secured: true, name: "some name", password_hash: "some password_hash", thumbnail_url: "some thumbnail_url"}
+    @update_attrs %{description: "some updated description", is_secured: false, name: "some updated name", password_hash: "some updated password_hash", thumbnail_url: "some updated thumbnail_url"}
+    @invalid_attrs %{description: nil, is_secured: nil, name: nil, password_hash: nil, thumbnail_url: nil}
+
+    def directory_fixture(attrs \\ %{}) do
+      {:ok, directory} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Sync.create_directory()
+
+      directory
+    end
+
+    test "list_directories/0 returns all directories" do
+      directory = directory_fixture()
+      assert Sync.list_directories() == [directory]
+    end
+
+    test "get_directory!/1 returns the directory with given id" do
+      directory = directory_fixture()
+      assert Sync.get_directory!(directory.id) == directory
+    end
+
+    test "create_directory/1 with valid data creates a directory" do
+      assert {:ok, %Directory{} = directory} = Sync.create_directory(@valid_attrs)
+      assert directory.description == "some description"
+      assert directory.is_secured == true
+      assert directory.name == "some name"
+      assert directory.password_hash == "some password_hash"
+      assert directory.thumbnail_url == "some thumbnail_url"
+    end
+
+    test "create_directory/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Sync.create_directory(@invalid_attrs)
+    end
+
+    test "update_directory/2 with valid data updates the directory" do
+      directory = directory_fixture()
+      assert {:ok, %Directory{} = directory} = Sync.update_directory(directory, @update_attrs)
+      assert directory.description == "some updated description"
+      assert directory.is_secured == false
+      assert directory.name == "some updated name"
+      assert directory.password_hash == "some updated password_hash"
+      assert directory.thumbnail_url == "some updated thumbnail_url"
+    end
+
+    test "update_directory/2 with invalid data returns error changeset" do
+      directory = directory_fixture()
+      assert {:error, %Ecto.Changeset{}} = Sync.update_directory(directory, @invalid_attrs)
+      assert directory == Sync.get_directory!(directory.id)
+    end
+
+    test "delete_directory/1 deletes the directory" do
+      directory = directory_fixture()
+      assert {:ok, %Directory{}} = Sync.delete_directory(directory)
+      assert_raise Ecto.NoResultsError, fn -> Sync.get_directory!(directory.id) end
+    end
+
+    test "change_directory/1 returns a directory changeset" do
+      directory = directory_fixture()
+      assert %Ecto.Changeset{} = Sync.change_directory(directory)
     end
   end
 end

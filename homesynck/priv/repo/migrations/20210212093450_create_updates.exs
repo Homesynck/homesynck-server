@@ -8,6 +8,5 @@ defmodule Homesynck.Repo.Migrations.CreateUpdates do
 
       timestamps()
     end
-
   end
 end

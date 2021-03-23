@@ -47,7 +47,9 @@ defmodule Homesynck.Auth do
 
   def authenticate(%{"password" => password} = params) do
     case get_by(params) do
-      nil -> {:error, "no user found"}
+      nil ->
+        {:error, "no user found"}
+
       user ->
         Argon2.check_pass(user, password, [{:hash_key, :password_hashed}])
         {:ok, user.id}
@@ -72,11 +74,13 @@ defmodule Homesynck.Auth do
     |> Repo.insert()
   end
 
-  def register(%{
-    "register_token" => register_token,
-    "name" => login,
-    "password" => password
-  } = params) do
+  def register(
+        %{
+          "register_token" => register_token,
+          "name" => login,
+          "password" => password
+        } = params
+      ) do
     if get_by(params) do
       {:error, "name taken"}
     else

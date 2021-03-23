@@ -1,7 +1,7 @@
 defmodule HomesynckWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :homesynck
 
-   @doc """
+  @doc """
   Callback invoked for dynamically configuring the endpoint.
 
   It receives the endpoint configuration and checks if
@@ -9,7 +9,10 @@ defmodule HomesynckWeb.Endpoint do
   """
   def init(_key, config) do
     if config[:load_from_system_env] do
-      port = Application.get_env(:homesynck, :app_port) || raise "expected the PORT environment variable to be set"
+      port =
+        Application.get_env(:homesynck, :app_port) ||
+          raise "expected the PORT environment variable to be set"
+
       {:ok, Keyword.put(config, :http, [:inet6, port: port])}
     else
       {:ok, config}

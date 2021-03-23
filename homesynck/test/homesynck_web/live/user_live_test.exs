@@ -6,7 +6,11 @@ defmodule HomesynckWeb.UserLiveTest do
   alias Homesynck.Auth
 
   @create_attrs %{email: "some email", name: "some name", password_hashed: "some password_hashed"}
-  @update_attrs %{email: "some updated email", name: "some updated name", password_hashed: "some updated password_hashed"}
+  @update_attrs %{
+    email: "some updated email",
+    name: "some updated name",
+    password_hashed: "some updated password_hashed"
+  }
   @invalid_attrs %{email: nil, name: nil, password_hashed: nil}
 
   defp fixture(:user) do

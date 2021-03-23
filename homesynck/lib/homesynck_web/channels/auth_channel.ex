@@ -14,9 +14,15 @@ defmodule HomesynckWeb.AuthChannel do
   @impl true
   def handle_in("login", payload, socket) do
     case payload do
-      %{"password" => password, "login" => login} ->
+      %{
+        "password" => password,
+        "login" => login,
+        "directory" => directory,
+        "directory_password" => directory_password} ->
         {:reply, authenticate(login, password), socket}
-      _ -> {:reply, {:error, %{reason: "wrong params"}}, socket}
+
+      _ ->
+        {:reply, {:error, %{reason: "wrong params"}}, socket}
     end
   end
 
@@ -25,7 +31,9 @@ defmodule HomesynckWeb.AuthChannel do
     case payload do
       %{"login" => login, "password" => password, "register_token" => register_token} ->
         {:reply, register(login, password, register_token), socket}
-      _ -> {:reply, {:error, %{reason: "wrong params"}}, socket}
+
+      _ ->
+        {:reply, {:error, %{reason: "wrong params"}}, socket}
     end
   end
 
@@ -38,10 +46,12 @@ defmodule HomesynckWeb.AuthChannel do
   end
 
   defp authenticate(login, password) do
-    params = case is_email?(login) do
-      true -> %{"email" => login, "password" => password}
-      false -> %{"name" => login, "password" => password}
-    end
+    params =
+      case is_email?(login) do
+        true -> %{"email" => login, "password" => password}
+        false -> %{"name" => login, "password" => password}
+      end
+
     case Homesynck.Auth.authenticate(params) do
       {:ok, id} -> {:ok, %{token: gen_auth_token(id), sync_channel_id: id}}
       error -> {:error, %{reason: "unauthorized"}}
@@ -50,13 +60,15 @@ defmodule HomesynckWeb.AuthChannel do
 
   defp register(login, password, register_token) do
     case Homesynck.Auth.register(%{
-      "register_token" => register_token,
-      "name" => login,
-      "password" => password
-    }) do
-      {:ok, id} -> {:ok, %{token: gen_auth_token(id), sync_channel_id: id}}
+           "register_token" => register_token,
+           "name" => login,
+           "password" => password
+         }) do
+      {:ok, id} ->
+        {:ok, %{token: gen_auth_token(id), sync_channel_id: id}}
+
       error ->
-        {:error, %{reason: "#{inspect error}"}}
+        {:error, %{reason: "#{inspect(error)}"}}
     end
   end
 
@@ -78,7 +90,7 @@ defmodule HomesynckWeb.AuthChannel do
   # broadcast to everyone in the current topic (auth:lobby).
   @impl true
   def handle_in("shout", payload, socket) do
-    broadcast socket, "shout", payload
+    broadcast(socket, "shout", payload)
     {:noreply, socket}
   end
 
@@ -94,7 +106,9 @@ defmodule HomesynckWeb.AuthChannel do
     end
   end
 
-  defp is_email?(email) do false end
+  defp is_email?(email) do
+    false
+  end
 
   defp gen_auth_token(user_id) do
     Phoenix.Token.sign(

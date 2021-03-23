@@ -6,8 +6,16 @@ defmodule Homesynck.AuthTest do
   describe "users" do
     alias Homesynck.Auth.User
 
-    @valid_attrs %{email: "some email", name: "some name", password_hashed: "some password_hashed"}
-    @update_attrs %{email: "some updated email", name: "some updated name", password_hashed: "some updated password_hashed"}
+    @valid_attrs %{
+      email: "some email",
+      name: "some name",
+      password_hashed: "some password_hashed"
+    }
+    @update_attrs %{
+      email: "some updated email",
+      name: "some updated name",
+      password_hashed: "some updated password_hashed"
+    }
     @invalid_attrs %{email: nil, name: nil, password_hashed: nil}
 
     def user_fixture(attrs \\ %{}) do
@@ -69,8 +77,18 @@ defmodule Homesynck.AuthTest do
   describe "phone_numbers" do
     alias Homesynck.Auth.PhoneNumber
 
-    @valid_attrs %{expires_on: ~D[2010-04-17], number: "some number", register_token: "some register_token", verification_code: "some verification_code"}
-    @update_attrs %{expires_on: ~D[2011-05-18], number: "some updated number", register_token: "some updated register_token", verification_code: "some updated verification_code"}
+    @valid_attrs %{
+      expires_on: ~D[2010-04-17],
+      number: "some number",
+      register_token: "some register_token",
+      verification_code: "some verification_code"
+    }
+    @update_attrs %{
+      expires_on: ~D[2011-05-18],
+      number: "some updated number",
+      register_token: "some updated register_token",
+      verification_code: "some updated verification_code"
+    }
     @invalid_attrs %{expires_on: nil, number: nil, register_token: nil, verification_code: nil}
 
     def phone_number_fixture(attrs \\ %{}) do
@@ -106,7 +124,10 @@ defmodule Homesynck.AuthTest do
 
     test "update_phone_number/2 with valid data updates the phone_number" do
       phone_number = phone_number_fixture()
-      assert {:ok, %PhoneNumber{} = phone_number} = Auth.update_phone_number(phone_number, @update_attrs)
+
+      assert {:ok, %PhoneNumber{} = phone_number} =
+               Auth.update_phone_number(phone_number, @update_attrs)
+
       assert phone_number.expires_on == ~D[2011-05-18]
       assert phone_number.number == "some updated number"
       assert phone_number.register_token == "some updated register_token"

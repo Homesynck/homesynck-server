@@ -48,7 +48,8 @@ defmodule Homesynck.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:argon2_elixir, "~> 2.4.0"},
-      {:kvx, "~> 0.1.2"}
+      {:kvx, "~> 0.1.2"},
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false}
     ]
   end
 

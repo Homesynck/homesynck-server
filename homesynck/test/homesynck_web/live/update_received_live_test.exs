@@ -52,7 +52,9 @@ defmodule HomesynckWeb.UpdateReceivedLiveTest do
     test "updates update_received in listing", %{conn: conn, update_received: update_received} do
       {:ok, index_live, _html} = live(conn, Routes.update_received_index_path(conn, :index))
 
-      assert index_live |> element("#update_received-#{update_received.id} a", "Edit") |> render_click() =~
+      assert index_live
+             |> element("#update_received-#{update_received.id} a", "Edit")
+             |> render_click() =~
                "Edit Update received"
 
       assert_patch(index_live, Routes.update_received_index_path(conn, :edit, update_received))
@@ -73,7 +75,10 @@ defmodule HomesynckWeb.UpdateReceivedLiveTest do
     test "deletes update_received in listing", %{conn: conn, update_received: update_received} do
       {:ok, index_live, _html} = live(conn, Routes.update_received_index_path(conn, :index))
 
-      assert index_live |> element("#update_received-#{update_received.id} a", "Delete") |> render_click()
+      assert index_live
+             |> element("#update_received-#{update_received.id} a", "Delete")
+             |> render_click()
+
       refute has_element?(index_live, "#update_received-#{update_received.id}")
     end
   end
@@ -82,13 +87,15 @@ defmodule HomesynckWeb.UpdateReceivedLiveTest do
     setup [:create_update_received]
 
     test "displays update_received", %{conn: conn, update_received: update_received} do
-      {:ok, _show_live, html} = live(conn, Routes.update_received_show_path(conn, :show, update_received))
+      {:ok, _show_live, html} =
+        live(conn, Routes.update_received_show_path(conn, :show, update_received))
 
       assert html =~ "Show Update received"
     end
 
     test "updates update_received within modal", %{conn: conn, update_received: update_received} do
-      {:ok, show_live, _html} = live(conn, Routes.update_received_show_path(conn, :show, update_received))
+      {:ok, show_live, _html} =
+        live(conn, Routes.update_received_show_path(conn, :show, update_received))
 
       assert show_live |> element("a", "Edit") |> render_click() =~
                "Edit Update received"

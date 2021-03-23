@@ -17,7 +17,6 @@ defmodule Homesynck.Sync.Update do
     update
     |> cast(attrs, [:rank, :instructions])
     |> put_assoc(:emitter, Map.get(attrs, :emitter))
-    |> IO.inspect
     |> validate_required([:rank, :instructions, :emitter])
   end
 end

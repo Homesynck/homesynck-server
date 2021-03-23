@@ -5,8 +5,18 @@ defmodule HomesynckWeb.PhoneNumberLiveTest do
 
   alias Homesynck.Auth
 
-  @create_attrs %{expires_on: ~D[2010-04-17], number: "some number", register_token: "some register_token", verification_code: "some verification_code"}
-  @update_attrs %{expires_on: ~D[2011-05-18], number: "some updated number", register_token: "some updated register_token", verification_code: "some updated verification_code"}
+  @create_attrs %{
+    expires_on: ~D[2010-04-17],
+    number: "some number",
+    register_token: "some register_token",
+    verification_code: "some verification_code"
+  }
+  @update_attrs %{
+    expires_on: ~D[2011-05-18],
+    number: "some updated number",
+    register_token: "some updated register_token",
+    verification_code: "some updated verification_code"
+  }
   @invalid_attrs %{expires_on: nil, number: nil, register_token: nil, verification_code: nil}
 
   defp fixture(:phone_number) do
@@ -76,7 +86,10 @@ defmodule HomesynckWeb.PhoneNumberLiveTest do
     test "deletes phone_number in listing", %{conn: conn, phone_number: phone_number} do
       {:ok, index_live, _html} = live(conn, Routes.phone_number_index_path(conn, :index))
 
-      assert index_live |> element("#phone_number-#{phone_number.id} a", "Delete") |> render_click()
+      assert index_live
+             |> element("#phone_number-#{phone_number.id} a", "Delete")
+             |> render_click()
+
       refute has_element?(index_live, "#phone_number-#{phone_number.id}")
     end
   end
@@ -85,14 +98,16 @@ defmodule HomesynckWeb.PhoneNumberLiveTest do
     setup [:create_phone_number]
 
     test "displays phone_number", %{conn: conn, phone_number: phone_number} do
-      {:ok, _show_live, html} = live(conn, Routes.phone_number_show_path(conn, :show, phone_number))
+      {:ok, _show_live, html} =
+        live(conn, Routes.phone_number_show_path(conn, :show, phone_number))
 
       assert html =~ "Show Phone number"
       assert html =~ phone_number.number
     end
 
     test "updates phone_number within modal", %{conn: conn, phone_number: phone_number} do
-      {:ok, show_live, _html} = live(conn, Routes.phone_number_show_path(conn, :show, phone_number))
+      {:ok, show_live, _html} =
+        live(conn, Routes.phone_number_show_path(conn, :show, phone_number))
 
       assert show_live |> element("a", "Edit") |> render_click() =~
                "Edit Phone number"

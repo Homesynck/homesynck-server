@@ -10,8 +10,6 @@ defmodule HomesynckWeb.SyncChannel do
     end
   end
 
-
-
   # Channels can be used in a request/response fashion
   # by sending replies to requests from the client
   @impl true
@@ -23,7 +21,7 @@ defmodule HomesynckWeb.SyncChannel do
   # broadcast to everyone in the current topic (sync:lobby).
   @impl true
   def handle_in("shout", payload, socket) do
-    broadcast socket, "shout", payload
+    broadcast(socket, "shout", payload)
     {:noreply, socket}
   end
 

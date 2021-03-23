@@ -55,14 +55,13 @@ config :homesynck, HomesynckWeb.Endpoint,
 # configured to run both http and https servers on
 # different ports.
 
-config :homesynck, HomesynckWeb.Endpoint,
-    http: [port: 4000]
-    # https: [
-    #   port: 4001,
-    #   cipher_suite: :strong,
-    #   certfile: "priv/cert/selfsigned.pem",
-    #   keyfile: "priv/cert/selfsigned_key.pem"
-    # ]
+config :homesynck, HomesynckWeb.Endpoint, http: [port: 4000]
+# https: [
+#   port: 4001,
+#   cipher_suite: :strong,
+#   certfile: "priv/cert/selfsigned.pem",
+#   keyfile: "priv/cert/selfsigned_key.pem"
+# ]
 
 # Watch static and templates for browser reloading.
 config :homesynck, HomesynckWeb.Endpoint,
