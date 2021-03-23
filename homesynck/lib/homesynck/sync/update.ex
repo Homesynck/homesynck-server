@@ -1,11 +1,10 @@
 defmodule Homesynck.Sync.Update do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Homesynck.Sync.{Controller, UpdateReceived}
+  alias Homesynck.Auth.User
 
   schema "updates" do
-    belongs_to :emitter, Controller
-    many_to_many :receivers, Controller, join_through: UpdateReceived
+    belongs_to :emitter, User
 
     field :instructions, :string
     field :rank, :integer
@@ -17,6 +16,8 @@ defmodule Homesynck.Sync.Update do
   def changeset(update, attrs) do
     update
     |> cast(attrs, [:rank, :instructions])
-    |> validate_required([:rank, :instructions])
+    |> put_assoc(:emitter, Map.get(attrs, :emitter))
+    |> IO.inspect
+    |> validate_required([:rank, :instructions, :emitter])
   end
 end

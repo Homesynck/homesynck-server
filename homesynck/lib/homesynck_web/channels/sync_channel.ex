@@ -10,6 +10,8 @@ defmodule HomesynckWeb.SyncChannel do
     end
   end
 
+
+
   # Channels can be used in a request/response fashion
   # by sending replies to requests from the client
   @impl true

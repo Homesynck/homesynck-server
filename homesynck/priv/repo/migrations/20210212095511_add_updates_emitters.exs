@@ -3,7 +3,7 @@ defmodule Homesynck.Repo.Migrations.AddUpdatesEmitters do
 
   def change do
     alter table(:updates) do
-      add :emitter_id, references(:controllers, on_delete: :nothing)
+      add :emitter_id, references(:users, on_delete: :delete_all)
     end
 
     create index(:updates, [:emitter_id])

@@ -2,7 +2,6 @@ defmodule HomesynckWeb.UserSocket do
   use Phoenix.Socket
 
   # Channels
-  channel "room:*", HomesynckWeb.RoomChannel
   channel "auth:*", HomesynckWeb.AuthChannel
   channel "sync:*", HomesynckWeb.SyncChannel
 
