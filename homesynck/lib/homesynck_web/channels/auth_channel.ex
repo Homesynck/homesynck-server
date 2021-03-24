@@ -28,6 +28,7 @@ defmodule HomesynckWeb.AuthChannel do
       {:ok, user_id} ->
         token = AuthTokenHelper.gen_auth_token(user_id, socket)
         Phoenix.Socket.assign(socket, :auth_token, token)
+        Phoenix.Socket.assign(socket, :verified_user_id, user_id)
         {:ok, %{user_id: user_id}}
 
       {:error, reason} -> {:error, %{reason: reason}}
@@ -51,6 +52,7 @@ defmodule HomesynckWeb.AuthChannel do
       {:ok, user_id} ->
         token = AuthTokenHelper.gen_auth_token(user_id, socket)
         Phoenix.Socket.assign(socket, :auth_token, token)
+        Phoenix.Socket.assign(socket, :verified_user_id, user_id)
         {:ok, %{user_id: user_id}}
 
       {:error, reason} -> {:error, %{reason: reason}}

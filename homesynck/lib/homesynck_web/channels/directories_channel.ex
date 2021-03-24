@@ -10,7 +10,8 @@ defmodule HomesynckWeb.DirectoriesChannel do
     end
   end
 
-
+  @impl true
+  def handle_in("")
 
   # Add authorization logic here as required.
   defp authorized?(_payload) do

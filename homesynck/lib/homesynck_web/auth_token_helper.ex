@@ -6,4 +6,8 @@ defmodule HomesynckWeb.AuthTokenHelper do
       user_id
     )
   end
+
+  def verify_auth_token(user_id, token) do
+
+  end
 end
