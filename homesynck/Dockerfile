@@ -8,6 +8,7 @@ RUN apk update && apk upgrade && \
   apk add postgresql-client && \
   apk add nodejs npm && \
   apk add build-base && \
+  apk add bash && \
   rm -rf /var/cache/apk/*
 
 # Set environment to production
