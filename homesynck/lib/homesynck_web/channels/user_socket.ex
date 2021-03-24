@@ -4,6 +4,7 @@ defmodule HomesynckWeb.UserSocket do
   # Channels
   channel "auth:*", HomesynckWeb.AuthChannel
   channel "sync:*", HomesynckWeb.SyncChannel
+  channel "directories:*", HomesynckWeb.DirectoriesChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After

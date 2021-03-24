@@ -3,7 +3,6 @@ defmodule Homesynck.Auth.User do
   import Ecto.Changeset
 
   schema "users" do
-    has_many :controllers, Homesynck.Sync.Controller
     field :email, :string
     field :name, :string
     field :password_hashed, :string

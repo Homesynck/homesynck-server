@@ -52,6 +52,7 @@ defmodule Homesynck.Auth do
 
       user ->
         Argon2.check_pass(user, password, [{:hash_key, :password_hashed}])
+        |> IO.inspect #TODO
         {:ok, user.id}
     end
   end
@@ -86,7 +87,9 @@ defmodule Homesynck.Auth do
     else
       case create_user(params) do
         {:ok, user} -> {:ok, user.id}
-        error -> error
+        error ->
+          error
+          |> IO.inspect #TODO
       end
     end
   end
@@ -161,8 +164,8 @@ defmodule Homesynck.Auth do
     cond do
       is_phone_format_invalid?(phone) -> {:error, "invalid format"}
       is_phone_cooling_down?(phone) -> {:error, "phone not validated"}
-      send_validation_sms(phone) == :ok -> {:error, "invalid format"}
-      true -> {:ok, "dummy token"}
+      send_validation_sms(phone) != :ok -> {:error, "invalid format"}
+      true -> {:ok, []}
     end
   end
 
