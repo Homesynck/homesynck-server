@@ -30,4 +30,4 @@ mix ecto.migrate
 echo "Migrations finished."
 
 # Start the server.
-exec mix phx.server
+elixir --sname $name --cookie cookie -S mix phx.server
