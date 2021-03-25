@@ -32,12 +32,12 @@ defmodule Homesynck.Sync.Directory do
 
   defp put_pass_hash(changeset), do: changeset
 
-  def with_user_id(query \\ __MODULE__, user_id) do
+  def with_user_id(query, user_id) do
     query
     |> where([c], c.user_id == ^user_id)
   end
 
-  def with_name(query \\ __MODULE__, name) do
+  def with_name(query, name) do
     query
     |> where([c], c.name == ^name)
   end
