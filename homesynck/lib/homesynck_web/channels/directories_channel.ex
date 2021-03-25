@@ -1,9 +1,10 @@
 defmodule HomesynckWeb.DirectoriesChannel do
   use HomesynckWeb, :channel
   alias Homesynck.Sync
+  alias HomesynckWeb.AuthTokenHelper
 
   @impl true
-  def join("directories:lobby", payload, socket) do
+  def join("directories:lobby", _payload, socket) do
     if authorized?(socket) do
       {:ok, socket}
     else
@@ -16,10 +17,10 @@ defmodule HomesynckWeb.DirectoriesChannel do
         "create",
         %{
           "name" => dir_name,
-          "description" => dir_description,
-          "thumbnail_url" => dir_thumbnail_url,
-          "is_secured" => dir_is_secured,
-          "password" => dir_password
+          "description" => _dir_description,
+          "thumbnail_url" => _dir_thumbnail_url,
+          "is_secured" => _dir_is_secured,
+          "password" => _dir_password
         } = payload,
         %{
           assigns: %{user_id: user_id}
@@ -31,7 +32,7 @@ defmodule HomesynckWeb.DirectoriesChannel do
           {:ok, %{directory_id: directory.id}}
 
         {:error, :not_found} ->
-          case Sync.create_directory(user_id, payload) do
+          case Sync.create_directory_for(user_id, payload) do
             {:ok, directory_id} -> {:ok, %{directory_id: directory_id}}
             error -> {:error, %{reason: IO.inspect(error)}}
           end
@@ -46,8 +47,8 @@ defmodule HomesynckWeb.DirectoriesChannel do
   @impl true
   def handle_in(
         "open",
-        %{"name" => name},
-        %{assigns: %{user_id: user_id}}
+        %{"name" => dir_name},
+        %{assigns: %{user_id: user_id}} = socket
       ) do
     resp =
       case Sync.get_user_directory_by_name(user_id, dir_name) do

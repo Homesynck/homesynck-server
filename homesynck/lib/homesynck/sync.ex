@@ -161,8 +161,8 @@ defmodule Homesynck.Sync do
   def create_directory_for(
         user_id,
         %{
-          "name" => dir_name,
-          "is_secured" => dir_is_secured
+          "name" => _dir_name,
+          "is_secured" => _dir_is_secured
         } = attrs
       ) do
     case insert_directory(Map.put(attrs, "user_id", user_id)) do
@@ -176,7 +176,7 @@ defmodule Homesynck.Sync do
     end
   end
 
-  defp insert_directory(attrs \\ %{}) do
+  defp insert_directory(attrs) do
     %Directory{}
     |> Directory.changeset(attrs)
     |> Repo.insert()
