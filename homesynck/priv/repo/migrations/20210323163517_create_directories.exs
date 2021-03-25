@@ -14,5 +14,6 @@ defmodule Homesynck.Repo.Migrations.CreateDirectories do
     end
 
     create index(:directories, [:user_id])
+    create unique_index(:directories, [:name, :user_id])
   end
 end

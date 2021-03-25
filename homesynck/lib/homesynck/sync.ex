@@ -117,6 +117,19 @@ defmodule Homesynck.Sync do
     Repo.all(Directory)
   end
 
+  def get_user_directory_by_name(user_id, name) do
+    directories_with_name =
+      Directory
+      |> Directory.with_user_id(user_id)
+      |> Directory.with_name(name)
+      |> Repo.all()
+
+    case directories_with_name do
+      [first_dir | _] -> {:ok, first_dir}
+      _ -> {:error, :not_found}
+    end
+  end
+
   @doc """
   Gets a single directory.
 
@@ -145,7 +158,25 @@ defmodule Homesynck.Sync do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_directory(attrs \\ %{}) do
+  def create_directory_for(
+        user_id,
+        %{
+          "name" => dir_name,
+          "is_secured" => dir_is_secured
+        } = attrs
+      ) do
+    case insert_directory(Map.put(attrs, "user_id", user_id)) do
+      {:ok, directory} ->
+        {:ok, directory.id}
+
+      error ->
+        # TODO
+        error
+        |> IO.inspect()
+    end
+  end
+
+  defp insert_directory(attrs \\ %{}) do
     %Directory{}
     |> Directory.changeset(attrs)
     |> Repo.insert()

@@ -250,9 +250,27 @@ defmodule Homesynck.SyncTest do
   describe "directories" do
     alias Homesynck.Sync.Directory
 
-    @valid_attrs %{description: "some description", is_secured: true, name: "some name", password_hash: "some password_hash", thumbnail_url: "some thumbnail_url"}
-    @update_attrs %{description: "some updated description", is_secured: false, name: "some updated name", password_hash: "some updated password_hash", thumbnail_url: "some updated thumbnail_url"}
-    @invalid_attrs %{description: nil, is_secured: nil, name: nil, password_hash: nil, thumbnail_url: nil}
+    @valid_attrs %{
+      description: "some description",
+      is_secured: true,
+      name: "some name",
+      password_hash: "some password_hash",
+      thumbnail_url: "some thumbnail_url"
+    }
+    @update_attrs %{
+      description: "some updated description",
+      is_secured: false,
+      name: "some updated name",
+      password_hash: "some updated password_hash",
+      thumbnail_url: "some updated thumbnail_url"
+    }
+    @invalid_attrs %{
+      description: nil,
+      is_secured: nil,
+      name: nil,
+      password_hash: nil,
+      thumbnail_url: nil
+    }
 
     def directory_fixture(attrs \\ %{}) do
       {:ok, directory} =

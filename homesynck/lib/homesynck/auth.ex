@@ -37,6 +37,13 @@ defmodule Homesynck.Auth do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  def get_user(id) do
+    case Repo.get(User, id) do
+      user -> {:ok, user}
+      nil -> {:error, :not_found}
+    end
+  end
+
   def get_by(%{"name" => name}) do
     Repo.get_by(User, name: name)
   end
@@ -52,7 +59,9 @@ defmodule Homesynck.Auth do
 
       user ->
         Argon2.check_pass(user, password, [{:hash_key, :password_hashed}])
-        |> IO.inspect #TODO
+        # TODO
+        |> IO.inspect()
+
         {:ok, user.id}
     end
   end
@@ -86,10 +95,13 @@ defmodule Homesynck.Auth do
       {:error, "name taken"}
     else
       case create_user(params) do
-        {:ok, user} -> {:ok, user.id}
+        {:ok, user} ->
+          {:ok, user.id}
+
         error ->
           error
-          |> IO.inspect #TODO
+          # TODO
+          |> IO.inspect()
       end
     end
   end

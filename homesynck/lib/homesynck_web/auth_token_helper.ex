@@ -7,7 +7,10 @@ defmodule HomesynckWeb.AuthTokenHelper do
     )
   end
 
-  def verify_auth_token(user_id, token) do
-
+  def auth_token_valid?(user_id, token, socket) do
+    case Phoenix.Token.verify(socket, "user auth", token, max_age: 86_400) do
+      {:ok, ^user_id} -> true
+      _ -> false
+    end
   end
 end

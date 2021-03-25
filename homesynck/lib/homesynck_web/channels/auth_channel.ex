@@ -13,63 +13,77 @@ defmodule HomesynckWeb.AuthChannel do
   end
 
   @impl true
-  def handle_in("login", %{
-    "password" => password,
-    "login" => login
-  }, socket) do
-
+  def handle_in(
+        "login",
+        %{
+          "password" => password,
+          "login" => login
+        },
+        socket
+      ) do
     params =
       case is_email?(login) do
         true -> %{"email" => login, "password" => password}
         false -> %{"name" => login, "password" => password}
       end
 
-    resp = case Homesynck.Auth.authenticate(params) do
-      {:ok, user_id} ->
-        token = AuthTokenHelper.gen_auth_token(user_id, socket)
-        Phoenix.Socket.assign(socket, :auth_token, token)
-        Phoenix.Socket.assign(socket, :verified_user_id, user_id)
-        {:ok, %{user_id: user_id}}
+    resp =
+      case Homesynck.Auth.authenticate(params) do
+        {:ok, user_id} ->
+          token = AuthTokenHelper.gen_auth_token(user_id, socket)
+          Phoenix.Socket.assign(socket, :auth_token, token)
+          Phoenix.Socket.assign(socket, :user_id, user_id)
+          {:ok, %{user_id: user_id}}
 
-      {:error, reason} -> {:error, %{reason: reason}}
-    end
-
-    {:reply, resp, socket}
-  end
-
-  @impl true
-  def handle_in("register", %{
-    "login" => login,
-    "password" => password,
-    "register_token" => register_token
-  }, socket) do
-
-    resp = case Homesynck.Auth.register(%{
-      "register_token" => register_token,
-      "name" => login,
-      "password" => password
-    }) do
-      {:ok, user_id} ->
-        token = AuthTokenHelper.gen_auth_token(user_id, socket)
-        Phoenix.Socket.assign(socket, :auth_token, token)
-        Phoenix.Socket.assign(socket, :verified_user_id, user_id)
-        {:ok, %{user_id: user_id}}
-
-      {:error, reason} -> {:error, %{reason: reason}}
-    end
+        {:error, reason} ->
+          {:error, %{reason: reason}}
+      end
 
     {:reply, resp, socket}
   end
 
   @impl true
-  def handle_in("validate_phone", %{
-    "phone" => phone
-  }, socket) do
+  def handle_in(
+        "register",
+        %{
+          "login" => login,
+          "password" => password,
+          "register_token" => register_token
+        },
+        socket
+      ) do
+    resp =
+      case Homesynck.Auth.register(%{
+             "register_token" => register_token,
+             "name" => login,
+             "password" => password
+           }) do
+        {:ok, user_id} ->
+          token = AuthTokenHelper.gen_auth_token(user_id, socket)
+          Phoenix.Socket.assign(socket, :auth_token, token)
+          Phoenix.Socket.assign(socket, :user_id, user_id)
+          {:ok, %{user_id: user_id}}
 
-    resp = case Homesynck.Auth.validate_phone(phone) do
-      {:ok, _} -> {:ok, %{}}
-      {:error, reason} -> {:error, %{reason: reason}}
-    end
+        {:error, reason} ->
+          {:error, %{reason: reason}}
+      end
+
+    {:reply, resp, socket}
+  end
+
+  @impl true
+  def handle_in(
+        "validate_phone",
+        %{
+          "phone" => phone
+        },
+        socket
+      ) do
+    resp =
+      case Homesynck.Auth.validate_phone(phone) do
+        {:ok, _} -> {:ok, %{}}
+        {:error, reason} -> {:error, %{reason: reason}}
+      end
 
     {:reply, resp, socket}
   end
