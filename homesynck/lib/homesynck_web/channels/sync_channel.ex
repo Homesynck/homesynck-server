@@ -2,7 +2,7 @@ defmodule HomesynckWeb.SyncChannel do
   use HomesynckWeb, :channel
 
   @impl true
-  def join("sync:" <> directory_id, payload, socket) do
+  def join("sync:" <> _directory_id, payload, socket) do
     if authorized?(payload) do
       {:ok, socket}
     else

@@ -1,5 +1,4 @@
 defmodule HomesynckWeb.AuthChannel do
-  import Logger
   use HomesynckWeb, :channel
   alias HomesynckWeb.AuthTokenHelper
 
@@ -89,7 +88,7 @@ defmodule HomesynckWeb.AuthChannel do
   end
 
   @impl true
-  def handle_in(_, _, socket) do
+  def handle_in(_, _, _socket) do
     {:reply, {:error, %{reason: "wrong params"}}}
   end
 
@@ -101,7 +100,7 @@ defmodule HomesynckWeb.AuthChannel do
   defp is_email?(email) when is_binary(email) do
     case Regex.run(~r/^[\w.!#$%&’*+\-\/=?\^`{|}~]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*$/i, email) do
       nil -> false
-      [email, _] -> true
+      [_email, _] -> true
     end
   end
 

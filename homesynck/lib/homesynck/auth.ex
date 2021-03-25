@@ -38,9 +38,10 @@ defmodule Homesynck.Auth do
   def get_user!(id), do: Repo.get!(User, id)
 
   def get_user(id) do
-    case Repo.get(User, id) do
-      user -> {:ok, user}
-      nil -> {:error, :not_found}
+    user = Repo.get(User, id)
+    case user do
+      %{} -> {:ok, user}
+      _ -> {:error, :not_found}
     end
   end
 
@@ -86,9 +87,9 @@ defmodule Homesynck.Auth do
 
   def register(
         %{
-          "register_token" => register_token,
-          "name" => login,
-          "password" => password
+          "register_token" => _register_token,
+          "name" => _login,
+          "password" => _password
         } = params
       ) do
     if get_by(params) do
