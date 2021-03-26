@@ -13,6 +13,7 @@ defmodule Homesynck.Sync.Directory do
     field :password, :string, virtual: true
     field :password_hash, :string
     field :thumbnail_url, :string
+    field :current_rank, :integer, default: 0
 
     timestamps()
   end

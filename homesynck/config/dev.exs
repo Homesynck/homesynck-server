@@ -20,7 +20,7 @@ config :homesynck, HomesynckWeb.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  secret_key_base: "Pi6lbm3/QtepN6SHNYU3pDjJeKZs/DEV",
+  secret_key_base: "fspBlihP3d/f0yXzOY4vCpx2o390APIxO9UbO9oBpklxCj5zW626M8mpwEJzpqvF",
   watchers: [
     node: [
       "node_modules/webpack/bin/webpack.js",
