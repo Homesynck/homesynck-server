@@ -7,9 +7,15 @@ defmodule HomesynckWeb.AuthChannel do
     if authorized?(payload) do
       {:ok, socket}
     else
-      {:error, %{reason: "unauthorized"}}
+      {:error,
+       %{
+         reason: "unauthorized"
+       }}
     end
   end
+
+  @impl true
+  def join(_, _, _), do: {:error, %{reason: "wrong params"}}
 
   @impl true
   def handle_in(
@@ -32,8 +38,8 @@ defmodule HomesynckWeb.AuthChannel do
           token = AuthTokenHelper.gen_auth_token(user_id, socket)
           {:ok, %{user_id: user_id, auth_token: token}}
 
-        {:error, reason} ->
-          {:error, %{reason: inspect(reason)}}
+        {:error, _reason} ->
+          {:error, %{reason: "login rejected"}}
       end
 
     {:reply, resp, socket}
@@ -59,8 +65,8 @@ defmodule HomesynckWeb.AuthChannel do
           token = AuthTokenHelper.gen_auth_token(user_id, socket)
           {:ok, %{user_id: user_id, auth_token: token}}
 
-        {:error, reason} ->
-          {:error, %{reason: inspect(reason)}}
+        {:error, _reason} ->
+          {:error, %{reason: "register rejected"}}
       end
 
     {:reply, resp, socket}
@@ -76,8 +82,11 @@ defmodule HomesynckWeb.AuthChannel do
       ) do
     resp =
       case Homesynck.Auth.validate_phone(phone) do
-        {:ok, _} -> {:ok, %{}}
-        {:error, reason} -> {:error, %{reason: inspect(reason)}}
+        {:ok, _} ->
+          {:ok, %{}}
+
+        {:error, _reason} ->
+          {:error, %{reason: "phone validation rejected"}}
       end
 
     {:reply, resp, socket}
@@ -94,7 +103,9 @@ defmodule HomesynckWeb.AuthChannel do
   end
 
   defp is_email?(email) when is_binary(email) do
-    case Regex.run(~r/^[\w.!#$%&’*+\-\/=?\^`{|}~]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*$/i, email) do
+    reg = ~r/^[\w.!#$%&’*+\-\/=?\^`{|}~]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*$/i
+
+    case Regex.run(reg, email) do
       nil -> false
       [_email, _] -> true
     end

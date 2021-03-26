@@ -25,6 +25,9 @@ defmodule HomesynckWeb.DirectoriesChannel do
   end
 
   @impl true
+  def join(_, _, _), do: {:error, %{reason: "wrong params"}}
+
+  @impl true
   def handle_in(
         "create",
         %{
@@ -46,11 +49,11 @@ defmodule HomesynckWeb.DirectoriesChannel do
         {:error, :not_found} ->
           case Sync.create_directory_for(user_id, payload) do
             {:ok, directory_id} -> {:ok, %{directory_id: directory_id}}
-            error -> {:error, %{reason: inspect(error)}}
+            _error -> {:error, %{reason: "directory creation failed"}}
           end
 
-        {:error, reason} ->
-          {:error, %{reason: inspect(reason)}}
+        {:error, _reason} ->
+          {:error, %{reason: "directory creation failed"}}
       end
 
     {:reply, resp, socket}
@@ -68,26 +71,21 @@ defmodule HomesynckWeb.DirectoriesChannel do
           {:ok, %{directory_id: directory.id}}
 
         {:error, :not_found} ->
-          {:error, %{reason: "not found"}}
+          {:error, %{reason: "directory not found"}}
 
-        {:error, reason} ->
-          {:error, %{reason: inspect(reason)}}
+        {:error, _reason} ->
+          {:error, %{reason: "directory opening failed"}}
       end
 
     {:reply, resp, socket}
   end
 
-  defp authorized?(auth_token, user_id, socket) do
-    AuthTokenHelper.auth_token_valid?(user_id, auth_token, socket)
-  end
-
-  defp authorized?(auth_token, user_id, socket) do
-    IO.puts("SOCKET_UNAUTHORIZED: #{user_id}:#{auth_token}:#{inspect(socket)}")
-    false
-  end
-
   @impl true
   def handle_in(_, _, socket) do
     {:reply, {:error, %{reason: "wrong params"}}, socket}
+  end
+
+  defp authorized?(auth_token, user_id, socket) do
+    AuthTokenHelper.auth_token_valid?(user_id, auth_token, socket)
   end
 end

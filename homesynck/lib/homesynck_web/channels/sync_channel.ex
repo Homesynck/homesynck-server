@@ -30,6 +30,9 @@ defmodule HomesynckWeb.SyncChannel do
   end
 
   @impl true
+  def join(_, _, _), do: {:error, %{reason: "wrong params"}}
+
+  @impl true
   def handle_in(
         "push_update",
         %{
@@ -45,7 +48,7 @@ defmodule HomesynckWeb.SyncChannel do
         {:ok, %{:update_id => update.id}}
       else
         {:error, :not_found} -> {:error, %{:reason => "directory not found"}}
-        {:error, error} -> {:error, %{:reason => inspect(error)}}
+        {:error, _error} -> {:error, %{:reason => "update pushing failed"}}
       end
 
     {:reply, resp, socket}
