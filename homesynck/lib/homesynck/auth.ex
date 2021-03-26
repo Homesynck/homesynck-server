@@ -39,8 +39,9 @@ defmodule Homesynck.Auth do
 
   def get_user(id) do
     user = Repo.get(User, id)
+
     case user do
-      %{} -> {:ok, user}
+      %User{} -> {:ok, user}
       _ -> {:error, :not_found}
     end
   end
@@ -54,16 +55,13 @@ defmodule Homesynck.Auth do
   end
 
   def authenticate(%{"password" => password} = params) do
-    case get_by(params) do
-      nil ->
-        {:error, "no user found"}
-
-      user ->
-        Argon2.check_pass(user, password, [{:hash_key, :password_hashed}])
-        # TODO
-        |> IO.inspect()
-
-        {:ok, user.id}
+    with %User{} = user <- get_by(params),
+         {:ok, user} <-
+           Argon2.check_pass(user, password, [{:hash_key, :password_hashed}]) do
+      {:ok, user.id}
+    else
+      nil -> {:error, "no user found"}
+      {:error, reason} -> {:error, reason}
     end
   end
 

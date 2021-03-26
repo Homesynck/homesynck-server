@@ -27,7 +27,7 @@ defmodule Homesynck.Sync.Directory do
   end
 
   defp put_pass_hash(%Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset) do
-    change(changeset, Argon2.add_hash(password, [{:hash_key, :password_hashed}]))
+    change(changeset, Argon2.add_hash(password, [{:hash_key, :password_hash}]))
   end
 
   defp put_pass_hash(changeset), do: changeset

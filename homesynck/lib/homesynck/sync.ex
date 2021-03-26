@@ -130,6 +130,15 @@ defmodule Homesynck.Sync do
     end
   end
 
+  def directory_id_owned_by_user_id?(user_id, dir_id) do
+    try do
+      dir = get_directory!(dir_id)
+      dir.user_id == user_id
+    rescue
+      _ -> false
+    end
+  end
+
   @doc """
   Gets a single directory.
 
@@ -145,6 +154,15 @@ defmodule Homesynck.Sync do
 
   """
   def get_directory!(id), do: Repo.get!(Directory, id)
+
+  def get_directory(id) do
+    dir = Repo.get(Directory, id)
+
+    case dir do
+      %Directory{} -> {:ok, dir}
+      _ -> {:error, :not_found}
+    end
+  end
 
   @doc """
   Creates a directory.
@@ -180,6 +198,29 @@ defmodule Homesynck.Sync do
     %Directory{}
     |> Directory.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def open_directory(directory_id, user_id, password \\ "") do
+    with true <- directory_id_owned_by_user_id?(user_id, directory_id),
+         {:ok, %Directory{} = directory} <- get_directory(directory_id),
+         {:ok, directory} <- authenticate_directory(directory, password) do
+      {:ok, directory}
+    else
+      _ -> {:error, :access_denied}
+    end
+  end
+
+  def authenticate_directory(
+        %Directory{
+          is_secured: is_secured
+        } = dir,
+        password
+      ) do
+    if is_secured do
+      Argon2.check_pass(dir, password, [{:hash_key, :password_hash}])
+    else
+      {:ok, dir}
+    end
   end
 
   @doc """
