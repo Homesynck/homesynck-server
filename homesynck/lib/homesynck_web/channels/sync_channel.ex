@@ -30,7 +30,7 @@ defmodule HomesynckWeb.SyncChannel do
     resp =
       with {:ok, directory} <- Sync.get_directory(directory_id),
            {:ok, update} <- Sync.push_update_to_directory(directory, update_attrs) do
-        broadcast_updates([update])
+        broadcast_updates([update], socket)
         {:ok, %{:update_id => update.id}}
       else
         {:error, :not_found} -> {:error, %{:reason => "directory not found"}}
@@ -82,10 +82,10 @@ defmodule HomesynckWeb.SyncChannel do
     |> (&push(socket, "updates", %{"updates" => &1})).()
   end
 
-  defp broadcast_updates(updates, socket) do
+  defp broadcast_updates(updates, from_socket) do
     updates
     |> build_updates()
-    |> (&broadcast("updates", %{"updates" => &1})).()
+    |> (&broadcast(from_socket, "updates", %{"updates" => &1})).()
   end
 
   defp build_updates(updates) do
