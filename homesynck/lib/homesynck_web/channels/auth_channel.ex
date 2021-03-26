@@ -30,8 +30,10 @@ defmodule HomesynckWeb.AuthChannel do
       case Homesynck.Auth.authenticate(params) do
         {:ok, user_id} ->
           token = AuthTokenHelper.gen_auth_token(user_id, socket)
-          Phoenix.Socket.assign(socket, :auth_token, token)
-          Phoenix.Socket.assign(socket, :user_id, user_id)
+          socket = socket
+          |> Phoenix.Socket.assign(:auth_token, token)
+          |> Phoenix.Socket.assign(:user_id, user_id)
+          IO.puts("NEW_SOCKET: #{inspect socket}")
           {:ok, %{user_id: user_id}}
 
         {:error, reason} ->
