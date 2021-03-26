@@ -18,7 +18,7 @@ defmodule HomesynckWeb.AuthTokenHelper do
     IO.puts("TOKEN_VALID?\n#{inspect(socket)}\n---> #{user_id}:#{token}:#{inspect(result)}")
 
     case result do
-      {:ok, ^user_id} -> true
+      {:ok, _} -> true
       _ -> false
     end
   end
