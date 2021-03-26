@@ -27,6 +27,22 @@ defmodule Homesynck.Sync.Directory do
     |> unique_constraint([:name, :user_id])
   end
 
+  def update_changeset(directory, attrs) do
+    directory
+    |> cast(attrs, [
+      :name,
+      :description,
+      :thumbnail_url,
+      :is_secured,
+      :password,
+      :user_id,
+      :current_rank
+    ])
+    |> validate_required([:name, :is_secured, :user_id])
+    |> put_pass_hash()
+    |> unique_constraint([:name, :user_id])
+  end
+
   defp put_pass_hash(%Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset) do
     change(changeset, Argon2.add_hash(password, [{:hash_key, :password_hash}]))
   end

@@ -4,7 +4,11 @@ defmodule HomesynckWeb.SyncChannel do
   alias HomesynckWeb.AuthTokenHelper
 
   @impl true
-  def join("sync:" <> directory_id, payload, socket) do
+  def join(
+        "sync:" <> directory_id,
+        %{"received_updates" => received_updates} = payload,
+        socket
+      ) when is_list(received_updates) do
     if authorized?(directory_id, payload, socket) do
       {:ok, socket}
     else
@@ -12,12 +16,16 @@ defmodule HomesynckWeb.SyncChannel do
     end
   end
 
+  def send_missing_updates(received_updates, directory_id) do
+
+  end
+
   @impl true
   def handle_in("push_update", %{
-    "rank" => rank,
-    "instructions" => instructions
-  }) do
-
+        "rank" => rank,
+        "instructions" => instructions
+      }) do
+    # broadcast()
   end
 
   defp authorized?(

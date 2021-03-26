@@ -139,6 +139,54 @@ defmodule Homesynck.Sync do
     end
   end
 
+  def push_update_to_directory(
+        %Directory{
+          id: directory_id,
+          current_rank: current_rank
+        } = directory,
+        %{"rank" => rank} = update_attrs
+      )
+      when current_rank == rank - 1 do
+    case Repo.transaction(fn ->
+           {:ok, %Update{} = update} =
+             create_update(Map.put(update_attrs, "directory_id", directory_id))
+
+           {:ok, %Directory{} = directory} =
+             update_directory(directory, %{"current_rank" => current_rank + 1})
+
+           update
+         end) do
+      {:ok, update} -> {:ok, update.id}
+      {:error, reason} -> {:error, reason}
+    end
+  end
+
+  def push_update_to_directory(_, _), do: {:error, :invalid_update}
+
+  def get_missing_updates(
+        %Directory{
+          id: directory_id,
+          current_rank: current_rank
+        } = _directory,
+        ranks \\ []
+      ) do
+    missing_numbers(1, current_rank, ranks)
+    |> Enum.map(fn rank ->
+      Update
+      |> Update.with_directory_id(directory_id)
+      |> Update.with_rank(rank)
+      |> Repo.all()
+    end)
+  end
+
+  defp missing_numbers(min, max, list \\ []) when min <= max do
+    [min..max, list]
+    |> Stream.concat()
+    |> Enum.frequencies()
+    |> Enum.reduce([], fn {num, freq}, acc -> if freq == 1, do: [num | acc], else: acc end)
+    |> Enum.sort()
+  end
+
   @doc """
   Gets a single directory.
 
@@ -237,7 +285,7 @@ defmodule Homesynck.Sync do
   """
   def update_directory(%Directory{} = directory, attrs) do
     directory
-    |> Directory.changeset(attrs)
+    |> Directory.update_changeset(attrs)
     |> Repo.update()
   end
 
