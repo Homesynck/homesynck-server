@@ -151,7 +151,7 @@ defmodule Homesynck.Sync do
            {:ok, %Update{} = update} =
              create_update(Map.put(update_attrs, "directory_id", directory_id))
 
-           {:ok, %Directory{} = directory} =
+           {:ok, %Directory{} = _directory} =
              update_directory(directory, %{"current_rank" => current_rank + 1})
 
            update
@@ -179,7 +179,7 @@ defmodule Homesynck.Sync do
     end)
   end
 
-  defp missing_numbers(min, max, list \\ []) when min <= max do
+  defp missing_numbers(min, max, list) when min <= max do
     [min..max, list]
     |> Stream.concat()
     |> Enum.frequencies()
