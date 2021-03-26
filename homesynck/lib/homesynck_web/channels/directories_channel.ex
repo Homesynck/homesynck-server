@@ -4,8 +4,20 @@ defmodule HomesynckWeb.DirectoriesChannel do
   alias HomesynckWeb.AuthTokenHelper
 
   @impl true
-  def join("directories:lobby", _payload, socket) do
-    if authorized?(socket) do
+  def join(
+        "directories:lobby",
+        %{
+          "auth_token" => auth_token,
+          "user_id" => user_id
+        },
+        socket
+      ) do
+    if authorized?(auth_token, user_id, socket) do
+      socket =
+        socket
+        |> Phoenix.Socket.assign(:auth_token, auth_token)
+        |> Phoenix.Socket.assign(:user_id, user_id)
+
       {:ok, socket}
     else
       {:error, %{reason: "unauthorized"}}
@@ -65,19 +77,12 @@ defmodule HomesynckWeb.DirectoriesChannel do
     {:reply, resp, socket}
   end
 
-  defp authorized?(
-         %{
-           assigns: %{
-             auth_token: auth_token,
-             user_id: user_id
-           }
-         } = socket
-       ) do
+  defp authorized?(auth_token, user_id, socket) do
     AuthTokenHelper.auth_token_valid?(user_id, auth_token, socket)
   end
 
-  defp authorized?(socket) do
-    IO.puts("SOCKET_UNAUTHORIZED: #{inspect socket}")
+  defp authorized?(auth_token, user_id, socket) do
+    IO.puts("SOCKET_UNAUTHORIZED: #{user_id}:#{auth_token}:#{inspect(socket)}")
     false
   end
 

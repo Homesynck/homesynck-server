@@ -6,11 +6,22 @@ defmodule HomesynckWeb.SyncChannel do
   @impl true
   def join(
         "sync:" <> directory_id,
-        %{"received_updates" => received_updates} = payload,
+        %{
+          "directory_password" => _password,
+          "auth_token" => auth_token,
+          "user_id" => user_id,
+          "received_updates" => received_updates
+        } = payload,
         socket
       )
       when is_list(received_updates) do
     if authorized?(directory_id, payload, socket) do
+      socket =
+        socket
+        |> Phoenix.Socket.assign(:auth_token, auth_token)
+        |> Phoenix.Socket.assign(:user_id, user_id)
+        |> Phoenix.Socket.assign(:directory_id, directory_id)
+
       send_missing_updates(received_updates, directory_id, socket)
       {:ok, socket}
     else
@@ -25,7 +36,7 @@ defmodule HomesynckWeb.SyncChannel do
           "rank" => _rank,
           "instructions" => _instructions
         } = update_attrs,
-        %{topic: "sync:" <> directory_id} = socket
+        %{assigns: %{directory_id: directory_id}} = socket
       ) do
     resp =
       with {:ok, directory} <- Sync.get_directory(directory_id),
@@ -47,12 +58,10 @@ defmodule HomesynckWeb.SyncChannel do
 
   defp authorized?(
          directory_id,
-         %{"directory_password" => password},
          %{
-           assigns: %{
-             user_id: user_id,
-             auth_token: auth_token
-           }
+           "directory_password" => password,
+           "auth_token" => auth_token,
+           "user_id" => user_id
          },
          socket
        ) do
