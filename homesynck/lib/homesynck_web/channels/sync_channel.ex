@@ -1,6 +1,7 @@
 defmodule HomesynckWeb.SyncChannel do
   use HomesynckWeb, :channel
   alias Homesynck.Sync
+  alias HomesynckWeb.AuthTokenHelper
 
   @impl true
   def join("sync:" <> directory_id, payload, socket) do
@@ -11,17 +12,18 @@ defmodule HomesynckWeb.SyncChannel do
     end
   end
 
-  defp authorized?(directory_id, payload, _socket) do
-    # case Sync.get_user_directory_by_name(user_id, dir_name) do
-    #   {:ok, directory} ->
-    #     secured = directory.is_secured
-    #     password = Map.get(payload, "directory_password", "")
-    #     not secured or (secured and password == directory.password)
-
-    #   {:error, _} ->
-    #     false
-    # end
-    true
+  defp authorized?(directory_id,
+  %{"directory_password" => password},
+  %{assigns: %{
+    user_id: user_id,
+    auth_token: auth_token
+  }}) do
+    with true <- AuthTokenHelper.auth_token_valid?(user_id, auth_token, socket),
+      {:ok, %Sync.Directory{}} <- Sync.open_directory(directory_id, user_id, password) do
+        true
+      else
+        _ -> false
+      end
   end
 
   defp authorized?(_, _, _), do: false
