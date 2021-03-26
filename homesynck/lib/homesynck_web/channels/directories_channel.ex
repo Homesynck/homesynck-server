@@ -76,7 +76,8 @@ defmodule HomesynckWeb.DirectoriesChannel do
     AuthTokenHelper.auth_token_valid?(user_id, auth_token, socket)
   end
 
-  defp authorized?(_) do
+  defp authorized?(socket) do
+    IO.puts("SOCKET_UNAUTHORIZED: #{inspect socket}")
     false
   end
 
