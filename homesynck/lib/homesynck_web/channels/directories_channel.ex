@@ -34,11 +34,11 @@ defmodule HomesynckWeb.DirectoriesChannel do
         {:error, :not_found} ->
           case Sync.create_directory_for(user_id, payload) do
             {:ok, directory_id} -> {:ok, %{directory_id: directory_id}}
-            error -> {:error, %{reason: IO.inspect(error)}}
+            error -> {:error, %{reason: inspect(error)}}
           end
 
         {:error, reason} ->
-          {:error, %{reason: IO.inspect(reason)}}
+          {:error, %{reason: inspect(reason)}}
       end
 
     {:reply, resp, socket}
@@ -59,7 +59,7 @@ defmodule HomesynckWeb.DirectoriesChannel do
           {:error, %{reason: "not found"}}
 
         {:error, reason} ->
-          {:error, %{reason: IO.inspect(reason)}}
+          {:error, %{reason: inspect(reason)}}
       end
 
     {:reply, resp, socket}
@@ -78,5 +78,10 @@ defmodule HomesynckWeb.DirectoriesChannel do
 
   defp authorized?(_) do
     false
+  end
+
+  @impl true
+  def handle_in(_, _, socket) do
+    {:reply, {:error, %{reason: "wrong params"}}, socket}
   end
 end

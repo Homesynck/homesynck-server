@@ -35,7 +35,7 @@ defmodule HomesynckWeb.AuthChannel do
           {:ok, %{user_id: user_id}}
 
         {:error, reason} ->
-          {:error, %{reason: reason}}
+          {:error, %{reason: inspect(reason)}}
       end
 
     {:reply, resp, socket}
@@ -64,7 +64,7 @@ defmodule HomesynckWeb.AuthChannel do
           {:ok, %{user_id: user_id}}
 
         {:error, reason} ->
-          {:error, %{reason: reason}}
+          {:error, %{reason: inspect(reason)}}
       end
 
     {:reply, resp, socket}
@@ -81,15 +81,15 @@ defmodule HomesynckWeb.AuthChannel do
     resp =
       case Homesynck.Auth.validate_phone(phone) do
         {:ok, _} -> {:ok, %{}}
-        {:error, reason} -> {:error, %{reason: reason}}
+        {:error, reason} -> {:error, %{reason: inspect(reason)}}
       end
 
     {:reply, resp, socket}
   end
 
   @impl true
-  def handle_in(_, _, _socket) do
-    {:reply, {:error, %{reason: "wrong params"}}}
+  def handle_in(_, _, socket) do
+    {:reply, {:error, %{reason: "wrong params"}}, socket}
   end
 
   # Add authorization logic here as required.

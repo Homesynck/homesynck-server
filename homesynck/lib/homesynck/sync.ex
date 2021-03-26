@@ -156,7 +156,7 @@ defmodule Homesynck.Sync do
 
            update
          end) do
-      {:ok, update} -> {:ok, update.id}
+      {:ok, update} -> {:ok, update}
       {:error, reason} -> {:error, reason}
     end
   end
