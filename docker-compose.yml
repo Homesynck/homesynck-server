@@ -1,43 +1,51 @@
+# TO REPLACE
+# $your@email.com -> your email (only if HTTPS)
+# $yourdomain.com -> your domain (only if HTTPS)
+# $postgres_password -> a secure database password
+
+# you can remove the `nginx-certbot` part entirely
+# if not using HTTPS or if using another reverse-proxy
+
 version: "3.7"
 
 services:
-  homesynck-phoenix-server:
+phoenix-server:
     build:
       context: ./homesynck
     env_file:
       - docker.env
     environment:
-      DATABASE_URL: ecto://postgres:postgres@homesynck-postgres-db/homesynck
+      DATABASE_URL: ecto://postgres:$postgres_password@postgres-db/homesynck
       DATABASE_USER: postgres
-      DATABASE_PASS: postgres
+      DATABASE_PASS: $postgres_password
       DATABASE_NAME: homesynck
       DATABASE_PORT: 5432
-      DATABASE_HOST: homesynck-postgres-db
-      HOST: homesynck.anicetnougaret.fr
-      PORT: 4000
+      DATABASE_HOST: postgres-db
+      HOST: $yourdomain.com
+      PORT: 4001
     ports:
-      - "4001:4000"
+      - "4001:4001"
     restart: always
     depends_on:
-      - homesynck-postgres-db
+      - postgres-db
   
-  homesynck-postgres-db:
+  postgres-db:
     image: postgres:10.12-alpine
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: $postgres_password
     restart: always
 
-  homesynck-nginx-certbot:
+  nginx-certbot:
     image: staticfloat/nginx-certbot
     ports:
       - 80:80/tcp
       - 443:443/tcp
     environment:
-      CERTBOT_EMAIL: john@doe.com
+      CERTBOT_EMAIL: $your@email.com
       ENVSUBST_VARS: HMSK_U HMSK_P HMSK_H
-      HMSK_H: homesynck-postgres-db
-      HMSK_U: homesynck.yourdomain.com
+      HMSK_H: postgres-db
+      HMSK_U: $yourdomain.com
       HMSK_P: 4001
     restart: unless-stopped
     volumes:
