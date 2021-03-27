@@ -1,0 +1,31 @@
+# Phoenix channels clients list
+Please, report any new or deprecated client you found (we only put fully implemented ones).
+
+- Javascript/Typescript
+  - [phoenix.js](https://www.npmjs.com/package/phoenix) *official, browser only*
+  - [phoenix-channels.js](https://www.npmjs.com/package/phoenix-channels)
+  - [phoenix-websocket-js](https://github.com/digimondo/phoenix-websocket-js)
+- Java/Kotlin
+  - [JavaPhoenixChannels](https://github.com/eoinsha/JavaPhoenixChannels)
+  - [ch.kuon.phoenix](https://git.goyman.com/kuon/java-phoenix-channel) *we used it and it works!*
+- Elixir
+  - [phoenix_client](https://github.com/mobileoverlord/phoenix_client)
+  - [phoenix-channel-client](https://gitlab.com/ryo33/phoenix-channel-client)
+- Swift
+  - [swiftPhoenix](https://github.com/davidstump/SwiftPhoenixClient)
+  - [Birdsong](https://github.com/sjrmanning/Birdsong)
+  - [BittybBird](https://github.com/neneboe/BittyBird)
+  - [Stone](https://github.com/0x7fs/Stone)
+- Python
+  - [realtime-py](https://github.com/supabase/realtime-py)
+- C#
+  - [PhoenixSharp](https://github.com/Mazyod/PhoenixSharp)
+  - [CSharpPhoenixClient](https://github.com/livehelpnow/CSharpPhoenixClient)
+- C++
+  - [PhxSocketCPP](https://github.com/jojojames/PhxSocketCPP)
+  - [phoenix-channel-cpp](https://github.com/termoose/phoenix-channel-cpp)
+- Rust
+  - [phoenix-rs](https://github.com/laibulle/phoenix-rs_bkp)
+  - [phoenix-channels-r](https://github.com/gsterjov/phoenix-channels-rs)
+- Godot Engine
+  - [GodotPhoenixChannels](https://github.com/alfredbaudisch/GodotPhoenixChannels)

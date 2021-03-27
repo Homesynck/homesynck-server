@@ -1,62 +1,30 @@
 # Homesynck server
 
-- [How does it work?](#how-does-it-work)
-- [Self-hosting guide](#self-hosting)
+## What is Homesynck ? 
+It's a real-time ordered data synchronisation tool.
 
-# How does it work?
-A Homesynck server instance is made of 2 parts (and 1 optional part):
+It is mainly aiming towards speed, reliability and security so that it fits most use cases.
 
-- [A Phoenix web server](./homesynck/README.md)
-- A PostgreSQL database for data persistance
-- *Optional*: a reverse proxy (here we use Nginx)
+It is all free and open-source. It can also be easily self-hosted.
 
-Those 3 parts can be downloaded and run all in harmony using Docker containers and docker-compose.
+### What is real-time ordered data synchronisation ?
+Basically, when you're sending data from multiple places at the same time but you need to have it received and processed in the same order by everyone.
 
-# Self-hosting
-## Setup on Unix based OS
-### Prerequisites
-- a terminal with git command
-  - Make sure git is working by doing `git --version`
-- docker and docker-compose installed
-  - Make sure Docker is working by doing `docker ps`
-    - if you get error: `Got permission denied while trying to connect to the Docker daemon` you'll need to prepend any `docker` and `docker-compose` command we do here with `sudo `, assuming you have such permissions on your machine
-  - Make sure docker-compose is working by doing `docker-compose -v`
-    - my docker-compose version as of writing this is `1.25.0`
-- sudo permissions on your machine
-- for HTTPS to work: a domain name (e.g. `john@doe.com`) pointing to the IP of your machine
+Order is not garanteed when things are done remotely and concurrently, Homesynck tries to enforce its own order so that everyone can agree on it.
 
-### Basic instructions
-By following those instructions you'll get an up and running Homesynck server instance on your machine.
+Ordering problems can be critical when writing software. Here are some concrete examples:
 
-We won't customize database settings and we won't setup HTTPS during this. But you can do it later by following our [database management guide] and our [https enabling guide]. For production you should 100% follow them.
+- Remote file synchronisation
+- Collaborative apps (e.g. Google Docs clones)
+- Order-sensitive message exchanging (e.g. messaging apps)
+- Turn-based video games
 
-Let's get going:
+## How does it work?
+Clients send messages to directories hosted on a Homesynck server. Homesynck takes note of the order in which it received messages for each directory. Then it sends messages back to clients connected to a directory and indicates in which order they should be processed.
 
-1. Open a terminal
-2. Clone this repo: `git clone https://github.com/Homesynck/Homesynck-server.git`
-3. Open it `cd homesynck-server`
-4. Generate a 64 bytes long encryption key (or longer)
-   - by going to [this website](https://www.allkeysgenerator.com/Random/Security-Encryption-Key-Generator.aspx), 1024 bits should be fine
-   - or by using command `mix phx.gen.secret 64` if you got an existing Phoenix project
-5. Execute `echo "SECRET_KEY_BASE=your generated key" >> docker.env`
-6. Make sure `cat docker.env` does print `SECRET_KEY_BASE=your generated key`
-7. Pull, build and run all the containers in the background by doing `docker-compose up --build -d`
-8. Make sure you have the 3 containers running by doing `docker ps`
-9. Make sure the Phoenix web server did start by doing `docker logs homesynck-server_phoenix-server_1`
-10. Open a browser and go to `http://localhost:4001`
+Official clients, called SDKs, are available and can be imported into most pieces of software.
 
-## Database management
-### Change database password
-1. Open `docker-compose.yml`
-2. Replace all `postgres_password` with your new password
-3. Restart the server with `docker-compose up --build -d`
-
-## Setup HTTPS
-HTTPS is mandatory since the server does not encrypt messages by default, making your synchronised data vulnerable to nowadays beginner-friendly man-in-the-middle attacks.
-
-1. make sure you have a domain name (costs a little money) and that it points to your machine's IP address.
-2. Open `docker-compose.yml`
-3. Replace all `yourdomain.com` with your domain name
-4. Replace all `your@email.com` with your email (doesn't have to be a working one, but it's better)
-5. Restart the server with `docker-compose up --build -d`
-6. Make sure it worked `https://yourdomain.com`
+## Cool, let's get rolling!
+- [Self-hosting guide](./docs/self_host_guide.md)
+- [Check out existing SDKs]()
+- [Make your hown client SDK guide](docs/channels_docs.md)
