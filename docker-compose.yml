@@ -9,7 +9,7 @@
 version: "3.7"
 
 services:
-phoenix-server:
+  phoenix-server:
     build:
       context: ./homesynck
     env_file:
