@@ -17,7 +17,7 @@ defmodule HomesynckWeb.AuthTokenHelper do
       {:ok, result_user_id} ->
         IO.puts("#{user_id}:#{result_user_id}")
 
-        if user_id == "#{result_user_id}" do
+        if "#{user_id}" == "#{result_user_id}" do
           true
         else
           false
