@@ -15,6 +15,8 @@ defmodule HomesynckWeb.AuthTokenHelper do
 
     case result do
       {:ok, result_user_id} ->
+        IO.puts("#{user_id}:#{result_user_id}")
+
         user_id == result_user_id
         |> IO.inspect()
       _ ->
