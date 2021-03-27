@@ -3,9 +3,9 @@
 ## What is Homesynck? 
 It's a real-time ordered data synchronisation tool.
 
-It is mainly aiming towards speed, reliability and security so that it fits most use cases.
+Its main goals are scalability, reliability and security so that it fits most use cases.
 
-It is all free and open-source. It can also be easily self-hosted.
+It is free and open-source under MIT license. It can be self-hosted easily.
 
 ## What is real-time ordered data synchronisation?
 Basically, when you're sending data from multiple places at the same time but you need to have it received and processed in the same order by everyone.
