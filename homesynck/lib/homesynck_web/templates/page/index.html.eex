@@ -4,7 +4,7 @@
     </header>
     <article class="article">
         <h2 class="article_headline">
-            Securely exchange ordered real-time data at scale with peace of mind*
+            Securely exchange ordered real-time data at scale with peace of mind!
         </h2>
         <separator class="article_separator article_separator-white">
             ⋯⋯⋯⋯⋯⋯⋯⋯⋯
@@ -17,7 +17,7 @@
                 Data agnostic
             </h2>
             <p class="article_section_content">
-                It doesn't care about the kind of data you want to synchronise, it's only job is to avoid ordering mess ups
+                It doesn't care about the kind of data you want to synchronise, it's only job is to avoid disorder.
             </p>
         </div>
         <div class="article_section article_section-reversed">
@@ -31,7 +31,7 @@
                 Built on top of Elixir and the Phoenix framework, it can handle concurrent streams of data like no other tech.
             </p>
         </div>
-        <div class="article_section">
+        <div class="article_section article_section-last">
             <emoji-icon class="emoji-icon">
                 📁
             </emoji-icon>
@@ -46,5 +46,111 @@
                 That's it! You know how to use it!
             </p>
         </div>
+        <footer class="article_footer">
+            <section class="article_footer_section">
+                <a href="https://github.com/Homesynck" class="article_footer_section_title">
+                    Github
+                </a>
+            </section>
+            <section class="article_footer_section">
+                <a href="https://github.com/Homesynck/Homesynck-server/tree/main/docs" class="article_footer_section_title">
+                    Docs
+                </a>
+            </section>
+            <section class="article_footer_section">
+                <a href="https://github.com/Homesynck" class="article_footer_section_title">
+                    About us
+                </a>
+            </section>
+        </footer>
+    </article>
+
+    <article class="article">
+        <h2 class="article_headline">
+            <span style="color: rgba(0, 0, 0, 0.418)">Step 1:</span> Pick your client SDK ⬇
+        </h2>
+        <separator class="article_separator article_separator-white">
+            ⋯⋯⋯⋯⋯⋯⋯⋯⋯
+        </separator>
+        <div class="article_section">
+            <emoji-icon class="emoji-icon">
+                ☕
+            </emoji-icon>
+            <h2 class="article_section_title">
+                Java 8
+            </h2>
+            <div class="article_section_content">
+                The optimal platform for native desktop & Android apps!
+                <div class="links">
+                    <a class="inline_link" href="https://github.com/Homesynck/homesynck-java-sdk">
+                        ∴ Source code ∴
+                    </a>
+                    <a class="inline_link" href="https://github.com/Homesynck/homesynck-java-sdk">
+                        ∴ Maven repository ∴
+                    </a>
+                    <a class="inline_link" href="https://github.com/Homesynck/homesynck-java-sdk">
+                        ∴ <span style="color: rgba(0, 0, 0, 0.418)">coming soon</span> Documentation ∴
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="article_section article_section-reversed disabled">
+            <emoji-icon class="emoji-icon">
+                🍷
+            </emoji-icon>
+            <h2 class="article_section_title">
+                <span style="color: rgba(0, 0, 0, 0.418)">coming soon</span>
+                Elixir OTP
+            </h2>
+            <p class="article_section_content">
+                Well suited for server-to-server synchronization.
+            </p>
+        </div>
+        <div class="article_section article_section-last disabled">
+            <emoji-icon class="emoji-icon">
+                🍤
+            </emoji-icon>
+            <h2 class="article_section_title">
+                <span style="color: rgba(0, 0, 0, 0.418)">coming soon</span>
+                Javascript
+            </h2>
+            <p class="article_section_content">
+                Create your own web-centric synchronised real-time cool club.
+            </p>
+        </div>
+        <h2 class="article_headline">
+            <span style="color: rgba(0, 0, 0, 0.418)">Step 2:</span> Setup self-host
+        </h2>
+        <separator class="article_separator article_separator-white">
+            ⋯⋯⋯⋯⋯⋯⋯⋯⋯
+        </separator>
+        <div class="article_section">
+            <emoji-icon class="emoji-icon">
+                🐳
+            </emoji-icon>
+            <h2 class="article_section_title">
+                Docker-compose
+            </h2>
+            <div class="article_section_content">
+                Scalable Phoenix web server, capable PostgreSQL database, automatic HTTPS with Nginx & Certbot.
+                <div class="links">
+                    <a class="inline_link" href="https://github.com/Homesynck/Homesynck-server">
+                        ∴ Source code ∴
+                    </a>
+                    <a class="inline_link" href="https://github.com/Homesynck/Homesynck-server">
+                        ∴ <span style="color: rgba(0, 0, 0, 0.418)">coming soon</span> Setup guide ∴
+                    </a>
+                    <a class="inline_link" href="https://github.com/Homesynck/Homesynck-server">
+                        ∴ <span style="color: rgba(0, 0, 0, 0.418)">coming soon</span> Documentation ∴
+                    </a>
+                </div>
+            </div>
+        </div>
+        <h2 class="article_headline">
+            <span style="color: rgba(0, 0, 0, 0.418)">Step 3:</span> Start syncing!
+        </h2>
+        <separator class="article_separator article_separator-white">
+            ⋯⋯⋯⋯⋯⋯⋯⋯⋯
+        </separator>
     </article>
 </page>
