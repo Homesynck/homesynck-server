@@ -177,7 +177,6 @@ body {
   vertical-align: top;
   font-size: 1rem;
   background-color: var(--c-1);
-  border-top: solid 0.5rem var(--c-3);
   margin: auto;
   flex-grow: 10;
 }
@@ -187,7 +186,7 @@ body {
 }
 
 .article_footer_section:not(:last-child) {
-  border-right: solid 0.5rem var(--c-3);
+  border-right: solid 0.25rem var(--c-2);
 }
 
 .article_footer_section:first-child {
@@ -220,13 +219,9 @@ body {
 }
 
 a.article_footer_section_title {
-  text-decoration: underline;
   color: var(--c-3);
-}
-
-a.article_footer_section_title:hover {
-  font-weight: bolder;
-  font-style: italic;
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 
 .sdks_menu {
