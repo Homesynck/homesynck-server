@@ -1,0 +1,47 @@
+version: "3.7"
+
+services:
+  homesynck-phoenix-server:
+    build:
+      context: ./homesynck
+    env_file:
+      - docker.env
+    environment:
+      DATABASE_URL: ecto://postgres:postgres@homesynck-postgres-db/homesynck
+      DATABASE_USER: postgres
+      DATABASE_PASS: postgres
+      DATABASE_NAME: homesynck
+      DATABASE_PORT: 5432
+      DATABASE_HOST: homesynck-postgres-db
+      HOST: homesynck.anicetnougaret.fr
+      PORT: 4000
+    ports:
+      - "4001:4000"
+    restart: always
+    depends_on:
+      - homesynck-postgres-db
+  
+  homesynck-postgres-db:
+    image: postgres:10.12-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    restart: always
+
+  homesynck-nginx-certbot:
+    image: staticfloat/nginx-certbot
+    ports:
+      - 80:80/tcp
+      - 443:443/tcp
+    environment:
+      CERTBOT_EMAIL: john@doe.com
+      ENVSUBST_VARS: HMSK_U HMSK_P HMSK_H
+      HMSK_H: homesynck-postgres-db
+      HMSK_U: homesynck.yourdomain.com
+      HMSK_P: 4001
+    restart: unless-stopped
+    volumes:
+      - ./nginx:/etc/nginx/user.conf.d:ro
+      - letsencrypt:/etc/letsencrypt
+volumes:
+  letsencrypt:

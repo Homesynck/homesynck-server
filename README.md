@@ -1,1 +1,3 @@
-# HomeSynck server
+# Homesynck server
+
+# Self-hosting: Getting started
