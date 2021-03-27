@@ -1,6 +1,10 @@
 # Homesynck server
-## How does it work?
-A Homesynck server instance is made of 2 parts (and 1 optional part).
+
+- [How does it work?](#how-does-it-work)
+- [Self-hosting guide](#self-hosting)
+
+# How does it work?
+A Homesynck server instance is made of 2 parts (and 1 optional part):
 
 - [A Phoenix web server](./homesynck/README.md)
 - A PostgreSQL database for data persistance
@@ -8,8 +12,8 @@ A Homesynck server instance is made of 2 parts (and 1 optional part).
 
 Those 3 parts can be downloaded and run all in harmony using Docker containers and docker-compose.
 
-# Self-hosting: Getting started
-## For Unix based OS
+# Self-hosting
+## Setup on Unix based OS
 ### Prerequisites
 - a terminal with git command
   - Make sure git is working by doing `git --version`
@@ -39,4 +43,20 @@ Let's get going:
 7. Pull, build and run all the containers in the background by doing `docker-compose up --build -d`
 8. Make sure you have the 3 containers running by doing `docker ps`
 9. Make sure the Phoenix web server did start by doing `docker logs homesynck-server_phoenix-server_1`
-10. Open a browser and go to `http://localhost:4000`
+10. Open a browser and go to `http://localhost:4001`
+
+## Database management
+### Change database password
+1. Open `docker-compose.yml`
+2. Replace all `postgres_password` with your new password
+3. Restart the server with `docker-compose up --build -d`
+
+## Setup HTTPS
+HTTPS is mandatory since the server does not encrypt messages by default, making your synchronised data vulnerable to nowadays beginner-friendly man-in-the-middle attacks.
+
+1. make sure you have a domain name (costs a little money) and that it points to your machine's IP address.
+2. Open `docker-compose.yml`
+3. Replace all `yourdomain.com` with your domain name
+4. Replace all `your@email.com` with your email (doesn't have to be a working one, but it's better)
+5. Restart the server with `docker-compose up --build -d`
+6. Make sure it worked `https://yourdomain.com`
