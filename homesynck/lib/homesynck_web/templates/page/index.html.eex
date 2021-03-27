@@ -1,6 +1,6 @@
 <page class="page">
     <header class="header">
-        <img class="header_img" src="<%= Routes.static_path(@conn, "/images/homesynck_logo.png") %>"><img/>
+        <img class="header_img" src="<%= Routes.static_path(@conn, "/images/homesynck.png") %>"><img/>
     </header>
     <article class="article">
         <h2 class="article_headline">
