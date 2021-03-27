@@ -1,13 +1,13 @@
 # Homesynck server
 
-## What is Homesynck ? 
+## What is Homesynck? 
 It's a real-time ordered data synchronisation tool.
 
 It is mainly aiming towards speed, reliability and security so that it fits most use cases.
 
 It is all free and open-source. It can also be easily self-hosted.
 
-### What is real-time ordered data synchronisation ?
+## What is real-time ordered data synchronisation?
 Basically, when you're sending data from multiple places at the same time but you need to have it received and processed in the same order by everyone.
 
 Order is not garanteed when things are done remotely and concurrently, Homesynck tries to enforce its own order so that everyone can agree on it.
