@@ -52,11 +52,11 @@
                     Github
                 </a>
             </section>
-            <section class="article_footer_section">
+            <!--<section class="article_footer_section">
                 <a href="https://github.com/Homesynck/Homesynck-server/tree/main/docs" class="article_footer_section_title">
                     Docs
                 </a>
-            </section>
+            </section>-->
             <section class="article_footer_section">
                 <a href="https://github.com/Homesynck" class="article_footer_section_title">
                     About us
