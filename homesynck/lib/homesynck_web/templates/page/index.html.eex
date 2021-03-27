@@ -4,7 +4,7 @@
     </header>
     <article class="article">
         <h2 class="article_headline">
-            Securely exchange ordered real-time data at scale with peace of mind!
+            Securely synchronise and persist ordered real-time data at scale with peace of mind!
         </h2>
         <separator class="article_separator article_separator-white">
             ⋯⋯⋯⋯⋯⋯⋯⋯⋯
@@ -17,7 +17,7 @@
                 Data agnostic
             </h2>
             <p class="article_section_content">
-                It doesn't care about the kind of data you want to synchronise, its only job is to avoid disorder.
+                It doesn't care about the kind of data you want to synchronise, its only job is to store it and avoid disorder.
             </p>
         </div>
         <div class="article_section article_section-reversed">
@@ -31,7 +31,7 @@
                 Built on top of Elixir and the Phoenix framework, it can handle concurrent streams of data like no other tech.
             </p>
         </div>
-        <div class="article_section article_section-last">
+        <div class="article_section">
             <emoji-icon class="emoji-icon">
                 📁
             </emoji-icon>
@@ -39,12 +39,49 @@
                 Simple & organised
             </h2>
             <p class="article_section_content">
-                Accounts create several directories
+                Clients connect to accounts and open directories.
                 <br/>
-                Directories receive ordered updates in real-time
+                Directories receive ordered updates from clients in real-time.
                 <br/>
-                That's it! You know how to use it!
+                Clients receive updates on directories they opened.
+                <br/>
+                Clients process directories' updates in order and cache them.
             </p>
+        </div>
+        <div class="article_section article_section-reversed">
+            <emoji-icon class="emoji-icon">
+                🧩
+            </emoji-icon>
+            <h2 class="article_section_title">
+                A foundation to build upon
+            </h2>
+            <p class="article_section_content">
+                Homesynck is distributed as an open source product, meaning anyone can come and tweak it as they please.
+                <br/>
+                It offers basic customisation to manage accounts, security and even add specific features like phone validation.
+            </p>
+        </div>
+        <div class="article_section article_section-last">
+            <emoji-icon class="emoji-icon">
+                📡
+            </emoji-icon>
+            <h2 class="article_section_title">
+                The only backend you need?
+            </h2>
+            <div class="article_section_content">
+                Homesynck can act as the perfect backend for simple apps.
+                <br/>
+                That's what we tried with Getway, an Android contact management app.
+                <br/>
+                Homesynck acts as its only backend, managing data, persistance and authentication layers.
+                <br/>
+                + It's all real-time!
+                <div class="links">
+                    <a class="inline_link" href="https://github.com/Homesynck/Getway">
+                        ∴ Check it out ∴
+                    </a>
+                </div>
+            </div>
         </div>
         <footer class="article_footer">
             <section class="article_footer_section">
