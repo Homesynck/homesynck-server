@@ -12,6 +12,12 @@ h2 {
   font-size: 1.2rem;
 }
 
+br {
+  display: block;
+  margin: 0.25rem 0;
+  content: " ";
+}
+
 .theme-light {
   --c-0: #010000;
   --c-a: #b10b0b;
@@ -72,8 +78,8 @@ body {
 }
 
 .article_headline {
-  margin-left: 3rem;
-  margin-right: 3rem;
+  margin-left: 5rem;
+  margin-right: 5rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
   text-align: center;
