@@ -17,8 +17,11 @@ defmodule HomesynckWeb.AuthTokenHelper do
       {:ok, result_user_id} ->
         IO.puts("#{user_id}:#{result_user_id}")
 
-        Integer.parse(user_id) == result_user_id
-        |> IO.inspect()
+        if user_id == "#{result_user_id}" do
+          true
+        else
+          false
+        end
       _ ->
         IO.puts("rejected token #{user_id}:#{token}")
         false
