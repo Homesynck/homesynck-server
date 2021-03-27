@@ -23,7 +23,7 @@ Those 3 parts can be downloaded and run all in harmony using Docker containers a
 ### Basic instructions
 By following those instructions you'll get an up and running Homesynck server instance on your machine.
 
-We won't customize database settings and we won't setup HTTPS during this. But you can do it later by following our [database management guide] and our [https enabling guide]. For production you should 100% follow them.
+We won't customize database settings and we won't setup HTTPS during this. But you will need to do it before deploying to production by following our [database management guide](#database-management) and our [https enabling guide](#setup-https).
 
 Let's get going:
 
