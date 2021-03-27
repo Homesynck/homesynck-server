@@ -26,5 +26,5 @@ Official clients, called SDKs, are available and can be imported into most piece
 
 ## Cool, let's get rolling!
 - [Self-hosting guide](./docs/self_host_guide.md)
-- [Check out existing SDKs]()
+- [Check out existing SDKs](https://homesynck.anicetnougaret.fr/)
 - [Make your hown client SDK guide](docs/channels_docs.md)
