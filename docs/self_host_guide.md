@@ -2,7 +2,7 @@
 ## How does it work?
 A Homesynck server instance is made of 2 parts (and 1 optional part):
 
-- [A Phoenix web server](./homesynck/README.md)
+- A [Phoenix web server](../homesynck/README.md)
 - A [PostgreSQL](https://www.postgresql.org/) database for data persistance
 - *Optional*: a reverse proxy (here we use [Nginx](https://nginx.org/en/), but any should work)
 
