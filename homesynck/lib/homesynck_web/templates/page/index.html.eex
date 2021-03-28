@@ -4,33 +4,11 @@
     </header>
     <article class="article">
         <h2 class="article_headline">
-            Securely synchronise and persist ordered real-time data at scale!
+            Synchronise your frontends in real-time!
         </h2>
         <separator class="article_separator article_separator-white">
             ⋯⋯⋯⋯⋯⋯⋯⋯⋯
         </separator>
-        <div class="article_section">
-            <emoji-icon class="emoji-icon">
-                💾
-            </emoji-icon>
-            <h2 class="article_section_title">
-                Data agnostic
-            </h2>
-            <p class="article_section_content">
-                It doesn't care about the kind of data you want to synchronise, its only job is to store it and avoid disorder.
-            </p>
-        </div>
-        <div class="article_section article_section-reversed">
-            <emoji-icon class="emoji-icon">
-                🚚
-            </emoji-icon>
-            <h2 class="article_section_title">
-                Highly reliable
-            </h2>
-            <p class="article_section_content">
-                Built on top of Elixir and the Phoenix framework, it can handle concurrent streams of data like no other tech.
-            </p>
-        </div>
         <div class="article_section">
             <emoji-icon class="emoji-icon">
                 📁
@@ -46,6 +24,28 @@
                 Clients receive updates on directories they opened.
                 <br/>
                 Clients process directories' updates in order and cache them.
+            </p>
+        </div>
+        <div class="article_section article_section-reversed">
+            <emoji-icon class="emoji-icon">
+                🚚
+            </emoji-icon>
+            <h2 class="article_section_title">
+                Highly reliable
+            </h2>
+            <p class="article_section_content">
+                Built on top of Elixir and the Phoenix framework, it can handle concurrent streams of data like no other tech.
+            </p>
+        </div>
+        <div class="article_section">
+            <emoji-icon class="emoji-icon">
+                💾
+            </emoji-icon>
+            <h2 class="article_section_title">
+                Data agnostic
+            </h2>
+            <p class="article_section_content">
+                It doesn't care about the kind of data you want to synchronise, its only job is to store it and avoid disorder.
             </p>
         </div>
         <div class="article_section article_section-reversed">
@@ -117,7 +117,9 @@
                 Java 8
             </h2>
             <div class="article_section_content">
-                The optimal platform for native desktop & Android apps!
+                The optimal platform for Android apps.
+                <br>
+                + Supports real-time file synchronisation!
                 <div class="links">
                     <a class="inline_link" href="https://github.com/Homesynck/homesynck-java-sdk">
                         ∴ Source code ∴
