@@ -6,6 +6,8 @@ defmodule Homesynck.Sync do
   import Ecto.Query, warn: false
   alias Homesynck.Repo
 
+  alias Homesynck.Sync.SyncServer
+
   alias Homesynck.Sync.Update
 
   @doc """
@@ -139,29 +141,21 @@ defmodule Homesynck.Sync do
     end
   end
 
-  def push_update_to_directory(
-        %Directory{
-          id: directory_id,
-          current_rank: current_rank
-        } = directory,
-        %{"rank" => rank} = update_attrs
-      )
-      when current_rank == rank - 1 do
-    case Repo.transaction(fn ->
-           {:ok, %Update{} = update} =
-             create_update(Map.put(update_attrs, "directory_id", directory_id))
-
-           {:ok, %Directory{} = _directory} =
-             update_directory(directory, %{"current_rank" => current_rank + 1})
-
-           update
-         end) do
-      {:ok, update} -> {:ok, update}
-      {:error, reason} -> {:error, reason}
-    end
+  def push_update_sync(directory_id, update_attrs) do
+    SyncServer.call(:directory, directory_id, {:push_update, update_attrs})
   end
 
-  def push_update_to_directory(_, _), do: {:error, :invalid_update}
+  def push_update_transaction(%Directory{} = directory, update_attrs) do
+    Repo.transaction(fn ->
+      {:ok, %Update{} = update} =
+        create_update(Map.put(update_attrs, "directory_id", directory.id))
+
+      {:ok, %Directory{} = _directory} =
+        update_directory(directory, %{"current_rank" => directory.current_rank + 1})
+
+      update
+    end)
+  end
 
   def get_missing_updates(
         %Directory{

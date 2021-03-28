@@ -18,7 +18,7 @@ defmodule HomesynckWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    #live "/", PageLive, :index
+    # live "/", PageLive, :index
   end
 
   # Other scopes may use custom stacks.

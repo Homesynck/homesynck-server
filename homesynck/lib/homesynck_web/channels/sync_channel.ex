@@ -42,13 +42,16 @@ defmodule HomesynckWeb.SyncChannel do
         %{assigns: %{directory_id: directory_id}} = socket
       ) do
     resp =
-      with {:ok, directory} <- Sync.get_directory(directory_id),
-           {:ok, update} <- Sync.push_update_to_directory(directory, update_attrs) do
-        broadcast_updates([update], socket)
-        {:ok, %{:update_id => update.id}}
-      else
-        {:error, :not_found} -> {:error, %{:reason => "directory not found"}}
-        {:error, _error} -> {:error, %{:reason => "update pushing failed"}}
+      case Sync.push_update_sync(directory_id, update_attrs) do
+        {:ok, update} ->
+          broadcast_updates([update], socket)
+          {:ok, %{:update_id => update.id}}
+
+        {:error, :not_found} ->
+          {:error, %{:reason => "directory not found"}}
+
+        {:error, _error} ->
+          {:error, %{:reason => "update pushing failed"}}
       end
 
     {:reply, resp, socket}
@@ -102,6 +105,7 @@ defmodule HomesynckWeb.SyncChannel do
 
   defp build_updates(updates) do
     updates
+    |> IO.inspect
     |> Enum.map(&%{"rank" => &1.rank, "instructions" => &1.instructions})
   end
 end

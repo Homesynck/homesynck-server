@@ -22,6 +22,7 @@ defmodule HomesynckWeb.AuthTokenHelper do
         else
           false
         end
+
       _ ->
         IO.puts("rejected token #{user_id}:#{token}")
         false
