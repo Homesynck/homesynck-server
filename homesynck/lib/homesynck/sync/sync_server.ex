@@ -52,7 +52,7 @@ defmodule Homesynck.Sync.SyncServer do
         error -> error
       end
 
-    {:reply, resp, state}
+    {:reply, resp, state, @ttl}
   end
 
   def push_update_to_directory(
