@@ -1,5 +1,7 @@
 defmodule Homesynck.Auth.AdminRegistrator do
   use Task
+  require Logger
+  alias Homesynck.Repo
 
   @enable_admin_account Application.fetch_env!(:homesynck, :enable_admin_account)
   @admin_username Application.fetch_env!(:homesynck, :admin_username)
@@ -11,13 +13,23 @@ defmodule Homesynck.Auth.AdminRegistrator do
 
   def run() do
     if @enable_admin_account do
-      Homesynck.Auth.create_user(%{
-        "name" => @admin_username,
-        "password" => @admin_password
-      })
-      |> IO.inspect()
+      case Repo.get_by(Homesynck.Auth.User, name: @admin_username) do
+        %Homesynck.Auth.User{} = user ->
+          Homesynck.Auth.update_user(user, %{
+            "name" => @admin_username,
+            "password" => @admin_password
+          })
+          Logger.info("Admin account updating #{inspect account}")
+
+        nil ->
+          account = Homesynck.Auth.create_user(%{
+            "name" => @admin_username,
+            "password" => @admin_password
+          })
+          Logger.info("Admin account creation #{inspect account}")
+      end
     else
-      IO.puts("Admin account disabled, not creating")
+      Logger.info("Admin account disabled, not creating")
     end
   end
 end

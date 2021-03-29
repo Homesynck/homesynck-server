@@ -1,5 +1,6 @@
 defmodule Homesynck.Sync.SyncServer do
   use GenServer
+  require Logger
   alias Homesynck.Sync
 
   @ttl 3_600_000
@@ -47,9 +48,12 @@ defmodule Homesynck.Sync.SyncServer do
     resp =
       with {:ok, directory} <- Sync.get_directory(directory_id),
            {:ok, update} <- push_update_to_directory(directory, update_attrs) do
+        Logger.info("Push update success #{inspect update}")
         {:ok, update}
       else
-        error -> error
+        error ->
+          Logger.info("Push update error #{inspect error}")
+          error
       end
 
     {:reply, resp, state, @ttl}

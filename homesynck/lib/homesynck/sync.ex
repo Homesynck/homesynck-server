@@ -4,6 +4,7 @@ defmodule Homesynck.Sync do
   """
 
   import Ecto.Query, warn: false
+  require Logger
   alias Homesynck.Repo
 
   alias Homesynck.Sync.SyncServer

@@ -4,6 +4,7 @@ defmodule Homesynck.Auth do
   """
 
   import Ecto.Query, warn: false
+  require Logger
   alias Homesynck.Repo
 
   alias Homesynck.Auth.User
@@ -68,7 +69,7 @@ defmodule Homesynck.Auth do
            Argon2.check_pass(user, password, [{:hash_key, :password_hashed}]) do
       {:ok, user.id}
     else
-      nil -> {:error, "no user found"}
+      nil -> {:error, :not_found}
       {:error, reason} -> {:error, reason}
     end
   end
@@ -246,7 +247,7 @@ defmodule Homesynck.Auth do
            [{"Content-Type", "application/json"}]
          ) do
       {:ok, %HTTPoison.Response{body: "0"}} ->
-        IO.puts("Phone validation SMS sent to #{number}")
+        Logger.info("Phone validation SMS sent to #{inspect number}")
         :ok
 
       _ ->
