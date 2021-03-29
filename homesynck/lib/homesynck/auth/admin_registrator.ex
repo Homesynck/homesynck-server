@@ -15,7 +15,7 @@ defmodule Homesynck.Auth.AdminRegistrator do
     if @enable_admin_account do
       case Repo.get_by(Homesynck.Auth.User, name: @admin_username) do
         %Homesynck.Auth.User{} = user ->
-          Homesynck.Auth.update_user(user, %{
+          account = Homesynck.Auth.update_user(user, %{
             "name" => @admin_username,
             "password" => @admin_password
           })
