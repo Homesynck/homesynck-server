@@ -42,7 +42,8 @@ defmodule HomesynckWeb.SyncChannel do
         } = update_attrs,
         %{assigns: %{directory_id: directory_id}} = socket
       ) do
-    Logger.info("Received push_update #{inspect update_attrs}")
+    Logger.info("Received push_update #{inspect(update_attrs)}")
+
     resp =
       case Sync.push_update_sync(directory_id, update_attrs) do
         {:ok, update} ->
@@ -55,7 +56,8 @@ defmodule HomesynckWeb.SyncChannel do
         {:error, _error} ->
           {:error, %{:reason => "update pushing failed"}}
       end
-    Logger.info("Responding to push_update #{inspect resp}")
+
+    Logger.info("Responding to push_update #{inspect(resp)}")
     {:reply, resp, socket}
   end
 
@@ -104,7 +106,7 @@ defmodule HomesynckWeb.SyncChannel do
     |> build_updates()
     |> (&broadcast(from_socket, "updates", %{"updates" => &1})).()
 
-    Logger.info("Broadcasting updates #{inspect updates}")
+    Logger.info("Broadcasting updates #{inspect(updates)}")
   end
 
   defp build_updates(updates) do

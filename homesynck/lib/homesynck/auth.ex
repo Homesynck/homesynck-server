@@ -9,14 +9,6 @@ defmodule Homesynck.Auth do
 
   alias Homesynck.Auth.User
 
-  @enable_register Application.fetch_env!(:homesynck, :enable_register)
-  @enable_phone_validation Application.fetch_env!(:homesynck, :enable_phone_validation)
-  @phone_validation_api_endpoint Application.fetch_env!(
-                                   :homesynck,
-                                   :phone_validation_api_endpoint
-                                 )
-  @phone_validation_api_key Application.fetch_env!(:homesynck, :phone_validation_api_key)
-
   @doc """
   Returns the list of users.
 
@@ -92,28 +84,37 @@ defmodule Homesynck.Auth do
     |> Repo.insert()
   end
 
-  if @enable_register do
-    def register(
-          %{
-            "register_token" => _register_token,
-            "name" => _login,
-            "password" => _password
-          } = params
-        ) do
-      if get_by(params) do
-        {:error, :name_taken}
-      else
-        case create_user(params) do
-          {:ok, user} ->
-            {:ok, user.id}
+  def register(
+        %{
+          "register_token" => _register_token,
+          "name" => _login,
+          "password" => _password
+        } = params
+      ) do
+    if register_enabled? do
+      register(:enabled, params)
+    else
+      register(:disabled, params)
+    end
+  end
 
-          error ->
-            error
-        end
+  defp register(:enabled, params) do
+    if get_by(params) do
+      {:error, :name_taken}
+    else
+      case create_user(params) do
+        {:ok, user} ->
+          {:ok, user.id}
+
+        error ->
+          error
       end
     end
-  else
-    def register(_params), do: {:error, :disabled}
+  end
+
+  defp register(:disabled, _params) do
+    Logger.info("register disabled")
+    {:error, :disabled}
   end
 
   @doc """
@@ -178,21 +179,28 @@ defmodule Homesynck.Auth do
     Repo.all(PhoneNumber)
   end
 
-  if @enable_phone_validation do
-    def validate_register_token(token) do
-      case Repo.get_by(PhoneNumber, register_token: token) do
-        %PhoneNumber{} = phone ->
-          obfuscate_register_token(phone)
-          :ok
+  def validate_register_token(token) do
+    if phone_validation_enabled? do
+      validate_register_token(:enabled, token)
+    else
+      validate_register_token(:disabled, token)
+    end
+  end
 
-        nil ->
-          {:error, :not_found}
-      end
+  defp validate_register_token(:enabled, token) do
+    case Repo.get_by(PhoneNumber, register_token: token) do
+      %PhoneNumber{} = phone ->
+        obfuscate_register_token(phone)
+        :ok
+
+      nil ->
+        {:error, :not_found}
     end
-  else
-    def validate_register_token(_token) do
-      :ok
-    end
+  end
+
+  defp validate_register_token(:disabled, _token) do
+    Logger.info("aborting validate_register_token because disabled")
+    :ok
   end
 
   defp obfuscate_register_token(%PhoneNumber{} = phone) do
@@ -207,10 +215,10 @@ defmodule Homesynck.Auth do
     gen = fn -> :crypto.rand_uniform(0, 9) end
     code = "#{gen.()}#{gen.()}#{gen.()}#{gen.()}#{gen.()}#{gen.()}"
 
-    IO.puts(@enable_phone_validation)
+    IO.puts(phone_validation_enabled?)
 
     cond do
-      @enable_phone_validation != true -> {:error, :disabled}
+      phone_validation_enabled? != true -> {:error, :disabled}
       is_phone_format_invalid?(phone) -> {:error, :format}
       is_phone_cooling_down?(phone) -> {:error, :validation_failed}
       send_validation_sms(phone, code) != :ok -> {:error, :format}
@@ -236,18 +244,18 @@ defmodule Homesynck.Auth do
     body = %{
       number: number,
       message: code,
-      secret: @phone_validation_api_key
+      secret: phone_validation_api_key
     }
 
     HTTPoison.start()
 
     case HTTPoison.post(
-           @phone_validation_api_endpoint,
+           phone_validation_api_endpoint,
            Jason.encode!(body),
            [{"Content-Type", "application/json"}]
          ) do
       {:ok, %HTTPoison.Response{body: "0"}} ->
-        Logger.info("Phone validation SMS sent to #{inspect number}")
+        Logger.info("Phone validation SMS sent to #{inspect(number)}")
         :ok
 
       _ ->
@@ -351,5 +359,21 @@ defmodule Homesynck.Auth do
   """
   def change_phone_number(%PhoneNumber{} = phone_number, attrs \\ %{}) do
     PhoneNumber.changeset(phone_number, attrs)
+  end
+
+  defp register_enabled? do
+    Application.fetch_env!(:homesynck, :enable_register)
+  end
+
+  defp phone_validation_enabled? do
+    Application.fetch_env!(:homesynck, :enable_phone_validation)
+  end
+
+  defp phone_validation_api_endpoint do
+    Application.fetch_env!(:homesynck, :phone_validation_api_endpoint)
+  end
+
+  defp phone_validation_api_key do
+    Application.fetch_env!(:homesynck, :phone_validation_api_key)
   end
 end

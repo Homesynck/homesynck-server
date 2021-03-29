@@ -48,11 +48,11 @@ defmodule Homesynck.Sync.SyncServer do
     resp =
       with {:ok, directory} <- Sync.get_directory(directory_id),
            {:ok, update} <- push_update_to_directory(directory, update_attrs) do
-        Logger.info("Push update success #{inspect update}")
+        Logger.info("Push update success #{inspect(update)}")
         {:ok, update}
       else
         error ->
-          Logger.info("Push update error #{inspect error}")
+          Logger.info("Push update error #{inspect(error)}")
           error
       end
 
