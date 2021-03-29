@@ -174,6 +174,7 @@ defmodule Homesynck.Sync do
       |> Update.with_rank(rank)
       |> Repo.all()
     end)
+    |> List.flatten()
   end
 
   def get_missing_updates(
