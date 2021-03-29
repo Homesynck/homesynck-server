@@ -70,6 +70,7 @@ defmodule HomesynckWeb.SyncChannel do
   def handle_info({:send_missing, missing_updates}, socket) do
     Logger.info("Sending after join: #{inspect missing_updates}")
     send_updates(missing_updates, socket)
+    {:noreply, socket}
   end
 
   defp authorized?(
