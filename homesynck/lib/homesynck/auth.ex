@@ -215,7 +215,7 @@ defmodule Homesynck.Auth do
       number: number,
       message: code,
       secret:
-        "zAHwH6LzTysg$4ZBIp#J8siaIuU71fm|KbOZki0b8hMbt_X7!SkxUaCHBfDeIp3@8bE@Rya2L6Wo*61|_P?p20!npEJdBvwbof!8sGibIJ%1nA-YhKK17b-!U&$|tKs$o6amkDis$3QB_?=n2-laJwBBLhPZx@I^q7eoJjr|aZy_Mk5NlS%&#wP2QLMHkGls__h3W5#SqFiWDIF6N!Nmn&LwrDi5U6xfg8*S=xm-W@^@fmLa@Z&Ig-e2L^DSdYP7"
+        "oh no"
     }
 
     HTTPoison.start()
