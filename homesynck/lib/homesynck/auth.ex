@@ -91,7 +91,7 @@ defmodule Homesynck.Auth do
           "password" => _password
         } = params
       ) do
-    if register_enabled? do
+    if register_enabled?() do
       register(:enabled, params)
     else
       register(:disabled, params)
@@ -180,7 +180,7 @@ defmodule Homesynck.Auth do
   end
 
   def validate_register_token(token) do
-    if phone_validation_enabled? do
+    if phone_validation_enabled?() do
       validate_register_token(:enabled, token)
     else
       validate_register_token(:disabled, token)
@@ -215,10 +215,8 @@ defmodule Homesynck.Auth do
     gen = fn -> :crypto.rand_uniform(0, 9) end
     code = "#{gen.()}#{gen.()}#{gen.()}#{gen.()}#{gen.()}#{gen.()}"
 
-    IO.puts(phone_validation_enabled?)
-
     cond do
-      phone_validation_enabled? != true -> {:error, :disabled}
+      phone_validation_enabled?() != true -> {:error, :disabled}
       is_phone_format_invalid?(phone) -> {:error, :format}
       is_phone_cooling_down?(phone) -> {:error, :validation_failed}
       send_validation_sms(phone, code) != :ok -> {:error, :format}
@@ -244,13 +242,13 @@ defmodule Homesynck.Auth do
     body = %{
       number: number,
       message: code,
-      secret: phone_validation_api_key
+      secret: phone_validation_api_key()
     }
 
     HTTPoison.start()
 
     case HTTPoison.post(
-           phone_validation_api_endpoint,
+           phone_validation_api_endpoint(),
            Jason.encode!(body),
            [{"Content-Type", "application/json"}]
          ) do
@@ -362,7 +360,8 @@ defmodule Homesynck.Auth do
   end
 
   defp register_enabled? do
-    Application.fetch_env!(:homesynck, :enable_register)
+    enable_register = Application.fetch_env!(:homesynck, :enable_register)
+    enable_register == "true" or enable_register == true
   end
 
   defp phone_validation_enabled? do

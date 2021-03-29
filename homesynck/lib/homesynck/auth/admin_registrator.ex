@@ -8,34 +8,42 @@ defmodule Homesynck.Auth.AdminRegistrator do
   end
 
   def run() do
-    if enable_admin_account? do
-      case Repo.get_by(Homesynck.Auth.User, name: admin_username) do
-        %Homesynck.Auth.User{} = user ->
-          account =
-            Homesynck.Auth.update_user(user, %{
-              "name" => admin_username,
-              "password" => admin_password
-            })
-
-          Logger.info("Admin account updating #{inspect(account)}")
-
-        nil ->
-          account =
-            Homesynck.Auth.create_user(%{
-              "name" => admin_username,
-              "password" => admin_password
-            })
-
-          Logger.info("Admin account creation #{inspect(account)}")
-      end
+    if admin_account_enabled?() do
+      run(:enabled)
     else
-      Logger.info("->>>>>>>>>>>#{System.get_env("ENABLE_ADMIN_ACCOUNT")}")
-      Logger.info("Admin account disabled, not creating")
+      run(:disabled)
     end
   end
 
-  defp enable_admin_account? do
-    Application.fetch_env!(:homesynck, :enable_admin_account)
+  def run(:enabled) do
+    case Repo.get_by(Homesynck.Auth.User, name: admin_username()) do
+      %Homesynck.Auth.User{} = user ->
+        account =
+          Homesynck.Auth.update_user(user, %{
+            "name" => admin_username(),
+            "password" => admin_password()
+          })
+
+        Logger.info("Admin account updating #{inspect(account)}")
+
+      nil ->
+        account =
+          Homesynck.Auth.create_user(%{
+            "name" => admin_username(),
+            "password" => admin_password()
+          })
+
+        Logger.info("Admin account creation #{inspect(account)}")
+    end
+  end
+
+  def run(:disabled) do
+    Logger.info("Admin account disabled, not creating")
+  end
+
+  defp admin_account_enabled? do
+    enable_admin_account = Application.fetch_env!(:homesynck, :enable_admin_account)
+    enable_admin_account == "true" or enable_admin_account == true
   end
 
   defp admin_username do
