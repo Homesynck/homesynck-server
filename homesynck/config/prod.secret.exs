@@ -8,8 +8,8 @@ use Mix.Config
 #     """
 
 toBool = fn
-  "true", _ -> true
-  "false", _ -> false
+  "true" -> true
+  "false" -> false
 end
 
 config :homesynck,
