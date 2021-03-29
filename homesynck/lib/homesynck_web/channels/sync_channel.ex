@@ -66,6 +66,7 @@ defmodule HomesynckWeb.SyncChannel do
     {:reply, {:error, %{reason: "wrong params"}}, socket}
   end
 
+  @impl true
   def handle_info({:send_missing, missing_updates}, socket) do
     Logger.info("Sending after join: #{inspect missing_updates}")
     send_updates(missing_updates, socket)
@@ -90,7 +91,7 @@ defmodule HomesynckWeb.SyncChannel do
 
   defp authorized?(_, _, _), do: false
 
-  defp send_missing_updates(received_updates, directory_id, socket) do
+  defp send_missing_updates(received_updates, directory_id, _socket) do
     with {:ok, directory} <- Sync.get_directory(directory_id),
          [_ | _] = missing_updates <- Sync.get_missing_updates(directory, received_updates) do
       send(self(), {:send_missing, missing_updates})
