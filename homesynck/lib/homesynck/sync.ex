@@ -136,9 +136,12 @@ defmodule Homesynck.Sync do
   def directory_id_owned_by_user_id?(user_id, dir_id) do
     try do
       dir = get_directory!(dir_id)
+      Logger.info("check directory owner: #{inspect dir}")
       dir.user_id == user_id
     rescue
-      _ -> false
+      error ->
+        Logger.info("directory_id_owned_by_user_id?: #{inspect error}")
+        false
     end
   end
 
@@ -250,7 +253,7 @@ defmodule Homesynck.Sync do
       {:ok, directory}
     else
       error ->
-        Logger.info("#{inspect error}")
+        Logger.info("open_directory/3: #{inspect error}")
         {:error, :access_denied}
     end
   end
