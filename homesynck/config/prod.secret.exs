@@ -7,19 +7,13 @@ use Mix.Config
 #     For example: ecto://USER:PASS@HOST/DATABASE
 #     """
 
-toBool = fn
-  "true" -> true
-  "false" -> false
-  nil -> false
-end
-
 config :homesynck,
   # Admin account is an account created on server start
   # Usefull if you plan to disable register and allow only 1 account
-  enable_admin_account: toBool.(System.get_env("ENABLE_ADMIN_ACCOUNT")),
+  enable_admin_account: System.get_env("ENABLE_ADMIN_ACCOUNT"),
   admin_username: System.get_env("ADMIN_USERNAME"),
   admin_password: System.get_env("ADMIN_PASSWORD"),
-  enable_register: toBool.(System.get_env("ENABLE_REGISTER")),
+  enable_register: System.get_env("ENABLE_REGISTER"),
   # Phone validation can be disabled. If enabled you will need your own
   # phone validation API.
   # Compliant phone validation APIs must:
@@ -38,7 +32,7 @@ config :homesynck,
   # Then, the user would use this token to register one account.
   # Phone numbers used to generate a register token will be on a cooldown and
   # won't be authorized to generate another register token for 30 days.
-  enable_phone_validation: toBool.(System.get_env("ENABLE_PHONE_VALIDATION")),
+  enable_phone_validation: System.get_env("ENABLE_PHONE_VALIDATION"),
   phone_validation_api_endpoint: System.get_env("PHONE_VALIDATION_API_ENDPOINT") || "",
   phone_validation_api_key: System.get_env("PHONE_VALIDATION_API_KEY") || ""
 

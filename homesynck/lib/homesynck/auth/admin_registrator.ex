@@ -3,7 +3,7 @@ defmodule Homesynck.Auth.AdminRegistrator do
   require Logger
   alias Homesynck.Repo
 
-  @enable_admin_account Application.fetch_env!(:homesynck, :enable_admin_account)
+  @enable_admin_account Application.fetch_env!(:homesynck, :enable_admin_account) == "true"
   @admin_username Application.fetch_env!(:homesynck, :admin_username)
   @admin_password Application.fetch_env!(:homesynck, :admin_password)
 
