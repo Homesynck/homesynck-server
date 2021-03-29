@@ -1,5 +1,14 @@
 use Mix.Config
 
+config :homesynck,
+  enable_admin_account: true,
+  admin_username: "admin",
+  admin_password: "superpassword",
+  enable_register: true,
+  enable_phone_validation: false,
+  phone_validation_api_endpoint: "",
+  phone_validation_api_key: ""
+
 # Configure your database
 config :homesynck, Homesynck.Repo,
   username: "postgres",

@@ -14,9 +14,10 @@ defmodule Homesynck.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Homesynck.PubSub},
       # Start the Endpoint (http/https)
-      HomesynckWeb.Endpoint
+      HomesynckWeb.Endpoint,
       # Start a worker by calling: Homesynck.Worker.start_link(arg)
       # {Homesynck.Worker, arg}
+      {Homesynck.Auth.AdminRegistrator, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

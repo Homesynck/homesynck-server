@@ -8,6 +8,14 @@ defmodule Homesynck.Auth do
 
   alias Homesynck.Auth.User
 
+  @enable_register Application.fetch_env!(:homesynck, :enable_register)
+  @enable_phone_validation Application.fetch_env!(:homesynck, :enable_phone_validation)
+  @phone_validation_api_endpoint Application.fetch_env!(
+                                   :homesynck,
+                                   :phone_validation_api_endpoint
+                                 )
+  @phone_validation_api_key Application.fetch_env!(:homesynck, :phone_validation_api_key)
+
   @doc """
   Returns the list of users.
 
@@ -83,26 +91,28 @@ defmodule Homesynck.Auth do
     |> Repo.insert()
   end
 
-  def register(
-        %{
-          "register_token" => _register_token,
-          "name" => _login,
-          "password" => _password
-        } = params
-      ) do
-    if get_by(params) do
-      {:error, "name taken"}
-    else
-      case create_user(params) do
-        {:ok, user} ->
-          {:ok, user.id}
+  if @enable_register do
+    def register(
+          %{
+            "register_token" => _register_token,
+            "name" => _login,
+            "password" => _password
+          } = params
+        ) do
+      if get_by(params) do
+        {:error, :name_taken}
+      else
+        case create_user(params) do
+          {:ok, user} ->
+            {:ok, user.id}
 
-        error ->
-          error
-          # TODO
-          |> IO.inspect()
+          error ->
+            error
+        end
       end
     end
+  else
+    def register(_params), do: {:error, :disabled}
   end
 
   @doc """
@@ -167,39 +177,50 @@ defmodule Homesynck.Auth do
     Repo.all(PhoneNumber)
   end
 
-  def validate_register_token(_token) do
-    case Repo.get_by(PhoneNumber, register_token: token) do
-      %PhoneNumber{} = phone ->
-        obfuscated_token =
-          :crypto.strong_rand_bytes(256)
-          |> :unicode.characters_to_list({:utf16, :little})
+  if @enable_phone_validation do
+    def validate_register_token(token) do
+      case Repo.get_by(PhoneNumber, register_token: token) do
+        %PhoneNumber{} = phone ->
+          obfuscate_register_token(phone)
+          :ok
 
-        update_phone_number(phone, %{register_token: obfuscated_token})
-        :ok
-
-      nil ->
-        {:error, :not_found}
+        nil ->
+          {:error, :not_found}
+      end
     end
+  else
+    def validate_register_token(_token) do
+      :ok
+    end
+  end
+
+  defp obfuscate_register_token(%PhoneNumber{} = phone) do
+    obfuscated_token =
+      :crypto.strong_rand_bytes(256)
+      |> :unicode.characters_to_list({:utf16, :little})
+
+    update_phone_number(phone, %{register_token: obfuscated_token})
   end
 
   def validate_phone(phone) when is_binary(phone) do
     gen = fn -> :crypto.rand_uniform(0, 9) end
     code = "#{gen.()}#{gen.()}#{gen.()}#{gen.()}#{gen.()}#{gen.()}"
 
+    IO.puts(@enable_phone_validation)
+
     cond do
-      is_phone_format_invalid?(phone) -> {:error, "invalid format"}
-      is_phone_cooling_down?(phone) -> {:error, "phone not validated"}
-      send_validation_sms(phone, code) != :ok -> {:error, "invalid format"}
-      persist_verified_phone(phone, code) != :ok -> {:error, "code sent has error"}
+      @enable_phone_validation != true -> {:error, :disabled}
+      is_phone_format_invalid?(phone) -> {:error, :format}
+      is_phone_cooling_down?(phone) -> {:error, :validation_failed}
+      send_validation_sms(phone, code) != :ok -> {:error, :format}
+      persist_verified_phone(phone, code) != :ok -> {:error, :persist_error}
       true -> {:ok, []}
     end
   end
 
   defp is_phone_cooling_down?(number) do
-    with %PhoneNumer{expires: expires} <- Repo.get_by(PhoneNumber, number: number),
-         erl_date <- Ecto.Date.to_erl(expires),
-         {:ok, ndt_date} <- NaiveDateTime.from_erl(erl_date),
-         :gt <- NaiveDateTime.compare(NaiveDateTime.local_now(), ndt_date) do
+    with %PhoneNumber{expires_on: expires} <- Repo.get_by(PhoneNumber, number: number),
+         :gt <- NaiveDateTime.compare(NaiveDateTime.local_now(), expires) do
       false
     else
       _ -> true
@@ -214,14 +235,13 @@ defmodule Homesynck.Auth do
     body = %{
       number: number,
       message: code,
-      secret:
-        "oh no"
+      secret: @phone_validation_api_key
     }
 
     HTTPoison.start()
 
     case HTTPoison.post(
-           "https://infinite-badlands-29343.herokuapp.com/sms",
+           @phone_validation_api_endpoint,
            Jason.encode!(body),
            [{"Content-Type", "application/json"}]
          ) do
@@ -238,13 +258,11 @@ defmodule Homesynck.Auth do
     expires =
       NaiveDateTime.local_now()
       |> NaiveDateTime.add(2_592_000)
-      |> NaiveDateTime.to_erl()
-      |> Ecto.Date.from_erl()
 
     attrs = %{
       register_token: code,
       number: number,
-      expires: expires
+      expires_on: expires
     }
 
     case Repo.get_by(PhoneNumber, number: number) do

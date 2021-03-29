@@ -7,6 +7,15 @@ use Mix.Config
 #     For example: ecto://USER:PASS@HOST/DATABASE
 #     """
 
+config :homesynck,
+  enable_admin_account: true,
+  admin_username: System.get_env("ADMIN_USERNAME"),
+  admin_password: System.get_env("ADMIN_PASSWORD"),
+  enable_register: true,
+  enable_phone_validation: true,
+  phone_validation_api_endpoint: System.get_env("PHONE_VALIDATION_API_ENDPOINT") || "",
+  phone_validation_api_key: System.get_env("PHONE_VALIDATION_API_KEY") || ""
+
 config :homesynck, Homesynck.Repo,
   username: System.get_env("DATABASE_USER"),
   password: System.get_env("DATABASE_PASS"),
