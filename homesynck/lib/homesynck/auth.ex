@@ -168,28 +168,89 @@ defmodule Homesynck.Auth do
   end
 
   def validate_register_token(_token) do
-    false
+    case Repo.get_by(PhoneNumber, register_token: token) do
+      %PhoneNumber{} = phone ->
+        obfuscated_token =
+          :crypto.strong_rand_bytes(256)
+          |> :unicode.characters_to_list({:utf16, :little})
+
+        update_phone_number(phone, %{register_token: obfuscated_token})
+        :ok
+
+      nil ->
+        {:error, :not_found}
+    end
   end
 
   def validate_phone(phone) when is_binary(phone) do
+    gen = fn -> :crypto.rand_uniform(0, 9) end
+    code = "#{gen.()}#{gen.()}#{gen.()}#{gen.()}#{gen.()}#{gen.()}"
+
     cond do
       is_phone_format_invalid?(phone) -> {:error, "invalid format"}
       is_phone_cooling_down?(phone) -> {:error, "phone not validated"}
-      send_validation_sms(phone) != :ok -> {:error, "invalid format"}
+      send_validation_sms(phone, code) != :ok -> {:error, "invalid format"}
+      persist_verified_phone(phone, code) != :ok -> {:error, "code sent has error"}
       true -> {:ok, []}
     end
   end
 
-  defp is_phone_cooling_down?(_phone) do
-    false
+  defp is_phone_cooling_down?(number) do
+    with %PhoneNumer{expires: expires} <- Repo.get_by(PhoneNumber, number: number),
+         erl_date <- Ecto.Date.to_erl(expires),
+         {:ok, ndt_date} <- NaiveDateTime.from_erl(erl_date),
+         :gt <- NaiveDateTime.compare(NaiveDateTime.local_now(), ndt_date) do
+      false
+    else
+      _ -> true
+    end
   end
 
-  defp is_phone_format_invalid?(_phone) do
-    false
+  defp is_phone_format_invalid?(number) do
+    not String.match?(number, ~r"^\+(?:[0-9] ?){6,14}[0-9]$")
   end
 
-  defp send_validation_sms(_phone) do
-    :ok
+  defp send_validation_sms(number, code) do
+    body = %{
+      number: number,
+      message: code,
+      secret:
+        "zAHwH6LzTysg$4ZBIp#J8siaIuU71fm|KbOZki0b8hMbt_X7!SkxUaCHBfDeIp3@8bE@Rya2L6Wo*61|_P?p20!npEJdBvwbof!8sGibIJ%1nA-YhKK17b-!U&$|tKs$o6amkDis$3QB_?=n2-laJwBBLhPZx@I^q7eoJjr|aZy_Mk5NlS%&#wP2QLMHkGls__h3W5#SqFiWDIF6N!Nmn&LwrDi5U6xfg8*S=xm-W@^@fmLa@Z&Ig-e2L^DSdYP7"
+    }
+
+    HTTPoison.start()
+
+    case HTTPoison.post(
+           "https://infinite-badlands-29343.herokuapp.com/sms",
+           Jason.encode!(body),
+           [{"Content-Type", "application/json"}]
+         ) do
+      {:ok, %HTTPoison.Response{body: "0"}} ->
+        IO.puts("Phone validation SMS sent to #{number}")
+        :ok
+
+      _ ->
+        :error
+    end
+  end
+
+  defp persist_verified_phone(number, code) do
+    expires =
+      NaiveDateTime.local_now()
+      |> NaiveDateTime.add(2_592_000)
+      |> NaiveDateTime.to_erl()
+      |> Ecto.Date.from_erl()
+
+    attrs = %{
+      register_token: code,
+      number: number,
+      expires: expires
+    }
+
+    case Repo.get_by(PhoneNumber, number: number) do
+      %PhoneNumber{} = existing -> update_phone_number(existing, attrs)
+      nil -> create_phone_number(attrs)
+    end
   end
 
   @doc """

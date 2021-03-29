@@ -3,9 +3,8 @@ defmodule Homesynck.Repo.Migrations.CreatePhoneNumbers do
 
   def change do
     create table(:phone_numbers) do
-      add :number, :string
+      add :number_hash, :string
       add :expires_on, :date
-      add :verification_code, :string
       add :register_token, :string
 
       timestamps()

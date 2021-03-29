@@ -50,6 +50,7 @@ defmodule Homesynck.MixProject do
       {:argon2_elixir, "~> 2.4.0"},
       {:kvx, "~> 0.1.2"},
       {:idle_timeout, "~> 0.1.2", hex: :idle_timeout_ex},
+      {:httpoison, "~> 1.8"},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false}
     ]
   end

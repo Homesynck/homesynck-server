@@ -4,9 +4,9 @@ defmodule Homesynck.Auth.PhoneNumber do
 
   schema "phone_numbers" do
     field :expires_on, :date
-    field :number, :string
+    field :number_hash, :string
+    field :number, :string, virtual: true
     field :register_token, :string
-    field :verification_code, :string
 
     timestamps()
   end
@@ -16,5 +16,12 @@ defmodule Homesynck.Auth.PhoneNumber do
     phone_number
     |> cast(attrs, [:number, :expires_on, :verification_code, :register_token])
     |> validate_required([:number, :expires_on, :verification_code, :register_token])
+    |> put_number_hash()
   end
+
+  defp put_number_hash(%Ecto.Changeset{valid?: true, changes: %{number: number}} = changeset) do
+    change(changeset, Argon2.add_hash(number, [{:hash_key, :number_hash}]))
+  end
+
+  defp put_number_hash(changeset), do: changeset
 end
