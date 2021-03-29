@@ -29,6 +29,7 @@ defmodule Homesynck.Auth.AdminRegistrator do
           Logger.info("Admin account creation #{inspect account}")
       end
     else
+      Logger.info("->>>>>>>>>>>#{System.get_env("ENABLE_PHONE_VALIDATION")}")
       Logger.info("Admin account disabled, not creating")
     end
   end
