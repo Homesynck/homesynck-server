@@ -183,7 +183,7 @@ defmodule Homesynck.Sync do
         } = _directory,
         _ranks
       )
-      when current_rank > 0 do
+      when current_rank <= 0 do
     []
   end
 
