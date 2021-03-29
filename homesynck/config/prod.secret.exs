@@ -10,6 +10,7 @@ use Mix.Config
 toBool = fn
   "true" -> true
   "false" -> false
+  nil -> false
 end
 
 config :homesynck,
