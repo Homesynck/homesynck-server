@@ -138,7 +138,7 @@ defmodule Homesynck.Sync do
       dir = get_directory!(dir_id)
       "#{dir.user_id}" == "#{user_id}"
     rescue
-      error ->
+      _error ->
         false
     end
   end
@@ -164,7 +164,7 @@ defmodule Homesynck.Sync do
           id: directory_id,
           current_rank: current_rank
         } = _directory,
-        ranks \\ []
+        ranks
       )
       when current_rank > 0 do
     missing_numbers(1, current_rank, ranks)
