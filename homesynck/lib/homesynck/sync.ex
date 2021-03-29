@@ -249,7 +249,9 @@ defmodule Homesynck.Sync do
          {:ok, directory} <- authenticate_directory(directory, password) do
       {:ok, directory}
     else
-      _ -> {:error, :access_denied}
+      error ->
+        Logger.info("#{inspect error}")
+        {:error, :access_denied}
     end
   end
 
