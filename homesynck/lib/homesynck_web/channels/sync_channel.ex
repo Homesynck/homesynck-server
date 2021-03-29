@@ -105,8 +105,7 @@ defmodule HomesynckWeb.SyncChannel do
     updates
     |> build_updates()
     |> (&broadcast(from_socket, "updates", %{"updates" => &1})).()
-
-    Logger.info("Broadcasting updates #{inspect(updates)}")
+    |> (&(Logger.info("Broadcasting updates #{inspect &1}"))).()
   end
 
   defp build_updates(updates) do
