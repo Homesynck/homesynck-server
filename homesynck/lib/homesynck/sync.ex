@@ -165,7 +165,8 @@ defmodule Homesynck.Sync do
           current_rank: current_rank
         } = _directory,
         ranks \\ []
-      ) do
+      )
+      when current_rank > 0 do
     missing_numbers(1, current_rank, ranks)
     |> Enum.map(fn rank ->
       Update
@@ -173,6 +174,17 @@ defmodule Homesynck.Sync do
       |> Update.with_rank(rank)
       |> Repo.all()
     end)
+  end
+
+  def get_missing_updates(
+        %Directory{
+          id: _directory_id,
+          current_rank: current_rank
+        } = _directory,
+        _ranks
+      )
+      when current_rank > 0 do
+    []
   end
 
   defp missing_numbers(min, max, list) when min <= max do
@@ -251,7 +263,7 @@ defmodule Homesynck.Sync do
       {:ok, directory}
     else
       error ->
-        Logger.info("open_directory/3: #{inspect error}")
+        Logger.info("open_directory/3: #{inspect(error)}")
         {:error, :access_denied}
     end
   end
