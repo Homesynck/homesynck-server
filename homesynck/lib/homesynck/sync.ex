@@ -188,12 +188,34 @@ defmodule Homesynck.Sync do
     []
   end
 
-  defp missing_numbers(min, max, list) when min <= max do
+  def missing_numbers(min, max, list) when min <= max do
+    list = list
+    |> Enum.map(fn e ->
+      case e do
+        [min|[max]] -> Enum.to_list(min..max)
+        _ -> [e]
+      end
+    end)
+    |> List.flatten()
+
+    #TODO further optimisation
+
     [min..max, list]
     |> Stream.concat()
     |> Enum.frequencies()
     |> Enum.reduce([], fn {num, freq}, acc -> if freq == 1, do: [num | acc], else: acc end)
     |> Enum.sort()
+  end
+
+  def intervals_or_suite_to_suite(list) do
+    list
+    |> Enum.map(fn e ->
+      case e do
+        [min|[max]] -> Enum.to_list(min..max)
+        _ -> [e]
+      end
+    end)
+    |> List.flatten()
   end
 
   @doc """
