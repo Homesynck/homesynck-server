@@ -29,5 +29,14 @@ echo "Database $DATABASE_NAME exists, running migrations..."
 mix ecto.migrate
 echo "Migrations finished."
 
+echo "HOMESYNCK CONFIG: "
+echo "- enable_admin_account: $ENABLE_ADMIN_ACCOUNT"
+echo "- admin_username: $ADMIN_USERNAME"
+echo "- admin_password: $ADMIN_PASSWORD"
+echo "- enable_register: $ENABLE_REGISTER"
+echo "- enable_phone_validation: $ENABLE_PHONE_VALIDATION"
+echo "- phone_validation_api_endpoint: $PHONE_VALIDATION_API_ENDPOINT"
+echo "- phone_validation_api_key: $PHONE_VALIDATION_API_KEY"
+
 # Start the server.
 elixir --sname homesynck --cookie cookie -S mix phx.server
