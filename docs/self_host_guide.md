@@ -11,7 +11,7 @@
     - [Enabling and configuring Phone validation](#enabling-and-configuring-phone-validation)
   - [Admin account & no register mode](#admin-account--no-register-mode)
     - [Disabling Admin account](#disabling-admin-account)
-    - [Enabling and configuring Phone validation](#enabling-and-configuring-phone-validation-1)
+    - [Enabling and configuring Admin account](#enabling-and-configuring-admin-account)
     - [Enabling no register mode](#enabling-no-register-mode)
 - [Database management](#database-management)
   - [Change database password](#change-database-password)
@@ -95,7 +95,7 @@ In order to configure the server to use your API, do the following:
 
 ### Admin account & no register mode
 #### Disabling Admin account
-#### Enabling and configuring Phone validation
+#### Enabling and configuring Admin account
 #### Enabling no register mode
 
 ## Database management
