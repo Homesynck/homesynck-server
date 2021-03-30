@@ -84,6 +84,8 @@ Compliant phone validation APIs must:
 ```
  - Respond with code 200 if success.
 
+Check out our [example APIs](./phone_api.md)
+
 In order to configure the server to use your API, do the following:
 
 1. Open `docker-compose.yml`
@@ -147,53 +149,3 @@ HTTPS is mandatory since the server does not encrypt messages by default, making
 4. Replace all `your@email.com` with your email (doesn't have to be a working one, but it's better)
 5. Restart the server with `docker-compose up --build -d`
 6. Make sure it worked `https://yourdomain.com`
-
----
-**Example compliant Node.js phone API using NEXMO**
-
-```javascript
-const Nexmo = require('nexmo');
-
-const nexmo = new Nexmo({
-  apiKey: process.env.NEXMO_KEY,
-  apiSecret: process.env.NEXMO_SECRET
-});
-
-const express = require('express');
-const app = express();
-
-app.use(express.json());
-
-const url = '/sms';
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Connected to ${ PORT }`);
-});
-
-const from = 'Homesynck';
-const body = {
-    status : ""
-};
-const homesynckKey = process.env.HOMESYNCK_SECRET;
-
-app.post(url, async (req, res) => {
-  const number = req.body.number
-  const message = req.body.message
-  const secret = req.body.secret
-
-  if (secret == homesynckKey){
-    const smsResponse = await rStatus(from, number, message);
-    res.send(smsResponse.messages[0].status)
-  }
-});
-
-function rStatus(from, number, message) { 
-  return new Promise((resolve,reject) => {
-    nexmo.message.sendSms(from, number, message, (error, response) => {
-      if (error) return reject(error)
-      return resolve(response)
-    });
-  });
-}
-```
