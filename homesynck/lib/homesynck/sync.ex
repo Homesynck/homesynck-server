@@ -168,12 +168,14 @@ defmodule Homesynck.Sync do
       )
       when current_rank > 0 do
     missing_numbers(1, current_rank, ranks)
-    |> Enum.map(fn rank ->
+    |> Task.async_stream(fn rank ->
       Update
       |> Update.with_directory_id(directory_id)
       |> Update.with_rank(rank)
       |> Repo.all()
-    end)
+    end, timeout: :infinity)
+    |> Enum.map(fn {_, el} -> el end)
+    |> Enum.to_list()
     |> List.flatten()
   end
 

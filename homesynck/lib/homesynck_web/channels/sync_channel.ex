@@ -23,8 +23,12 @@ defmodule HomesynckWeb.SyncChannel do
         |> Phoenix.Socket.assign(:user_id, user_id)
         |> Phoenix.Socket.assign(:directory_id, directory_id)
 
-      send_missing_updates(received_updates, directory_id, socket)
-      {:ok, socket}
+      payload = case send_missing_updates(received_updates, directory_id, socket) do
+        {:ok, count} ->
+          %{missing_count: count}
+        _ -> %{}
+      end
+      {:ok, payload, socket}
     else
       {:error, %{reason: "unauthorized"}}
     end
@@ -96,6 +100,7 @@ defmodule HomesynckWeb.SyncChannel do
     with {:ok, directory} <- Sync.get_directory(directory_id),
          missing_updates <- Sync.get_missing_updates(directory, received_updates) do
       send(self(), {:send_missing, missing_updates})
+      {:ok, length(missing_updates)}
     else
       {:error, :not_found} -> {:error, :not_found}
     end
