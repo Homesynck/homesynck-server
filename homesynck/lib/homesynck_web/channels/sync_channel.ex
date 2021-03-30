@@ -94,10 +94,9 @@ defmodule HomesynckWeb.SyncChannel do
 
   defp send_missing_updates(received_updates, directory_id, _socket) do
     with {:ok, directory} <- Sync.get_directory(directory_id),
-         [_ | _] = missing_updates <- Sync.get_missing_updates(directory, received_updates) do
+         missing_updates <- Sync.get_missing_updates(directory, received_updates) do
       send(self(), {:send_missing, missing_updates})
     else
-      [] -> {:ok, :none_missing}
       {:error, :not_found} -> {:error, :not_found}
     end
   end
