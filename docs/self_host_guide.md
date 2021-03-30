@@ -68,6 +68,7 @@ If activated, a register token will be sent to a phone number validation API. Th
 1. Open `docker-compose.yml`
 2. Under `phoenix-server -> environment` change `ENABLE_PHONE_VALIDATION` to `"false"`
    - Double quotes are mandatory
+3. Restart the server with `docker-compose up --build -d`
 
 #### Enabling and configuring Phone validation
 Phone validation requires hosting your own automated SMS API.
@@ -95,7 +96,30 @@ In order to configure the server to use your API, do the following:
 
 ### Admin account & no register mode
 #### Disabling Admin account
+1. Open `docker-compose.yml`
+2. Under `phoenix-server -> environment` change `ENABLE_ADMIN_ACCOUNT` to `"false"`
+   - Double quotes are mandatory
+3. Restart the server with `docker-compose up --build -d`
+
 #### Enabling and configuring Admin account
+This feature creates an account for you on firststart using credentials in the server's configuration.
+
+Enabling it and also enabling "no register mode" can be useful to only let you use your own server, thus making it suitable for private use.
+
+This "admin account" can also be used for tests and maintenance.
+
+In order to enable and configure it do the following:
+
+1. Open `docker-compose.yml`
+2. Under `phoenix-server -> environment` change `ENABLE_ADMIN_ACCOUNT` to `"true"`
+   - Double quotes are mandatory
+3. Open or create your secret `docker.env` file:
+   - after `ADMIN_USERNAME=` put your admin account username
+   - after `ADMIN_PASSWORD=` put your admin account password
+4. Restart the server with `docker-compose up --build -d`
+
+If you change the `ADMIN_USERNAME` or `ADMIN_PASSWORD` later, it will take effect on server restart.
+
 #### Enabling no register mode
 
 ## Database management
