@@ -6,7 +6,7 @@
 - [What is real-time order-sensitive data synchronisation?](#what-is-real-time-order-sensitive-data-synchronisation)
 - [How does it work?](#how-does-it-work)
 
-**Useful links: **
+**Useful links:**
 - [Self-hosting guide](./docs/self_host_guide.md)
 - [Check out existing SDKs](https://homesynck.anicetnougaret.fr/)
 - [Make your hown client SDK guide](docs/channels_docs.md)
