@@ -114,7 +114,7 @@ defmodule Homesynck.Auth do
 
   defp register(:disabled, _params) do
     Logger.info("register disabled")
-    {:error, :disabled}
+    {:error, :feature_disabled}
   end
 
   @doc """
@@ -199,7 +199,7 @@ defmodule Homesynck.Auth do
   end
 
   defp validate_register_token(:disabled, _token) do
-    Logger.info("aborting validate_register_token because disabled")
+    Logger.info("dummy answering validate_register_token because disabled")
     :ok
   end
 
@@ -212,17 +212,29 @@ defmodule Homesynck.Auth do
   end
 
   def validate_phone(phone) when is_binary(phone) do
+    if phone_validation_enabled?() do
+      validate_phone(:enabled, phone)
+    else
+      validate_phone(:disabled, phone)
+    end
+  end
+
+  defp validate_phone(:enabled, phone) do
     gen = fn -> :crypto.rand_uniform(0, 9) end
     code = "#{gen.()}#{gen.()}#{gen.()}#{gen.()}#{gen.()}#{gen.()}"
 
     cond do
-      phone_validation_enabled?() != true -> {:error, :disabled}
       is_phone_format_invalid?(phone) -> {:error, :format}
       is_phone_cooling_down?(phone) -> {:error, :validation_failed}
       send_validation_sms(phone, code) != :ok -> {:error, :format}
       persist_verified_phone(phone, code) != :ok -> {:error, :persist_error}
       true -> {:ok, []}
     end
+  end
+
+  defp validate_phone(:disabled, _phone) do
+    Logger.info("dummy answering validate_phone because disabled")
+    {:ok, :feature_disabled}
   end
 
   defp is_phone_cooling_down?(number) do
