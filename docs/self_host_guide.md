@@ -1,4 +1,6 @@
 # Self-hosting
+
+**Table of contents**
 - [How does it work?](#how-does-it-work)
 - [Setup on Unix based OS](#setup-on-unix-based-os)
   - [Prerequisites](#prerequisites)

@@ -2,6 +2,7 @@
 
 ![logo](./docs/res/homesynck.png)
 
+**Table of contents**
 - [What is Homesynck server?](#what-is-homesynck-server)
 - [What is real-time order-sensitive data synchronisation?](#what-is-real-time-order-sensitive-data-synchronisation)
 - [How does it work?](#how-does-it-work)
