@@ -21,6 +21,9 @@ services:
       DATABASE_NAME: homesynck
       DATABASE_PORT: 5432
       DATABASE_HOST: postgres-db
+      ENABLE_ADMIN_ACCOUNT: "true"
+      ENABLE_REGISTER: "true"
+      ENABLE_PHONE_VALIDATION: "true"
       HOST: yourdomain.com
       PORT: 4001
     ports:

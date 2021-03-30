@@ -1,4 +1,15 @@
 # Self-hosting
+- [How does it work?](#how-does-it-work)
+- [Setup on Unix based OS](#setup-on-unix-based-os)
+  - [Prerequisites](#prerequisites)
+  - [Basic installation](#basic-installation)
+- [Configure features](#configure-features)
+  - [Phone validation for registering](#phone-validation-for-registering)
+  - [Admin account & single user mode](#admin-account--single-user-mode)
+- [Database management](#database-management)
+  - [Change database password](#change-database-password)
+- [Setup HTTPS](#setup-https)
+
 ## How does it work?
 A Homesynck server instance is made of 2 parts (and 1 optional part):
 
@@ -20,7 +31,7 @@ Those 3 parts can be downloaded and run all in harmony using Docker containers a
 - sudo permissions on your machine
 - for HTTPS to work: a domain name (e.g. `john@doe.com`) pointing to the IP of your machine
 
-### Basic instructions
+### Basic installation
 By following those instructions you'll get an up and running Homesynck server instance on your machine.
 
 We won't customize database settings and we won't setup HTTPS during this. But you will need to do it before deploying to production by following our [database management guide](#database-management) and our [https enabling guide](#setup-https).
@@ -39,6 +50,13 @@ Let's get going:
 8. Make sure you have the 3 containers running by doing `docker ps`
 9. Make sure the Phoenix web server did start by doing `docker logs homesynck-server_phoenix-server_1`
 10. Open a browser and go to `http://localhost:4001`
+
+## Configure features
+### Phone validation for registering
+*soon*
+
+### Admin account & single user mode
+*soon*
 
 ## Database management
 ### Change database password
