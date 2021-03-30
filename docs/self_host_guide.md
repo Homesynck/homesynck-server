@@ -121,6 +121,16 @@ In order to enable and configure it do the following:
 If you change the `ADMIN_USERNAME` or `ADMIN_PASSWORD` later, it will take effect on server restart.
 
 #### Enabling no register mode
+"No register mode" prevents anyone from creating an account using public WebSocket endpoints.
+
+You can enable the "admin account" feature along with this one in order to create a unique admin account for private use.
+
+In order to enable and configure "no register mode" do the following:
+
+1. Open `docker-compose.yml`
+2. Under `phoenix-server -> environment` change `ENABLE_REGISTER` to `"false"`
+   - Double quotes are mandatory
+3. Restart the server with `docker-compose up --build -d`
 
 ## Database management
 ### Change database password
