@@ -118,7 +118,7 @@
             </h2>
             <div class="article_section_content">
                 The optimal platform for Android apps.
-                <br>
+                <br/>
                 + Supports real-time file synchronisation!
                 <div class="links">
                     <a class="inline_link" href="https://github.com/Homesynck/homesynck-java-sdk">
@@ -133,7 +133,31 @@
                 </div>
             </div>
         </div>
-        <div class="article_section article_section-reversed disabled">
+        <div class="article_section article_section-reversed">
+            <emoji-icon class="emoji-icon">
+                🦕
+            </emoji-icon>
+            <h2 class="article_section_title">
+                Typescript & Javascript
+            </h2>
+            <div class="article_section_content">
+                Create a synchronised web app in no time.
+                <br/>
+                Compatible with browsers, Node.js & Deno.
+                <div class="links">
+                    <a class="inline_link" href="https://github.com/Homesynck/homesynck-ts-js-sdk">
+                        ∴ Source code ∴
+                    </a>
+                    <a class="inline_link" href="https://www.npmjs.com/package/homesynck-sdk">
+                        ∴ NPM page ∴
+                    </a>
+                    <a class="inline_link" href="https://homesynck.github.io/homesynck-ts-js-sdk/">
+                        ∴ Documentation ∴
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="article_section disabled article_section-last">
             <emoji-icon class="emoji-icon">
                 🍷
             </emoji-icon>
@@ -143,18 +167,6 @@
             </h2>
             <p class="article_section_content">
                 Well suited for server-to-server synchronisation.
-            </p>
-        </div>
-        <div class="article_section article_section-last disabled">
-            <emoji-icon class="emoji-icon">
-                🍤
-            </emoji-icon>
-            <h2 class="article_section_title">
-                <span style="color: rgba(0, 0, 0, 0.418)">coming soon</span>
-                Javascript
-            </h2>
-            <p class="article_section_content">
-                Create your own web-centric synchronised real-time cool club.
             </p>
         </div>
         <h2 class="article_headline">
