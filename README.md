@@ -1,6 +1,6 @@
-# Homesynck server
+![thumbnail](./docs/res/homesynck.png)
 
-![logo](./docs/res/homesynck.png)
+# Homesynck server
 
 **Table of contents**
 - [What is Homesynck server?](#what-is-homesynck-server)
