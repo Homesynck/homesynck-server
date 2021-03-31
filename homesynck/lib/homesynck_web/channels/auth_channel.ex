@@ -1,5 +1,6 @@
 defmodule HomesynckWeb.AuthChannel do
   use HomesynckWeb, :channel
+  require Logger
   alias HomesynckWeb.AuthTokenHelper
 
   @impl true
@@ -65,7 +66,12 @@ defmodule HomesynckWeb.AuthChannel do
           token = AuthTokenHelper.gen_auth_token(user_id, socket)
           {:ok, %{user_id: user_id, auth_token: token}}
 
-        {:error, _reason} ->
+        {:error, :name_taken} -> {:error, %{reason: "name taken"}}
+
+        {:error, :too_short_password} -> {:error, %{reason: "password too short"}}
+
+        {:error, reason} ->
+          Logger.info("#{inspect reason}") #TODO
           {:error, %{reason: "register rejected"}}
       end
 

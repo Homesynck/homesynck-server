@@ -106,6 +106,12 @@ defmodule Homesynck.Auth do
         {:ok, user} ->
           {:ok, user.id}
 
+        {:error, %Ecto.Changeset{} = c} ->
+          case Homesynck.EctoErrorsHelper.changeset_error_to_string(c) do
+            "password: The password is too short" -> {:error, :too_short_password}
+            other -> {:error, other}
+          end
+
         error ->
           error
       end

@@ -58,7 +58,7 @@ defmodule HomesynckWeb.SyncChannel do
           {:error, %{:reason => "directory not found"}}
 
         {:error, _error} ->
-          {:error, %{:reason => "update pushing failed"}}
+          {:error, %{:reason => "update pushing failed, verify that you are up to date"}}
       end
 
     Logger.info("Responding to push_update #{inspect(resp)}")
