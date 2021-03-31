@@ -168,12 +168,15 @@ defmodule Homesynck.Sync do
       )
       when current_rank > 0 do
     missing_numbers(1, current_rank, ranks)
-    |> Task.async_stream(fn rank ->
-      Update
-      |> Update.with_directory_id(directory_id)
-      |> Update.with_rank(rank)
-      |> Repo.all()
-    end, timeout: :infinity)
+    |> Task.async_stream(
+      fn rank ->
+        Update
+        |> Update.with_directory_id(directory_id)
+        |> Update.with_rank(rank)
+        |> Repo.all()
+      end,
+      timeout: :infinity
+    )
     |> Enum.map(fn {_, el} -> el end)
     |> Enum.to_list()
     |> List.flatten()
@@ -191,16 +194,17 @@ defmodule Homesynck.Sync do
   end
 
   def missing_numbers(min, max, list) when min <= max do
-    list = list
-    |> Enum.map(fn e ->
-      case e do
-        [min|[max]] -> Enum.to_list(min..max)
-        _ -> [e]
-      end
-    end)
-    |> List.flatten()
+    list =
+      list
+      |> Enum.map(fn e ->
+        case e do
+          [min | [max]] -> Enum.to_list(min..max)
+          _ -> [e]
+        end
+      end)
+      |> List.flatten()
 
-    #TODO further optimisation
+    # TODO further optimisation
 
     [min..max, list]
     |> Stream.concat()
@@ -213,7 +217,7 @@ defmodule Homesynck.Sync do
     list
     |> Enum.map(fn e ->
       case e do
-        [min|[max]] -> Enum.to_list(min..max)
+        [min | [max]] -> Enum.to_list(min..max)
         _ -> [e]
       end
     end)

@@ -1,0 +1,21 @@
+<page class="page">
+    <header class="header">
+        <h1>Sign in</h1>
+
+        <%= form_for @conn, Routes.session_path(@conn, :create), [method: :post, as: :user], fn f -> %>
+            <div class="form">
+                <div>
+                    <%= text_input f, :name, placeholder: "👋 Username", class: "form-control" %>
+                </div>
+    
+                <div>
+                    <%= password_input f, :password, placeholder: "🔐 Password", class: "form-control" %>
+                </div>
+    
+                <div>
+                    <%= submit "✔ Log in", class: 'form-button' %>
+                </div>
+            </div>
+        <%= end %>
+    </header>
+</page>

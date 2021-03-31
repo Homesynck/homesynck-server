@@ -8,6 +8,8 @@ defmodule HomesynckWeb.Router do
     plug :put_root_layout, {HomesynckWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    #plug NavigationHistory.Tracker, accept_duplicates: false
+    plug HomesynckWeb.AuthPlug
   end
 
   pipeline :api do
@@ -18,6 +20,11 @@ defmodule HomesynckWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/login", SessionController, :new
+    get "/logout", SessionController, :delete
+    get "/dashboard", PageController, :dashboard
+
+    resources "/sessions", SessionController, only: [:new, :create, :delete], singleton: true
     # live "/", PageLive, :index
   end
 

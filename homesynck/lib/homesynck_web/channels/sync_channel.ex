@@ -23,11 +23,15 @@ defmodule HomesynckWeb.SyncChannel do
         |> Phoenix.Socket.assign(:user_id, user_id)
         |> Phoenix.Socket.assign(:directory_id, directory_id)
 
-      payload = case send_missing_updates(received_updates, directory_id, socket) do
-        {:ok, count} ->
-          %{missing_count: count}
-        _ -> %{}
-      end
+      payload =
+        case send_missing_updates(received_updates, directory_id, socket) do
+          {:ok, count} ->
+            %{missing_count: count}
+
+          _ ->
+            %{}
+        end
+
       {:ok, payload, socket}
     else
       {:error, %{reason: "unauthorized"}}
@@ -72,7 +76,7 @@ defmodule HomesynckWeb.SyncChannel do
 
   @impl true
   def handle_info({:send_missing, missing_updates}, socket) do
-    Logger.info("Sending after join: #{inspect missing_updates}")
+    Logger.info("Sending after join: #{inspect(missing_updates)}")
     send_updates(missing_updates, socket)
     {:noreply, socket}
   end
@@ -116,7 +120,7 @@ defmodule HomesynckWeb.SyncChannel do
     updates
     |> build_updates()
     |> (&broadcast(from_socket, "updates", %{"updates" => &1})).()
-    |> (&(Logger.info("Broadcasting updates #{inspect &1}"))).()
+    |> (&Logger.info("Broadcasting updates #{inspect(&1)}")).()
   end
 
   defp build_updates(updates) do

@@ -62,7 +62,9 @@ defmodule Homesynck.Auth do
       {:ok, user.id}
     else
       nil -> {:error, :not_found}
-      {:error, reason} -> {:error, reason}
+      {:error, reason} ->
+        Comeonin.no_user_verify([])
+        {:error, reason}
     end
   end
 

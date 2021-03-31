@@ -14,6 +14,8 @@ config :homesynck,
   admin_username: System.get_env("ADMIN_USERNAME"),
   admin_password: System.get_env("ADMIN_PASSWORD"),
   enable_register: System.get_env("ENABLE_REGISTER"),
+  # Disable Sessions if you don't want users to be able to login on the hosted page
+  enable_sessions: System.get_env("ENABLE_SESSIONS"),
   # Phone validation can be disabled. If enabled you will need your own
   # phone validation API.
   # Compliant phone validation APIs must:
