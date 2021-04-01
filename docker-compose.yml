@@ -25,6 +25,9 @@ services:
       ENABLE_REGISTER: "true"
       ENABLE_SESSIONS: "true"
       ENABLE_PHONE_VALIDATION: "true"
+      INSTANCE_NAME: ""
+      INSTANCE_DESCRIPTION: ""
+      INSTANCE_OWNER: ""
       HOST: yourdomain.com
       PORT: 4001
     ports:
