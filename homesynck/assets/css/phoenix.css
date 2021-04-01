@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
 
 * {
   margin: 0;
@@ -52,6 +53,7 @@ body {
   justify-content: space-around;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 3rem;
   max-width: 40rem;
 }
 
@@ -64,6 +66,19 @@ body {
   margin-left: auto;
   margin-right: auto;
   max-width: 20rem;
+}
+
+.page_title {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 20rem;
+}
+
+.page_title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  margin-left: 3rem;
 }
 
 .article {
@@ -174,6 +189,7 @@ body {
 .article_footer {
   display: flex;
   flex-direction: row;
+  margin-bottom: 1rem;
 }
 
 .article_footer_section {
@@ -301,6 +317,108 @@ form div {
 
 .form-button:active {
   background-color: var(--c-3);
+}
+
+.collapse_button {
+  margin-top: 0.25rem;
+  display: inline;
+  width: fit-content;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--c-0);
+  cursor: pointer;
+
+  /*DISABLES SELECTION*/
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+.collapse_button:hover {
+  background-color: var(--c-3);
+  color: var(--c-a);
+  cursor: pointer;
+}
+
+.directory {
+  margin: 0.5rem 0rem;
+}
+
+.directory:last-child {
+  margin-bottom: 0;
+}
+
+.directory .article_section_title {
+  padding: 0.75rem 0.75rem;
+  font-size: 1.2rem;
+  background-color: var(--c-a);
+  color: var(--c-3);
+  font-style: normal;
+  cursor: pointer;
+}
+
+.directory .article_section_title:hover {
+  background-color: var(--c-2);
+  color: var(--c-a);
+  cursor: pointer;
+}
+
+.directory .article_section_content {
+  padding: 0.5rem 0.5rem;
+  margin: 0.5rem;
+  background-color: var(--c-1);
+}
+
+.updates {
+  margin-top: 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--c-2);
+}
+
+.update {
+  display: block;
+  padding: 1rem 0.75rem;
+  border-bottom: solid 0.25rem var(--c-1);
+}
+
+.update:last-child {
+  border-bottom: none;
+}
+
+.update div {
+  display: block;
+}
+
+.update .field {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background-color: var(--c-1);
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+}
+
+.update .instructions {
+  margin-top: 1rem;
+  border-radius: 0.25rem;
+  font-family: 'Fira Code', monospace;
+}
+
+.sticky {
+  position: fixed;
+  top: -10rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  padding-top: 10rem;
+  margin-right: auto;
+  margin-left: auto;
+  /* give it dimensions */
+  max-width: 100vw;
+  width: 40rem;
+  box-shadow: 0rem 0.2rem 0.5rem rgba(0, 0, 0, 0.13);
+  border-radius: 1rem;
 }
 
 @media (max-aspect-ratio: 1/1) {

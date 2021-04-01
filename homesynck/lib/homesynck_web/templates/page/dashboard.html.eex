@@ -1,0 +1,3 @@
+<page class="page">
+    <%= live_render(@conn, HomesynckWeb.DashboardLive) %>
+</page>

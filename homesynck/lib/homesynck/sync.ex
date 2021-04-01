@@ -11,6 +11,20 @@ defmodule Homesynck.Sync do
 
   alias Homesynck.Sync.Update
 
+  @topic inspect(__MODULE__)
+
+  def subscribe(user_id) do
+    Phoenix.PubSub.subscribe(Homesynck.PubSub, @topic <> "#{user_id}")
+  end
+
+  def notify_subscribers(user_id, payload, event) do
+    Phoenix.PubSub.broadcast(
+      Homesynck.PubSub,
+      @topic <> "#{user_id}",
+      {__MODULE__, event, payload}
+    )
+  end
+
   @doc """
   Returns the list of updates.
 
@@ -120,6 +134,12 @@ defmodule Homesynck.Sync do
     Repo.all(Directory)
   end
 
+  def get_user_directories(user_id) do
+    Directory
+    |> Directory.with_user_id(user_id)
+    |> Repo.all()
+  end
+
   def get_user_directory_by_name(user_id, name) do
     directories_with_name =
       Directory
@@ -141,6 +161,21 @@ defmodule Homesynck.Sync do
       _error ->
         false
     end
+  end
+
+  def get_update_count(directory_id) do
+    Update
+    |> Update.with_directory_id(directory_id)
+    |> Repo.aggregate(:count)
+  end
+
+  def get_last_updates(directory_id, limit) do
+    Repo.all(
+      from u in Update,
+        where: u.directory_id == ^directory_id,
+        order_by: [desc: u.rank],
+        limit: ^limit
+    )
   end
 
   def push_update_sync(directory_id, update_attrs) do
@@ -270,12 +305,11 @@ defmodule Homesynck.Sync do
       ) do
     case insert_directory(Map.put(attrs, "user_id", user_id)) do
       {:ok, directory} ->
+        notify_subscribers(user_id, directory, :directory_created)
         {:ok, directory.id}
 
       error ->
-        # TODO
         error
-        |> IO.inspect()
     end
   end
 

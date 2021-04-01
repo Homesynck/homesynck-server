@@ -8,6 +8,9 @@ use Mix.Config
 #     """
 
 config :homesynck,
+  instance_name: System.get_env("INSTANCE_NAME"),
+  instance_description: System.get_env("INSTANCE_DESCRIPTION"),
+  instance_owner: System.get_env("INSTANCE_OWNER"),
   # Admin account is an account created on server start
   # Usefull if you plan to disable register and allow only 1 account
   enable_admin_account: System.get_env("ENABLE_ADMIN_ACCOUNT"),

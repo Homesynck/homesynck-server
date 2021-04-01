@@ -67,8 +67,12 @@ defmodule Homesynck.Sync.SyncServer do
       )
       when current_rank == rank - 1 do
     case Sync.push_update_transaction(directory, update_attrs) do
-      {:ok, update} -> {:ok, update}
-      {:error, reason} -> {:error, reason}
+      {:ok, update} ->
+        Sync.notify_subscribers(directory.user_id, directory, :update_created)
+        {:ok, update}
+
+      {:error, reason} ->
+        {:error, reason}
     end
   end
 

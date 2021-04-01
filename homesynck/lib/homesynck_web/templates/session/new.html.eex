@@ -7,11 +7,11 @@
                 <div>
                     <%= text_input f, :name, placeholder: "👋 Username", class: "form-control" %>
                 </div>
-    
+
                 <div>
                     <%= password_input f, :password, placeholder: "🔐 Password", class: "form-control" %>
                 </div>
-    
+
                 <div>
                     <%= submit "✔ Log in", class: 'form-button' %>
                 </div>

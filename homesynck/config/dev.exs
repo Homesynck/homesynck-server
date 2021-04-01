@@ -1,6 +1,9 @@
 use Mix.Config
 
 config :homesynck,
+  instance_name: "PJS4",
+  instance_description: "A public server anyone can use to synchronise its apps!",
+  instance_owner: "Homesynck team",
   enable_admin_account: true,
   admin_username: "admin",
   admin_password: "superpassword",

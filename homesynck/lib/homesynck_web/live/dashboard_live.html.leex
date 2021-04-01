@@ -1,0 +1,109 @@
+<header class="header">
+    <h2 class="page_title">
+        📌Dashboard
+    </h2>
+</header>
+<div class="article">
+    <h2 class="article_headline">
+        Your directories
+    </h2>
+    <p style="text-align: center; padding-bottom: 0.5rem;">
+        <i>Directories are synchronized rooms for your apps</i>
+    </p>
+    <%= for directory <- @directories do %>
+    <div class="article_section directory">
+        <h2 class="article_section_title">
+        <%= if directory.id in @expanded_directories do %>
+            <div phx-click="collapse" phx-value-directory_id="<%= directory.id %>">
+                - <%= directory.name %>
+            </div>
+        <% else %>
+            <div phx-click="expand" phx-value-directory_id="<%= directory.id %>">
+                + <%= directory.name %>
+            </div>
+        <% end %>
+        </h2>
+        <%= if directory.id in @expanded_directories do %>
+            <div class="article_section_content">
+                <%= if directory.thumbnail_url != nil do %>
+                    <u><i>Description:</i></u> <b><%= directory.description %></b>
+                    <br/>
+                <% end %>
+                <%= if directory.description != nil do %>
+                    <u><i>Description:</i></u> <b><%= directory.description %></b>
+                    <br/>
+                <% end %>
+                <u><i>Update count:</i></u> <b><%= directory.update_count %></b>
+                <br/>
+                <%= if length(directory.last_updates) > 0 do %>
+                <u><i>Last updates:</i></u>
+                <div class="updates">
+                    <%= for update <- directory.last_updates do %>
+                    <div class="update">
+                        <p class="field rank"><%= update.rank %></p>
+                        <p class="field date"><%= update.inserted_at %></p>
+                        <p class="instructions">
+                            <%= if update.id in @expanded_updates do %>
+                                <%= update.instructions %>
+                                <div class="collapse_button" phx-click="collapse" phx-value-update_id="<%= update.id %>">
+                                    Show less
+                                </div>
+                            <% else %>
+                                <%= "#{String.slice(update.instructions, 0, 50)}..." %>
+                                <div class="collapse_button" phx-click="expand" phx-value-update_id="<%= update.id %>">
+                                    Show more
+                                </div>
+                            <% end %>
+                        </p>
+                    </div>
+                    <% end %>
+                </div>
+                <% end %>
+            </div>
+        <% end %>
+    </div>
+    <% end %>
+    <h2 class="article_headline">
+
+    </h2>
+</div>
+<div class="article">
+    <h2 class="article_headline">
+        This server
+    </h2>
+    <separator class="article_separator article_separator-white">
+        ⋯⋯⋯⋯⋯⋯⋯⋯⋯
+    </separator>
+    <div class="article_section">
+        <emoji-icon class="emoji-icon">
+            🙂
+        </emoji-icon>
+        <h2 class="article_section_title">
+            Your account
+        </h2>
+        <p class="article_section_content">
+            <u><i>User id:</i></u> <b><%= @user.id %></b>
+            <br/>
+            <u><i>Username:</i></u> <b><%= @user.name %></b>
+            <br/>
+        </p>
+    </div>
+    <div class="article_section">
+        <emoji-icon class="emoji-icon">
+            💻
+        </emoji-icon>
+        <h2 class="article_section_title">
+            About
+        </h2>
+        <p class="article_section_content">
+            <u><i>Name:</i></u> <b><%= @instance.name %></b>
+            <br/>
+            <u><i>Owned by:</i></u> <b><%= @instance.owner %></b>
+            <br/>
+            <u><i>Description:</i></u> <%= @instance.description %>
+        </p>
+    </div>
+    <h2 class="article_headline">
+
+    </h2>
+</div>

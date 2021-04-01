@@ -10,6 +10,41 @@
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
   <body class="theme-light">
+    <header class="article_footer sticky">
+      <section class="article_footer_section">
+        <a href="https://github.com/Homesynck" class="article_footer_section_title">
+            Github
+        </a>
+      </section>
+      <%= if assigns[:excluded_nav] == nil or not "/" in assigns[:excluded_nav] do %>
+        <section class="article_footer_section">
+          <a href="/" class="article_footer_section_title">
+              Home
+          </a>
+        </section>
+      <% end %>
+      <%= if current_user(@conn) == nil and sessions_enabled?() do %>
+          <section class="article_footer_section">
+              <a href="/login" class="article_footer_section_title">
+                  Sign in
+              </a>
+          </section>
+      <% end %>
+      <%= if current_user(@conn) != nil and sessions_enabled?() do %>
+          <%= if assigns[:excluded_nav] == nil or not "/dashboard" in assigns[:excluded_nav] do %>
+            <section class="article_footer_section">
+              <a href="/dashboard" class="article_footer_section_title">
+                  Dashboard
+              </a>
+            </section>
+          <% end %>
+          <section class="article_footer_section">
+              <a href="/logout" class="article_footer_section_title">
+                  Logout
+              </a>
+          </section>
+      <% end %>
+    </header>
     <%= @inner_content %>
   </body>
 </html>

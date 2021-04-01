@@ -8,8 +8,8 @@ defmodule HomesynckWeb.SessionController do
       render(conn, "new.html")
     else
       conn
-        |> put_flash(:error, "Sessions disabled on this instance")
-        |> redirect(to: "/")
+      |> put_flash(:error, "Sessions disabled on this instance")
+      |> redirect(to: "/")
     end
   end
 
@@ -24,10 +24,10 @@ defmodule HomesynckWeb.SessionController do
     case Homesynck.Auth.authenticate(form) do
       {:ok, user_id} ->
         conn
-        |> put_flash(:info, "Welcome back!")
         |> put_session(:user_id, user_id)
         |> configure_session(renew: true)
-        |> redirect(to: "/")
+        |> redirect(to: "/dashboard")
+
       _ ->
         conn
         |> put_flash(:error, "Bad name/password combination")

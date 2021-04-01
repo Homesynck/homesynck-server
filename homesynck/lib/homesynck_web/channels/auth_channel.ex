@@ -73,8 +73,6 @@ defmodule HomesynckWeb.AuthChannel do
           {:error, %{reason: "password too short"}}
 
         {:error, reason} ->
-          # TODO
-          Logger.info("#{inspect(reason)}")
           {:error, %{reason: "register rejected"}}
       end
 

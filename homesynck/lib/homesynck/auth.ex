@@ -61,9 +61,11 @@ defmodule Homesynck.Auth do
            Argon2.check_pass(user, password, [{:hash_key, :password_hashed}]) do
       {:ok, user.id}
     else
-      nil -> {:error, :not_found}
+      nil ->
+        {:error, :not_found}
+
       {:error, reason} ->
-        Comeonin.no_user_verify([])
+        Argon2.no_user_verify()
         {:error, reason}
     end
   end

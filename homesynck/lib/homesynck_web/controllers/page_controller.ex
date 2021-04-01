@@ -5,10 +5,14 @@ defmodule HomesynckWeb.PageController do
   plug :logged_in_user when action in [:dashboard]
 
   def index(conn, _params) do
-    render(conn, "index.html")
+    conn
+    |> assign(:excluded_nav, ["/"])
+    |> render("index.html")
   end
 
   def dashboard(conn, _params) do
-    render(conn, "index.html")
+    conn
+    |> assign(:excluded_nav, ["/dashboard"])
+    |> render("dashboard.html")
   end
 end

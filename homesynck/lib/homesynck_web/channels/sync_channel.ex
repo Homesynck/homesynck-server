@@ -125,7 +125,6 @@ defmodule HomesynckWeb.SyncChannel do
 
   defp build_updates(updates) do
     updates
-    |> IO.inspect()
     |> Enum.map(&%{"rank" => &1.rank, "instructions" => &1.instructions})
   end
 end
