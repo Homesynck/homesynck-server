@@ -403,7 +403,7 @@ form div {
   margin-top: 1rem;
   border-radius: 0.25rem;
   font-family: 'Fira Code', monospace;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 .sticky {

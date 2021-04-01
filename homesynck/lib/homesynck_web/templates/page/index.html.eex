@@ -112,8 +112,8 @@
                     <a class="inline_link" href="https://mvnrepository.com/artifact/com.github.homesynck/homesynck-java-sdk">
                         ∴ Maven repository ∴
                     </a>
-                    <a class="inline_link" href="https://github.com/Homesynck/homesynck-java-sdk">
-                        ∴ <span style="color: rgba(0, 0, 0, 0.418)">coming soon</span> Documentation ∴
+                    <a class="inline_link" href="https://homesynck.github.io/homesynck-java-sdk/">
+                        ∴ Documentation ∴
                     </a>
                 </div>
             </div>
