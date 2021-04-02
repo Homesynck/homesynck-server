@@ -277,7 +277,8 @@ defmodule Homesynck.Auth do
     number_hash = Argon2.Base.hash_password(number, "saltsaltsaltsaltsaltsalt", [])
 
     with %PhoneNumber{expires_on: expires} <- Repo.get_by(PhoneNumber, number_hash: number_hash),
-         :gt <- NaiveDateTime.compare(NaiveDateTime.local_now(), NaiveDateTime.new!(expires, ~T[12:00:00.000])) do
+          {:ok, date} <- NaiveDateTime.new(expires, ~T[12:00:00.000]),
+         :gt <- NaiveDateTime.compare(NaiveDateTime.local_now(), ) do
 
       Logger.info("Cooling down #{NaiveDateTime.compare(NaiveDateTime.local_now(), expires)}")
 
@@ -319,8 +320,8 @@ defmodule Homesynck.Auth do
   end
 
   defp persist_verified_phone(number, code) do
-    expires =
-      NaiveDateTime.new!(~D[1999-05-02], ~T[12:00:00.000])
+    {:ok, expires} =
+      NaiveDateTime.new(~D[1999-05-02], ~T[12:00:00.000])
 
     attrs = %{
       register_token: code,
