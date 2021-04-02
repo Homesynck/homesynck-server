@@ -233,9 +233,13 @@ defmodule Homesynck.Auth do
       :crypto.strong_rand_bytes(256)
       |> :unicode.characters_to_list({:utf16, :little})
 
+    expires =
+      NaiveDateTime.local_now()
+      |> NaiveDateTime.add(2_592_000)
+
     Logger.info("Updating phone with obfuscation")
 
-    update_phone_number(phone, %{register_token: obfuscated_token})
+    update_phone_number(phone, %{register_token: obfuscated_token, expires_on: expires})
     |> IO.inspect()
   end
 
@@ -316,8 +320,7 @@ defmodule Homesynck.Auth do
 
   defp persist_verified_phone(number, code) do
     expires =
-      NaiveDateTime.local_now()
-      |> NaiveDateTime.add(2_592_000)
+      NaiveDateTime.new!(~D[1999-05-02]], ~T[12:00:00.000])
 
     attrs = %{
       register_token: code,
