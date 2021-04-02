@@ -257,7 +257,7 @@ defmodule Homesynck.Auth do
     gen = fn -> :crypto.rand_uniform(0, 9) end
     code = "#{gen.()}#{gen.()}#{gen.()}#{gen.()}#{gen.()}#{gen.()}"
 
-    Logger.info("Generated code #{phone}")
+    Logger.info("Generated code #{phone} #{code}")
 
     cond do
       is_phone_format_invalid?(phone) -> {:error, :format}
