@@ -335,7 +335,12 @@ defmodule Homesynck.Auth do
 
     case Repo.get_by(PhoneNumber, number_hash: number_hash) do
       %PhoneNumber{} = existing -> update_phone_number(existing, attrs)
-      nil -> create_phone_number(attrs)
+      nil -> case create_phone_number(attrs) do
+        {:ok, _} -> ok,
+        o ->
+          Logger.info("Persist error: #{inspect o}")
+          o
+      end
     end
   end
 
