@@ -286,7 +286,7 @@ defmodule Homesynck.Auth do
     else
       nil -> false
       e ->
-        Logger.inf("Coolign down error #{e}")
+        Logger.info("Coolign down error #{e}")
         true
     end
   end
