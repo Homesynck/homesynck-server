@@ -278,7 +278,7 @@ defmodule Homesynck.Auth do
 
     with %PhoneNumber{expires_on: expires} <- Repo.get_by(PhoneNumber, number_hash: number_hash),
           {:ok, date} <- NaiveDateTime.new(expires, ~T[12:00:00.000]),
-         :gt <- NaiveDateTime.compare(NaiveDateTime.local_now(), date) do
+         :lt <- NaiveDateTime.compare(date, NaiveDateTime.local_now()) do
 
       Logger.info("Cooling down #{NaiveDateTime.compare(expires, NaiveDateTime.local_now())}")
 
