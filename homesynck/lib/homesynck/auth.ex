@@ -377,6 +377,7 @@ defmodule Homesynck.Auth do
     %PhoneNumber{}
     |> PhoneNumber.changeset(Map.put(attrs, :number_hash, number_hash))
     |> Repo.insert()
+    |> IO.inspect()
   end
 
   @doc """
