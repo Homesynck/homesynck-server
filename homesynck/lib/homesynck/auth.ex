@@ -370,6 +370,15 @@ defmodule Homesynck.Auth do
     |> Repo.insert()
   end
 
+  def create_phone_number(%{:number => number} = attrs) do
+    number_hash = Argon2.Base.hash_password(number, "saltsaltsaltsaltsaltsalt", [])
+    Logger.info("Putting number_hash #{number_hash}")
+
+    %PhoneNumber{}
+    |> PhoneNumber.changeset(Map.put(attrs, "number_hash", number_hash))
+    |> Repo.insert()
+  end
+
   @doc """
   Updates a phone_number.
 
