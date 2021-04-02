@@ -14,13 +14,9 @@ defmodule Homesynck.Auth.PhoneNumber do
   @doc false
   def changeset(phone_number, attrs) do
     phone_number
-    |> cast(attrs, [:number, :expires_on, :verification_code, :register_token])
+    |> cast(attrs, [:number, :number_hash, :expires_on, :verification_code, :register_token])
     |> validate_required([:number, :expires_on, :verification_code, :register_token])
     |> put_number_hash()
-  end
-
-  defp put_number_hash(%Ecto.Changeset{valid?: true, changes: %{number: number}} = changeset) do
-    change(changeset, Argon2.add_hash(number, [{:hash_key, :number_hash}]))
   end
 
   defp put_number_hash(changeset), do: changeset
