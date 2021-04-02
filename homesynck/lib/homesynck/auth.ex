@@ -214,7 +214,7 @@ defmodule Homesynck.Auth do
 
     case Repo.get_by(PhoneNumber, register_token: token) do
       %PhoneNumber{} = phone ->
-        Logger.info("Found code's phone #{phone}")
+        Logger.info("Found code's phone #{inspect phone}")
         obfuscate_register_token(phone)
         :ok
 
@@ -277,14 +277,15 @@ defmodule Homesynck.Auth do
     number_hash = Argon2.Base.hash_password(number, "saltsaltsaltsaltsaltsalt", [])
 
     with %PhoneNumber{expires_on: expires} <- Repo.get_by(PhoneNumber, number_hash: number_hash),
-          {:ok, date} <- NaiveDateTime.new(expires, ~T[12:00:00.000]),
+         {:ok, date} <- NaiveDateTime.new(expires, ~T[12:00:00.000]),
          :lt <- NaiveDateTime.compare(date, NaiveDateTime.local_now()) do
-
       Logger.info("Cooling down #{NaiveDateTime.compare(date, NaiveDateTime.local_now())}")
 
       false
     else
-      nil -> false
+      nil ->
+        false
+
       e ->
         Logger.info("Coolign down error #{e}")
         true
@@ -302,7 +303,7 @@ defmodule Homesynck.Auth do
       secret: phone_validation_api_key()
     }
 
-    Logger.info("API body #{inspect body}")
+    Logger.info("API body #{inspect(body)}")
 
     HTTPoison.start()
 
@@ -316,14 +317,13 @@ defmodule Homesynck.Auth do
         :ok
 
       other ->
-        Logger.info("Phone API response #{inspect other}")
+        Logger.info("Phone API response #{inspect(other)}")
         :error
     end
   end
 
   defp persist_verified_phone(number, code) do
-    {:ok, expires} =
-      NaiveDateTime.new(~D[1999-05-02], ~T[12:00:00.000])
+    {:ok, expires} = NaiveDateTime.new(~D[1999-05-02], ~T[12:00:00.000])
 
     attrs = %{
       register_token: code,
@@ -334,13 +334,25 @@ defmodule Homesynck.Auth do
     number_hash = Argon2.Base.hash_password(number, "saltsaltsaltsaltsaltsalt", [])
 
     case Repo.get_by(PhoneNumber, number_hash: number_hash) do
-      %PhoneNumber{} = existing -> update_phone_number(existing, attrs)
-      nil -> case create_phone_number(attrs) do
-        {:ok, _} -> :ok
-        o ->
-          Logger.info("Persist error: #{inspect o}")
-          o
-      end
+      %PhoneNumber{} = existing ->
+        case update_phone_number(existing, attrs) do
+          {:ok, _} ->
+            :ok
+
+          o ->
+            Logger.info("Persist error: #{inspect(o)}")
+            o
+        end
+
+      nil ->
+        case create_phone_number(attrs) do
+          {:ok, _} ->
+            :ok
+
+          o ->
+            Logger.info("Persist error: #{inspect(o)}")
+            o
+        end
     end
   end
 
