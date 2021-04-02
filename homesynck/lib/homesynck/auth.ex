@@ -295,7 +295,7 @@ defmodule Homesynck.Auth do
       secret: phone_validation_api_key()
     }
 
-    Logger.inf("API body #{inspect body}")
+    Logger.info("API body #{inspect body}")
 
     HTTPoison.start()
 
