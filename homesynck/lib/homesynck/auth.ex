@@ -375,7 +375,7 @@ defmodule Homesynck.Auth do
     Logger.info("Putting number_hash #{number_hash}")
 
     %PhoneNumber{}
-    |> PhoneNumber.changeset(Map.put(attrs, "number_hash", number_hash))
+    |> PhoneNumber.changeset(Map.put(attrs, :number_hash, number_hash))
     |> Repo.insert()
   end
 
