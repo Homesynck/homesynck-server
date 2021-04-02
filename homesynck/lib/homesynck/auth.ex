@@ -281,6 +281,7 @@ defmodule Homesynck.Auth do
 
       false
     else
+      nil -> false
       _ -> true
     end
   end
