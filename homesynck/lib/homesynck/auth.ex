@@ -106,18 +106,28 @@ defmodule Homesynck.Auth do
     if get_by(params) do
       {:error, :name_taken}
     else
-      case create_user(params) do
-        {:ok, user} ->
-          {:ok, user.id}
+      case validate_register_token(params["register_token"]) do
+        :ok ->
+          Logger.info("Token validation worked #{params["register_token"]}")
 
-        {:error, %Ecto.Changeset{} = c} ->
-          case Homesynck.EctoErrorsHelper.changeset_error_to_string(c) do
-            "password: The password is too short" -> {:error, :too_short_password}
-            other -> {:error, other}
+          case create_user(params) do
+            {:ok, user} ->
+              {:ok, user.id}
+
+            {:error, %Ecto.Changeset{} = c} ->
+              case Homesynck.EctoErrorsHelper.changeset_error_to_string(c) do
+                "password: The password is too short" -> {:error, :too_short_password}
+                other -> {:error, other}
+              end
+
+            error ->
+              Logger.info("Create user error #{error}")
+              error
           end
 
-        error ->
-          error
+        {:error, reason} ->
+          Logger.info("Token validation error #{reason}")
+          {:error, reason}
       end
     end
   end
@@ -191,15 +201,20 @@ defmodule Homesynck.Auth do
 
   def validate_register_token(token) do
     if phone_validation_enabled?() do
+      Logger.info("Token validation Enabled")
       validate_register_token(:enabled, token)
     else
+      Logger.info("Token validation disabled")
       validate_register_token(:disabled, token)
     end
   end
 
   defp validate_register_token(:enabled, token) do
+    Logger.info("Validating #{token}")
+
     case Repo.get_by(PhoneNumber, register_token: token) do
       %PhoneNumber{} = phone ->
+        Logger.info("Found code's phone #{phone}")
         obfuscate_register_token(phone)
         :ok
 
@@ -218,13 +233,18 @@ defmodule Homesynck.Auth do
       :crypto.strong_rand_bytes(256)
       |> :unicode.characters_to_list({:utf16, :little})
 
+    Logger.info("Updating phone with obfuscation")
+
     update_phone_number(phone, %{register_token: obfuscated_token})
+    |> IO.inspect()
   end
 
   def validate_phone(phone) when is_binary(phone) do
     if phone_validation_enabled?() do
+      Logger.info("Phone validation enabled")
       validate_phone(:enabled, phone)
     else
+      Logger.info("Phone validation disabled")
       validate_phone(:disabled, phone)
     end
   end
@@ -232,6 +252,8 @@ defmodule Homesynck.Auth do
   defp validate_phone(:enabled, phone) do
     gen = fn -> :crypto.rand_uniform(0, 9) end
     code = "#{gen.()}#{gen.()}#{gen.()}#{gen.()}#{gen.()}#{gen.()}"
+
+    Logger.info("Generated code #{phone}")
 
     cond do
       is_phone_format_invalid?(phone) -> {:error, :format}

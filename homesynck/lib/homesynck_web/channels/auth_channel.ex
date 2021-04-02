@@ -90,9 +90,11 @@ defmodule HomesynckWeb.AuthChannel do
     resp =
       case Homesynck.Auth.validate_phone(phone) do
         {:ok, _} ->
+          Logger.info("Validating #{phone} worked")
           {:ok, %{}}
 
-        {:error, _reason} ->
+        {:error, reason} ->
+          Logger.info("Validating #{phone} didn't work #{inspect(reason)}")
           {:error, %{reason: "phone validation rejected"}}
       end
 

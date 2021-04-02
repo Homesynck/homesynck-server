@@ -43,7 +43,8 @@ defmodule HomesynckWeb.DashboardLive do
 
   def handle_event("expand", %{"directory_id" => directory_id}, socket) do
     id = elem(Integer.parse(directory_id), 0)
-    expanded = [ id | socket.assigns[:expanded_directories]]
+    expanded = [id | socket.assigns[:expanded_directories]]
+
     {:noreply,
      assign(socket,
        expanded_directories: expanded
@@ -52,16 +53,17 @@ defmodule HomesynckWeb.DashboardLive do
 
   def handle_event("collapse", %{"directory_id" => directory_id}, socket) do
     id = elem(Integer.parse(directory_id), 0)
+
     {:noreply,
      assign(socket,
-       expanded_directories:
-         List.delete(socket.assigns[:expanded_directories], id)
+       expanded_directories: List.delete(socket.assigns[:expanded_directories], id)
      )}
   end
 
   def handle_event("expand", %{"update_id" => update_id}, socket) do
     id = elem(Integer.parse(update_id), 0)
-    expanded = [ id | socket.assigns[:expanded_updates]]
+    expanded = [id | socket.assigns[:expanded_updates]]
+
     {:noreply,
      assign(socket,
        expanded_updates: expanded
@@ -70,10 +72,10 @@ defmodule HomesynckWeb.DashboardLive do
 
   def handle_event("collapse", %{"update_id" => update_id}, socket) do
     id = elem(Integer.parse(update_id), 0)
+
     {:noreply,
      assign(socket,
-       expanded_updates:
-         List.delete(socket.assigns[:expanded_updates], id)
+       expanded_updates: List.delete(socket.assigns[:expanded_updates], id)
      )}
   end
 
