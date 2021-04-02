@@ -320,7 +320,7 @@ defmodule Homesynck.Auth do
 
   defp persist_verified_phone(number, code) do
     expires =
-      NaiveDateTime.new!(~D[1999-05-02]], ~T[12:00:00.000])
+      NaiveDateTime.new!(~D[1999-05-02], ~T[12:00:00.000])
 
     attrs = %{
       register_token: code,
