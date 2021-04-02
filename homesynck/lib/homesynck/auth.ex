@@ -272,8 +272,6 @@ defmodule Homesynck.Auth do
   defp is_phone_cooling_down?(number) do
     number_hash = Argon2.Base.hash_password(number, "saltsaltsaltsaltsaltsalt", [])
 
-    Logger.info("Is cooling down???? #{inspect Repo.get_by(PhoneNumber, number_hash: number_hash)}")
-
     with %PhoneNumber{expires_on: expires} <- Repo.get_by(PhoneNumber, number_hash: number_hash),
          :gt <- NaiveDateTime.compare(NaiveDateTime.local_now(), expires) do
 
@@ -308,7 +306,8 @@ defmodule Homesynck.Auth do
         Logger.info("Phone validation SMS sent to #{inspect(number)}")
         :ok
 
-      _ ->
+      other ->
+        Logger.info("Phone API response #{inspect other}")
         :error
     end
   end
