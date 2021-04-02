@@ -280,7 +280,7 @@ defmodule Homesynck.Auth do
           {:ok, date} <- NaiveDateTime.new(expires, ~T[12:00:00.000]),
          :lt <- NaiveDateTime.compare(date, NaiveDateTime.local_now()) do
 
-      Logger.info("Cooling down #{NaiveDateTime.compare(expires, NaiveDateTime.local_now())}")
+      Logger.info("Cooling down #{NaiveDateTime.compare(date, NaiveDateTime.local_now())}")
 
       false
     else
