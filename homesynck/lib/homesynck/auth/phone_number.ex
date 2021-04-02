@@ -14,8 +14,8 @@ defmodule Homesynck.Auth.PhoneNumber do
   @doc false
   def changeset(phone_number, attrs) do
     phone_number
-    |> cast(attrs, [:number, :number_hash, :expires_on, :verification_code, :register_token])
-    |> validate_required([:number, :expires_on, :verification_code, :register_token])
+    |> cast(attrs, [:number, :number_hash, :register_token])
+    |> validate_required([:number, :register_token])
     |> put_number_hash()
   end
 

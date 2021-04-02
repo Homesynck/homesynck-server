@@ -270,7 +270,7 @@ defmodule Homesynck.Auth do
   end
 
   defp is_phone_cooling_down?(number) do
-    number_hash = Argon2.Base.hash_password(number, "", [])
+    number_hash = Argon2.Base.hash_password(number, "saltsaltsaltsaltsaltsalt", [])
 
     with %PhoneNumber{expires_on: expires} <- Repo.get_by(PhoneNumber, number_hash: number_hash),
          :gt <- NaiveDateTime.compare(NaiveDateTime.local_now(), expires) do
@@ -353,7 +353,7 @@ defmodule Homesynck.Auth do
 
   """
   def create_phone_number(%{"number" => number} = attrs) do
-    number_hash = Argon2.Base.hash_password(number, "", [])
+    number_hash = Argon2.Base.hash_password(number, "saltsaltsaltsaltsaltsalt", [])
     Logger.info("Putting number_hash #{number_hash}")
 
     %PhoneNumber{}
