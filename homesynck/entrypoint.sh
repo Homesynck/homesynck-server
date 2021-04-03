@@ -40,4 +40,4 @@ echo "- instance_owner: $INSTANCE_OWNER"
 echo ""
 
 # Start the server.
-elixir --sname homesynck --cookie cookie -S mix phx.server
+elixir --sname homesynck --cookie $ELIXIR_SECRET_COOKIE -S mix phx.server
