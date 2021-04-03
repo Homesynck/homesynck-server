@@ -5,4 +5,4 @@ Homesynck uses [Phoenix Channels](https://hexdocs.pm/phoenix/channels.html), a p
 
 Therefore in order to make a custom Homesynck client, you first need a [Phoenix channels client](phoenix_clients_list.md).
 
-*soon*
+*coming soon*
