@@ -42,6 +42,7 @@ defmodule HomesynckWeb.DashboardLive do
     {:noreply, fetch(socket)}
   end
 
+  @impl true
   def handle_event("expand", %{"directory_id" => directory_id}, socket) do
     id = elem(Integer.parse(directory_id), 0)
     expanded = [id | socket.assigns[:expanded_directories]]
@@ -52,6 +53,7 @@ defmodule HomesynckWeb.DashboardLive do
      )}
   end
 
+  @impl true
   def handle_event("collapse", %{"directory_id" => directory_id}, socket) do
     id = elem(Integer.parse(directory_id), 0)
 
@@ -61,6 +63,7 @@ defmodule HomesynckWeb.DashboardLive do
      )}
   end
 
+  @impl true
   def handle_event("expand", %{"update_id" => update_id}, socket) do
     id = elem(Integer.parse(update_id), 0)
     expanded = [id | socket.assigns[:expanded_updates]]
@@ -71,6 +74,7 @@ defmodule HomesynckWeb.DashboardLive do
      )}
   end
 
+  @impl true
   def handle_event("collapse", %{"update_id" => update_id}, socket) do
     id = elem(Integer.parse(update_id), 0)
 
