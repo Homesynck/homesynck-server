@@ -4,7 +4,7 @@
     </header>
     <article class="article">
         <h2 class="article_headline">
-            Synchronise your frontends in real-time!
+            Synchronize your frontends in real-time!
         </h2>
         <separator class="article_separator article_separator-white">
             ⋯⋯⋯⋯⋯⋯⋯⋯⋯
@@ -45,7 +45,7 @@
                 Data agnostic
             </h2>
             <p class="article_section_content">
-                It doesn't care about the kind of data you want to synchronise, its only job is to store it and avoid disorder.
+                It doesn't care about the kind of data you want to synchronize, its only job is to store it and avoid disorder.
             </p>
         </div>
         <div class="article_section article_section-reversed">
@@ -126,7 +126,7 @@
                 Typescript & Javascript
             </h2>
             <div class="article_section_content">
-                Create a synchronised web app in no time.
+                Create a synchronized web app in no time.
                 <br/>
                 Compatible with browsers, Node.js & Deno.
                 <div class="links">
