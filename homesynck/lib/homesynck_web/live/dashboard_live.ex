@@ -37,6 +37,7 @@ defmodule HomesynckWeb.DashboardLive do
     assign(socket, directories: directories)
   end
 
+  @impl true
   def handle_info({Sync, _, _}, socket) do
     {:noreply, fetch(socket)}
   end

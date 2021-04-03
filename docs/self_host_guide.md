@@ -141,7 +141,7 @@ In order to enable and configure "no register mode" do the following:
 3. Restart the server with `docker-compose up --build -d`
 
 ## Setup HTTPS
-HTTPS is mandatory since the server does not encrypt messages by default, making your synchronised data vulnerable to nowadays beginner-friendly man-in-the-middle attacks.
+HTTPS is mandatory since the server does not encrypt messages by default, making your synchronized data vulnerable to nowadays beginner-friendly man-in-the-middle attacks.
 
 1. make sure you have a domain name (costs a little money) and that it points to your machine's IP address.
 2. Open `docker-compose.yml`

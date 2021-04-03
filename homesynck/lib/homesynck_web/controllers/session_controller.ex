@@ -1,8 +1,6 @@
 defmodule HomesynckWeb.SessionController do
   use HomesynckWeb, :controller
 
-  alias HomesynckWeb.Auth
-
   def new(conn, _) do
     if sessions_enabled?() do
       render(conn, "new.html")

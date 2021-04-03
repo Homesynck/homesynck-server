@@ -47,11 +47,11 @@ defmodule Homesynck.Auth.User do
     |> unique_constraint(:email)
   end
 
-  defp unique_name(changeset) do
-    changeset
-    |> validate_length(:name, min: 2, max: 64)
-    |> unique_constraint(:name)
-  end
+  # defp unique_name(changeset) do
+  #   changeset
+  #   |> validate_length(:name, min: 2, max: 64)
+  #   |> unique_constraint(:name)
+  # end
 
   defp validate_password(changeset, field, options \\ []) do
     validate_change(changeset, field, fn _, password ->

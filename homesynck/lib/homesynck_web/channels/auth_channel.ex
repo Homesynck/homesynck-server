@@ -72,7 +72,7 @@ defmodule HomesynckWeb.AuthChannel do
         {:error, :too_short_password} ->
           {:error, %{reason: "password too short"}}
 
-        {:error, reason} ->
+        {:error, _reason} ->
           {:error, %{reason: "register rejected"}}
       end
 

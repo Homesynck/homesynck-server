@@ -16,6 +16,6 @@
                     <%= submit "✔ Log in", class: 'form-button' %>
                 </div>
             </div>
-        <%= end %>
+        <% end %>
     </header>
 </page>
