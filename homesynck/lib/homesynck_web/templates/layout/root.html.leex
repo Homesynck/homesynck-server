@@ -4,6 +4,17 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <meta prefix="og: http://ogp.me/ns#" property="og:type" content="website" />
+    <meta prefix="og: http://ogp.me/ns#" property="og:title" content="Homesynck" />
+    <meta prefix="og: http://ogp.me/ns#" property="og:description" content="Message synchronization tool for making real-time software. Free & open source" />
+    <meta prefix="og: http://ogp.me/ns#" property="og:image" content="<%= Routes.static_path(@conn, "/images/site_banner.png") %>" />
+
+    <meta name="twitter:card" content="<%= Routes.static_path(@conn, "/images/site_banner.png") %>" />
+    <meta name="twitter:title" content="Homesynck" />
+    <meta name="twitter:description" content="Message synchronization tool for making real-time software. Free & open source" />
+    <meta name="twitter:image" content="<%= Routes.static_path(@conn, "/images/site_banner.png") %>" />
+
     <%= csrf_meta_tag() %>
     <%= live_title_tag assigns[:page_title] || "Homesynck" %>
     <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
