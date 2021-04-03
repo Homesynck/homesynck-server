@@ -172,6 +172,8 @@
             </h2>
             <div class="article_section_content">
                 Scalable Phoenix web server, capable PostgreSQL database, automatic HTTPS with Nginx & Certbot.
+                <br/>
+                The server comes with extensive customization and can serve this exact page along with a real-time dashboard!
                 <div class="links">
                     <a class="inline_link" href="https://github.com/Homesynck/Homesynck-server">
                         ∴ Source code ∴
