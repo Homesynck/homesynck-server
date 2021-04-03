@@ -34,4 +34,6 @@ Ordering problems can be critical when writing software. Here are some concrete 
 ## How does it work?
 Clients send messages to directories hosted on a Homesynck server. Homesynck takes note of the order in which it received messages for each directory. Then it sends the messages back to clients and indicates to them in which order messages should be processed. At the end, clients connected on a same directory are garanteed to have received the same messages in the same order.
 
+Clients also declare which updates they received on connection and the server fills the gaps *(Client SDKs are still heavily work in progress and don't always patch "holes" within their received updates list. Although they all support receiving new updates forward)*.
+
 Official clients, called SDKs, are available and can be imported into most pieces of software.
